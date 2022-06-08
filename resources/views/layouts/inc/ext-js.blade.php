@@ -5,4 +5,4 @@
 <!-- AdminLTE App -->
 <script src="{{ url('/adminlte/dist/js/adminlte.min.js')}}"></script>
 <!-- AdminLTE for demo purposes -->
-<script src="{{ url('/adminlte/dist/js/demo.js') }}"></script>
+{{-- <script src="{{ url('/adminlte/dist/js/demo.js') }}"></script> --}}
