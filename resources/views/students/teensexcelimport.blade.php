@@ -380,9 +380,9 @@ Footer
                     let alert_message;
 
                     if (logKey == undefined)
-                        alert_message = message;
+                        alert_message = error_message;
                     else
-                        alert_message = `${message}. Copy dan beritaukan kode log berikut ke admin = ${logKey}`;
+                        alert_message = `${error_message}. Copy dan beritaukan kode log berikut ke admin = ${logKey}`;
 
                     swal("Gagal", alert_message, "error")
                 }

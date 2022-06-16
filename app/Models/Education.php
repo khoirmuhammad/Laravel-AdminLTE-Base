@@ -2,8 +2,9 @@
 
 namespace App\Models;
 
-use Illuminate\Database\Eloquent\Factories\HasFactory;
+use Illuminate\Support\Facades\DB;
 use Illuminate\Database\Eloquent\Model;
+use Illuminate\Database\Eloquent\Factories\HasFactory;
 
 class Education extends Model
 {
@@ -14,4 +15,13 @@ class Education extends Model
     protected $casts = [
         'id' => 'string'
       ];
+
+      public static function get_education()
+      {
+        $result = DB::table('education')
+                  ->orderBy('order')
+                  ->get(['id','name']);
+
+        return $result;
+      }
 }

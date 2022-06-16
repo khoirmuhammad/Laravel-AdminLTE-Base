@@ -95,16 +95,17 @@
     function logout() {
 
       swal({
-          title: "Apakah anda yakin?",
-          text: "Anda akan keluar dari aplikasi ini",
-          type: "warning",
-          showCancelButton: true,
-          confirmButtonColor: '#DD6B55',
-          confirmButtonText: 'Ya',
-          cancelButtonText: "Tidak"
-      }).then(
-            function () { post_logout(); },
-            function () { return false; });
+        title: "Apakah Anda Yakin?",
+        text: "Keluar dari Aplikasi",
+        icon: "warning",
+        buttons: true,
+        dangerMode: true,
+      })
+      .then((willLogout) => {
+        if (willLogout) {
+          post_logout();
+        }
+      });
 
       
     }

@@ -21,9 +21,39 @@ class StudentController extends Controller
     public function index()
     {
         // Hash::make('Virtualcode')
+
+        $data = null;
+
+        if (session('role_type') == 'ppk')
+        {
+            $data = Student::selectByGroup();
+        }
+        else if (session('role_type') == 'ppd')
+        {
+            $data = Student::selectByVillage();
+        }
+        else
+        {
+            $data = Student::selectAll();
+        }
+
         return view('students.index',[
-            "title" => "Data Siswa",
-            "data" => collect(Student::select())
+            "title" => "Data Generus",
+            "data" => $data
+        ]);
+    }
+
+    public function get_add_student()
+    {
+        return view('students.add',[
+            "title" => "Tambah Generus"
+        ]);
+    }
+
+    public function get_edit_student()
+    {
+        return view('students.edit',[
+            "title" => "Ubah Generus"
         ]);
     }
 
@@ -129,7 +159,7 @@ class StudentController extends Controller
         {
             $error = $ex->getMessage();
             $action = explode('@',Route::getCurrentRoute()->getActionName())[1];
-            $log_key = strtoupper("superadmin" . $this->get_random_string());
+            $log_key = strtoupper(auth()->user()->username . $this->get_random_string());
 
             $this->save_log($action, $error, $log_key);
 
@@ -207,7 +237,7 @@ class StudentController extends Controller
         {
             $error = $ex->getMessage();
             $action = explode('@',Route::getCurrentRoute()->getActionName())[1];
-            $log_key = strtoupper("superadmin" . $this->get_random_string());
+            $log_key = strtoupper(auth()->user()->username . $this->get_random_string());
 
             $this->save_log($action, $error, $log_key);
 
@@ -249,10 +279,10 @@ class StudentController extends Controller
                         'isPribumi' => 1,
                         'group' => $student['group_id'],
                         'village' => $student['village_id'],
-                        'created_by' => 'superadmin',
-                        'updated_by' => 'superadmin',
-                        'created_at' => Carbon::now(),
-                        'updated_at' => Carbon::now(),
+                        'created_by' => auth()->user()->username,
+                        'updated_by' => auth()->user()->username,
+                        'created_at' => Carbon::now('Asia/Jakarta'),
+                        'updated_at' => Carbon::now('Asia/Jakarta'),
                     ];                    
                 }
                 else
@@ -268,10 +298,10 @@ class StudentController extends Controller
                         'isPribumi' => 1,
                         'group' => $find_student->group,
                         'village' => $find_student->village,
-                        'created_by' => 'superadmin',
-                        'updated_by' => 'superadmin',
-                        'created_at' => Carbon::now(),
-                        'updated_at' => Carbon::now(),
+                        'created_by' => auth()->user()->username,
+                        'updated_by' => auth()->user()->username,
+                        'created_at' => Carbon::now('Asia/Jakarta'),
+                        'updated_at' => Carbon::now('Asia/Jakarta'),
                     ];
                 }
             }
@@ -308,7 +338,7 @@ class StudentController extends Controller
 
                 $error = $pdoEx->getMessage();
                 $action = explode('@',Route::getCurrentRoute()->getActionName())[1];
-                $log_key = strtoupper("superadmin" . $this->get_random_string());
+                $log_key = strtoupper(auth()->user()->username . $this->get_random_string());
 
                 $this->save_log($action, $error, $log_key);
 
@@ -322,7 +352,7 @@ class StudentController extends Controller
         {
             $error = $ex->getMessage();
             $action = explode('@',Route::getCurrentRoute()->getActionName())[1];
-            $log_key = strtoupper("superadmin" . $this->get_random_string());
+            $log_key = strtoupper(auth()->user()->username . $this->get_random_string());
 
             $this->save_log($action, $error, $log_key);
 
@@ -372,10 +402,10 @@ class StudentController extends Controller
                             'isPribumi' => $student['status'] == "PRIBUMI" ? 1 : 0,
                             'group' => $student['group_id'],
                             'village' => $student['village_id'],
-                            'created_by' => 'superadmin',
-                            'updated_by' => 'superadmin',
-                            'created_at' => Carbon::now(),
-                            'updated_at' => Carbon::now(),
+                            'created_by' => auth()->user()->username,
+                            'updated_by' => auth()->user()->username,
+                            'created_at' => Carbon::now('Asia/Jakarta'),
+                            'updated_at' => Carbon::now('Asia/Jakarta'),
                         ];
                     }
 
@@ -396,10 +426,10 @@ class StudentController extends Controller
                             'isPribumi' => $student['status'] == "PRIBUMI" ? 1 : 0,
                             'group' => $find_student->group,
                             'village' => $find_student->village,
-                            'created_by' => 'superadmin',
-                            'updated_by' => 'superadmin',
-                            'created_at' => Carbon::now(),
-                            'updated_at' => Carbon::now(),
+                            'created_by' => auth()->user()->username,
+                            'updated_by' => auth()->user()->username,
+                            'created_at' => Carbon::now('Asia/Jakarta'),
+                            'updated_at' => Carbon::now('Asia/Jakarta'),
                         ];
                     }
                     else
@@ -453,7 +483,7 @@ class StudentController extends Controller
 
                 $error = $pdoEx->getMessage();
                 $action = explode('@',Route::getCurrentRoute()->getActionName())[1];
-                $log_key = strtoupper("superadmin" . $this->get_random_string());
+                $log_key = strtoupper(auth()->user()->username . $this->get_random_string());
 
                 $this->save_log($action, $error, $log_key);
 
@@ -466,7 +496,7 @@ class StudentController extends Controller
         {
             $error = $ex->getMessage();
             $action = explode('@',Route::getCurrentRoute()->getActionName())[1];
-            $log_key = strtoupper("superadmin" . $this->get_random_string());
+            $log_key = strtoupper(auth()->user()->username . $this->get_random_string());
 
             $this->save_log($action, $error, $log_key);
 
