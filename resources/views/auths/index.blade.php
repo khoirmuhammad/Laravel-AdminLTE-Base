@@ -119,7 +119,7 @@
 
         </div>
         <div class="modal-footer justify-content-between">
-          <button type="button" class="btn btn-default" data-dismiss="modal">Close</button>
+          <button type="button" class="btn btn-default" data-dismiss="modal">Tutup</button>
           <button type="button" id="btnProceed" class="btn btn-primary">
             <i id="loading-icon-proceed" class="fa fa-spinner fa-spin hide"></i>
               <span id="proceed-text">Lanjutkan</span>
@@ -138,17 +138,21 @@
 <!-- AdminLTE App -->
 <script src="/adminlte/dist/js/adminlte.min.js"></script>
 
+
 <script src="https://unpkg.com/sweetalert/dist/sweetalert.min.js"></script>
 
 <script>
     $(document).ready(function() {
+
+        $('#txtUsername').focus();
+        
         var CSRF_TOKEN = document.querySelector('meta[name="csrf-token"]').getAttribute("content");
 
         $('#txtPassword').on('keypress', function (e) {
          if(e.which === 13){
           authentication();
          }
-      });
+        });
 
         $('#btnLogin').on('click', function() {         
           authentication();

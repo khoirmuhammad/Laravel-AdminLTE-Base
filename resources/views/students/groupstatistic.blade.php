@@ -17,7 +17,7 @@
 @endsection
 
 @section('content')
-<div class="container-fluid">
+<div id="container-content" class="container-fluid" style="display: none">
     <div class="row">
       <div class="col-md-3">
 
@@ -30,19 +30,19 @@
                    alt="User profile picture">
             </div>
 
-            <h3 class="profile-username text-center">MDT Al A'laa</h3>
+            <h3 id="kbm-name" class="profile-username text-center"></h3>
 
-            <p class="text-muted text-center">No. Statistik 311234040101</p>
+            <p id="mdt-statistic" class="text-muted text-center"></p>
 
             <ul class="list-group list-group-unbordered mb-3">
               <li class="list-group-item">
-                <b>Ketua MDT</b> <a class="float-right">H. Arwanto</a>
+                <b>Ketua MDT</b> <p id="mdt-principle" class="float-right"></p>
               </li>
               <li class="list-group-item">
-                <b>Ketua KBM</b> <a class="float-right">Muhammad Khoirudin</a>
+                <b>Ketua KBM</b> <p id="kbm-principle" class="float-right"></p>
               </li>
               <li class="list-group-item">
-                <b>Ketua Muda Mudi</b> <a class="float-right">Achmad Choirul S</a>
+                <b>Ketua Muda Mudi</b> <p id="mudamudi-principle" class="float-right"></p>
               </li>
             </ul>
           </div>
@@ -59,21 +59,21 @@
           <div class="card-body">
             <strong><i class="fas fa-map-marker-alt mr-1"></i> Sekretariat</strong>
 
-            <p class="text-muted">
-              Karangtengah RT 01, RW 57 Sendangtirto, Berbah, Sleman
+            <p id="kbm-address" class="text-muted">
+              
             </p>
 
             <hr>
 
             <strong><i class="fas fa-envelope mr-1"></i> Email</strong>
 
-            <p class="text-muted">mk.muhammadkhoirudin@gmail.com</p>
+            <p id="kbm-email" class="text-muted"></p>
 
             <hr>
 
             <strong><i class="fas fa-phone-alt mr-1"></i> Kontak</strong>
 
-            <p class="text-muted">+6281385247038</p>
+            <p id="kbm-phone" class="text-muted"></p>
           </div>
           <!-- /.card-body -->
         </div>
@@ -149,6 +149,40 @@
     </div>
     <!-- /.row -->
   </div><!-- /.container-fluid -->
+
+  <div class="modal fade" id="modal-group">
+    <div class="modal-dialog">
+      <div class="modal-content">
+        <div class="modal-header">
+          <h4 class="modal-title">Pilih PPK / KBM / MDT</h4>
+          <button type="button" class="close" data-dismiss="modal" aria-label="Close">
+            <span aria-hidden="true">&times;</span>
+          </button>
+        </div>
+        <div class="modal-body">
+          <input type="hidden" id="role-type" value="{{ session('role_type') }}"/>
+          <input type="hidden" id="group" value="{{ request()->session()->has('group') ? session('group') : "" }}"/>
+          <input type="hidden" id="village" value="{{ request()->session()->has('village') ? session('village') : "" }}"/>
+          <div class="col-sm-12">
+            <div class="form-group">
+              <label>PPK / KBM / MDT</label>
+              <select id="kbm-select2" class="form-control select2" style="width: 100%;">
+                <option value="" >Pilih</option>
+              </select>
+            </div>
+          </div>
+        <div class="modal-footer justify-content-between">
+          <button type="button" class="btn btn-default" data-dismiss="modal">Tutup</button>
+          <button type="button" id="btnSelect" class="btn btn-primary">
+              <i id="loading-icon-select" class="fa fa-spinner fa-spin hide"></i>
+              <span id="select-text">Pilih</span>
+          </button>
+        </div>
+      </div>
+      <!-- /.modal-content -->
+    </div>
+    <!-- /.modal-dialog -->
+</div>
 @endsection
 
 @push('css')
@@ -159,26 +193,139 @@
     left:0px;
     background-color:rgb(233, 232, 232);
   }
+
+  .hide {
+        display: none;
+    }
 </style>
+
+<link rel="stylesheet" href="/adminlte/plugins/select2/css/select2.min.css">
+<link rel="stylesheet" href="/adminlte/plugins/select2-bootstrap4-theme/select2-bootstrap4.min.css">
+<link rel="stylesheet" href="/adminlte/dist/css/adminlte.min.css">
 @endpush
 
 @push('js')
+<script src="/adminlte/plugins/select2/js/select2.full.min.js"></script>
+
+<script src="https://unpkg.com/sweetalert/dist/sweetalert.min.js"></script>
+
 <script>
 $(document).ready(function() {
+    $('.select2').select2();
 
-    get_statistic_general_level();
-    get_statistic_general_education();
-    get_statistic_caberawit();
-    get_statistic_praremaja();
-    get_statistic_remaja();
-    get_statistic_unik();
-    get_statistic_unik_pribumi_status();
+    populate_kbm_select2();
+
+    let roleType = $('#role-type').val();
+
+    if (roleType != 'ppk') {
+      $('#modal-group').modal('show'); 
+    } else {
+
+      $('#container-content').show();
+
+      let group = $("#group").val();
+
+      get_group_info(group);
+
+      get_statistic_general_level(group);
+      get_statistic_general_education(group);
+      get_statistic_caberawit(group);
+      get_statistic_praremaja(group);
+      get_statistic_remaja(group);
+      get_statistic_unik(group);
+      get_statistic_unik_pribumi_status(group);
+    }
+
+    // Role unless ppk
+    $('#btnSelect').on('click', function(){
+        var group = $(".select2 option:selected").val();
+        
+        if (group == undefined || group == null || group == '') {
+          swal("Info", "Silakan pilih PPK / KBM / MDT", "info"); return;
+        }
+
+        $('#loading-icon-select').removeClass('hide');
+        $('#select-text').text('');
+
+        get_group_info(group);
+
+        get_statistic_general_level(group);
+        get_statistic_general_education(group);
+        get_statistic_caberawit(group);
+        get_statistic_praremaja(group);
+        get_statistic_remaja(group);
+        get_statistic_unik(group);
+        get_statistic_unik_pribumi_status(group);
+
+        
+        $('#loading-icon-select').addClass('hide');
+        $('#select-text').text('Pilih');
+
+        $('#modal-group').modal('hide');
+        $('#container-content').show();
+
+        
+    });
+
+    
+
+    
 
 });
 
-function get_statistic_unik_pribumi_status() {
+function populate_kbm_select2() {
+debugger;
+  let village = $('#village').val();
+  let url = village == "" ? "/api/group/group-list" : "/api/group/group-list-by-village/"+ village;
   $.ajax({
-    url:"/api/generus/statistika-unik-kelompok-by-pribumi-status",
+    url:url,
+    method: 'GET',
+    dataType: 'json',
+    success: function(response){
+      if (response.data != undefined || response.data != null) {
+        for(let i = 0; i < response.data.length; i++) {
+          $("#kbm-select2").append(`<option value="${response.data[i].id}">${response.data[i].name} - ${response.data[i].kbm_name}</option>`);
+        }        
+
+      }
+    },
+    error: function(response) {
+
+    }
+  });
+
+}
+
+function get_group_info(group) {
+  $.ajax({
+    url:"/api/group/group-info/"+ group,
+    method: 'GET',
+    dataType: 'json',
+    success: function(response){
+      if (response.data != undefined || response.data != null) {
+        let obj = response.data[0];
+
+        $('#kbm-name').html(`${obj.is_mdt ? "MDT " : "KBM "} ${obj.kbm_name}`);
+        $('#mdt-statistic').html(obj.mdt_statistic);
+        $('#mdt-principle').html(obj.mdt_principle);
+        $('#kbm-principle').html(obj.kbm_principle);
+        $('#mudamudi-principle').html(obj.muda_mudi_principle);
+
+        $('#kbm-address').html(obj.address);
+        $('#kbm-email').html(obj.email);
+        $('#kbm-phone').html(obj.hp);
+
+      }
+    },
+    error: function(response) {
+
+    }
+  });
+}
+
+function get_statistic_unik_pribumi_status(group) {
+  $.ajax({
+    url:"/api/generus/statistika-unik-kelompok-by-pribumi-status/"+ group,
     method: 'GET',
     dataType: 'json',
     success: function(response){
@@ -214,9 +361,9 @@ function get_statistic_unik_pribumi_status() {
 
 }
 
-function get_statistic_unik() {
+function get_statistic_unik(group) {
     $.ajax({
-        url:"/api/generus/statistika-unik-kelompok",
+        url:"/api/generus/statistika-unik-kelompok/"+ group,
         method: 'GET',
         dataType: 'json',
         success: function(response){
@@ -270,9 +417,9 @@ function get_statistic_unik() {
     });
 }
 
-function get_statistic_remaja() {
+function get_statistic_remaja(group) {
   $.ajax({
-    url:"/api/generus/statistika-remaja-kelompok",
+    url:"/api/generus/statistika-remaja-kelompok/"+ group,
     method: 'GET',
     dataType: 'json',
     success: function(response){
@@ -317,9 +464,9 @@ function get_statistic_remaja() {
 
 }
 
-function get_statistic_praremaja() {
+function get_statistic_praremaja(group) {
   $.ajax({
-    url:"/api/generus/statistika-praremaja-kelompok",
+    url:"/api/generus/statistika-praremaja-kelompok/"+ group,
     method: 'GET',
     dataType: 'json',
     success: function(response){
@@ -364,9 +511,9 @@ function get_statistic_praremaja() {
 
 }
 
-function get_statistic_caberawit() {
+function get_statistic_caberawit(group) {
     $.ajax({
-        url:"/api/generus/statistika-caberawit-kelompok",
+        url:"/api/generus/statistika-caberawit-kelompok/"+ group,
         method: 'GET',
         dataType: 'json',
         success: function(response){
@@ -420,9 +567,9 @@ function get_statistic_caberawit() {
     });
 }
 
-function get_statistic_general_education() {
+function get_statistic_general_education(group) {
     $.ajax({
-        url:"/api/generus/statistika-general-kelompok-by-education",
+        url:"/api/generus/statistika-general-kelompok-by-education/"+ group,
         method: 'GET',
         dataType: 'json',
         success: function(response){
@@ -476,10 +623,10 @@ function get_statistic_general_education() {
     });
 }
 
-function get_statistic_general_level() {
+function get_statistic_general_level(group) {
   debugger;
     $.ajax({
-        url:"/api/generus/statistika-general-kelompok-by-level",
+        url:"/api/generus/statistika-general-kelompok-by-level/" + group,
         method: 'GET',
         dataType: 'json',
         success: function(response){

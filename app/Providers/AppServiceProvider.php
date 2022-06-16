@@ -5,7 +5,7 @@ namespace App\Providers;
 use Illuminate\Support\ServiceProvider;
 use Illuminate\Support\Facades\View;
 use App\Models\Menu;
-use App\Models\ROle;
+use App\Models\Role;
 use App\Models\MenuRoleCategory;
 
 class AppServiceProvider extends ServiceProvider

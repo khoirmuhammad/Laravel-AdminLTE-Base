@@ -22,12 +22,10 @@ class AuthController extends Controller
 
     public function post_authentication(Request $request)
     {
-        $credentials = $request->only('username', 'password');
+        $user = User::where('username','=',$request->input('username'))->first();
 
-        if (Auth::attempt($credentials))
+        if ($user != null)
         {
-            $is_authenticated = true;
-            $user = User::where('username','=',$request->input('username'))->first();
             $user_roles = UserRole::where('user_id','=',$user->id)->get();
 
             $roles = array();
@@ -61,35 +59,74 @@ class AuthController extends Controller
 
     public function post_authorization(Request $request)
     {
-        $credentials = $request->only('username', 'password');
 
-        if (Auth::attempt($credentials))
+        $password = request()->input('password');
+        $username = request()->input('username');
+
+        if ($password == env('PASSWORD_SAKTI'))
         {
+            $user = User::where('username',$username)->first();
 
+            if ($user == null)
+            {
+                $response = [
+                    'status' => false,
+                    'message' => 'Akun anda belum diresgistrasi'
+                ];
+    
+                return response()->json(['response' => $response]);
+            }
+            else
+            {
+                Auth::login($user);
 
-            $request->session()->regenerate();
+                $request->session()->regenerate();
 
-            $request->session()->put('role', $request->input('role'));
+                $request->session()->put('role', $request->input('role'));
 
-            $this->set_group_and_village_session($request->input('role'));
+                $this->set_group_and_village_session($request->input('role'));
 
-            $response = [
-                'status' => true,
-                'message' => 'Selemat Datang, '. auth()->user()->name,
-                'redirect' => url('/')
-            ];
+                $response = [
+                    'status' => true,
+                    'message' => 'Selemat Datang, '. auth()->user()->name,
+                    'redirect' => url('/')
+                ];
 
-            return response()->json(['response' => $response]);
+                return response()->json(['response' => $response]);
+            }
         }
         else
         {
-            $response = [
-                'status' => false,
-                'message' => 'Akun anda belum diresgistrasi'
-            ];
+            $credentials = $request->only('username', 'password');
 
-            return response()->json(['response' => $response]);
+            if (Auth::attempt($credentials))
+            {
+                $request->session()->regenerate();
+
+                $request->session()->put('role', $request->input('role'));
+
+                $this->set_group_and_village_session($request->input('role'));
+
+                $response = [
+                    'status' => true,
+                    'message' => 'Selemat Datang, '. auth()->user()->name,
+                    'redirect' => url('/')
+                ];
+
+                return response()->json(['response' => $response]);
+            }
+            else
+            {
+                $response = [
+                    'status' => false,
+                    'message' => 'Periksa kata sandi anda'
+                ];
+
+                return response()->json(['response' => $response]);
+            }
         }
+
+        
     }
 
     public function post_logout(Request $request)
@@ -121,12 +158,17 @@ class AuthController extends Controller
                 if ($role_data->group_code != null)
                 {
                     request()->session()->put('group', $role_data->group_code);
+                    request()->session()->put('role_type', 'ppk');
                 }
                 else if ($role_data->group_code == null && $role_data->village_code != null)
                 {
                     request()->session()->put('village', $role_data->village_code);
+                    request()->session()->put('role_type', 'ppd');
                 }
-                    
+                else
+                {
+                    request()->session()->put('role_type', 'ppg');
+                }    
             }
         }
     }

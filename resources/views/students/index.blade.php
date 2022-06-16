@@ -32,6 +32,7 @@
 </div>
 </div>
 <div class="card-body">
+<input type="hidden" id="role_type" value="{{ request()->session()->has('role_type') ? session('role_type') : "" }}"/>
 <table id="example1" class="table table-bordered table-striped">
   <thead>
   <tr>
@@ -41,8 +42,13 @@
     <th>Jenjang</th>
     <th>Kelas</th>
     <th>Pendidikan</th>
+    @if(session('role_type') != 'ppk')
     <th>Kelompok</th>
+    @endif
     <th>Pribumi</th>
+    @if(session('role_type') == 'ppk')
+    <th width="7%">#</th>
+    @endif
   </tr>
   </thead>
   <tbody>
@@ -55,8 +61,17 @@
     <td>{{ $item->level }}</td>
     <td>{{ $item->class }}</td>
     <td>{{ $item->education }}</td>
+    @if(session('role_type') != 'ppk')
     <td>{{ $item->group }}</td>
+    @endif
+    
     <td>{{ $item->isPribumi == 1 ? "Ya" : "Tidak" }}</td>
+    @if(session('role_type') == 'ppk')
+    <td>    
+      <a href="/generus/ubah-generus?id={{ $item->id }}" class="btn btn-info btn-sm"> <i class="fa fa-pencil"></i></a>
+      <a class="btn btn-danger btn-sm" onclick="deleteStudent('{{ $item->id }}', '{{ $item->fullname }}')"> <i class="fa fa-trash"></i></a>   
+    </td>
+    @endif
   </tr>
   @endforeach
 
@@ -71,8 +86,13 @@
     <th>Jenjang</th>
     <th>Kelas</th>
     <th>Pendidikan</th>
+    @if(session('role_type') != 'ppk')
     <th>Kelompok</th>
+    @endif
     <th>Pribumi</th>
+    @if(session('role_type') == 'ppk')
+    <th>#</th>
+    @endif
   </tr>
   </tfoot>
 </table>
@@ -122,7 +142,7 @@ $(document).ready(function() {
   $('#example1 tfoot th').each(function () {
         var title = $(this).text();
 
-        if (title != 'No') {
+        if (title != 'No' && title != '#') {
           $(this).html('<input type="text" class="form-control" placeholder="' + title + '" />');
         }
         
@@ -153,22 +173,74 @@ $(document).ready(function() {
         },
     });
 
-  let buttons = `
-  <div class="btn-group" role="group" aria-label="Button">
-    <button type="button" id="student_import_excel_remaja" class="btn btn-success btn-sm"><i class="fa fa-file-excel-o" aria-hidden="true"> Impor Data Excel Remaja</i></button>
-    <button type="button" id="student_import_excel_caberawit" class="btn btn-info btn-sm"><i class="fa fa-file-excel-o" aria-hidden="true"> Impor Data Excel Caberawit</i></button>
-  </div>
-  `;
+  let buttons;
+
+  if ($('#role_type').val() != 'ppk') {
+    buttons = `
+    <div class="btn-group" role="group" aria-label="Button">
+      <button type="button" id="print-student" class="btn btn-success btn-sm"><i class="fa fa-file-excel-o" aria-hidden="true"></i> Cetak Data</button>
+    </div>
+    `;
+  } else {
+    buttons = `
+    <div class="btn-group" role="group" aria-label="Button">
+      <button type="button" id="add-student" class="btn btn-primary btn-sm"><i class="fa fa-user-plus" aria-hidden="true"></i> Tambah Data</button>
+      <button type="button" id="print-student" class="btn btn-success btn-sm"><i class="fa fa-file-excel-o" aria-hidden="true"></i> Cetak Data</button>
+    </div>
+    `;
+  }
+
+  
 
   $(buttons).appendTo('#example1_wrapper .col-md-6:eq(0)');
 
-  $('#student_import_excel_remaja').on('click', function() {
-      window.location='{{ url("generus/impor-excel-remaja") }}'
-  })
+  $('#add-student').on('click', function() {
+      window.location='{{ url("generus/tambah-generus") }}'
+  });
+
+  
 
 });
 
+function deleteStudent(id, name) {
+  swal({
+        title: "Apakah Anda Yakin?",
+        text: `Menghapus ${name} dari database!`,
+        icon: "warning",
+        buttons: true,
+        dangerMode: true,
+      })
+      .then((willDelete) => {
+        if (willDelete) {
+          performDeleteStudent(id, name);
+        }
+      });
 
+    return false;
+  }
+
+  function performDeleteStudent(id, name) {
+    debugger;
+    $.ajax({
+        url:"/api/generus/delete-student-by-id",
+        type: 'DELETE',
+        dataType:'json',
+        contentType: 'json',
+        data: JSON.stringify({id:id}),
+        contentType: 'application/json; charset=utf-8',
+        headers: {'X-CSRF-TOKEN': CSRF_TOKEN},
+        success: function(response){
+          debugger;
+          if (response.status) {
+            swal("Berhasil", `Generus ${name} berhasil dihapus`, "success");
+            location.reload(true);
+          }
+        },
+        error: function(response) {
+          debugger;
+        }
+      });
+  }
 
 
 </script>
