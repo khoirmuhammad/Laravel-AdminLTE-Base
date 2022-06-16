@@ -106,12 +106,12 @@
 
 @push('css')
 <style>
-  th:first-child, td:first-child
+  /* th:first-child, td:first-child
   {
     position:sticky;
     left:0px;
     background-color:rgb(233, 232, 232);
-  }
+  } */
 </style>
 @endpush
 
@@ -203,64 +203,76 @@ function get_statistic_by_group_education_gender() {
 
                     for(let i = 0; i < groupData.length; i++) {
                         if (groupData[i].education === 'SD') {
-                            male_sd = groupData[i].male; male_sd_total = male_sd_total + male_sd;
-                            female_sd = groupData[i].female; female_sd_total = female_sd_total + female_sd;
+                            male_sd = groupData[i].male; male_sd_total = parseInt(male_sd_total) + parseInt(male_sd);
+                            female_sd = groupData[i].female; female_sd_total = parseInt(female_sd_total)+ parseInt(female_sd);
                         } else if (groupData[i].education === 'SMP') {
-                            male_smp = groupData[i].male; male_smp_total = male_smp_total + male_smp;
-                            female_smp = groupData[i].female; female_smp_total = female_smp_total + female_smp;
+                            male_smp = groupData[i].male; male_smp_total = parseInt(male_smp_total) + parseInt(male_smp);
+                            female_smp = groupData[i].female; female_smp_total = parseInt(female_smp_total) + parseInt(female_smp);
                         } else if (groupData[i].education === 'SMA/SMK') {
-                            male_sma = groupData[i].male; male_sma_total = male_sma_total + male_sma;
-                            female_sma = groupData[i].female; female_sma_total = female_sma_total + female_sma;
+                            male_sma = groupData[i].male; male_sma_total = parseInt(male_sma_total) + parseInt(male_sma);
+                            female_sma = groupData[i].female; female_sma_total = parseInt(female_sma_total) + parseInt(female_sma);
                         } else if (groupData[i].education === 'KULIAH') {
-                            male_kuliah = groupData[i].male; male_kuliah_total = male_kuliah_total + male_kuliah;
-                            female_kuliah = groupData[i].female; female_kuliah_total = female_kuliah_total + female_kuliah;
+                            male_kuliah = groupData[i].male; male_kuliah_total = parseInt(male_kuliah_total) + parseInt(male_kuliah);
+                            female_kuliah = groupData[i].female; female_kuliah_total = parseInt(female_kuliah_total) + parseInt(female_kuliah);
                         } else if (groupData[i].education === 'USMAN') {
-                            male_usman = groupData[i].male; male_usman_total = male_usman_total + male_usman;
-                            female_usman= groupData[i].female; female_usman_total = female_usman_total + female_usman;
+                            male_usman = groupData[i].male; male_usman_total = parseInt(male_usman_total) + parseInt(male_usman);
+                            female_usman= groupData[i].female; female_usman_total = parseInt(female_usman_total) + parseInt(female_usman);
                         }
                     }
+
+                    let total_sd = parseInt(male_sd) + parseInt(female_sd);
+                    let total_smp = parseInt(male_smp) + parseInt(female_smp);
+                    let total_sma = parseInt(male_sma) + parseInt(female_sma);
+                    let total_kuliah = parseInt(male_kuliah) + parseInt(female_kuliah);
+                    let total_usman = parseInt(male_usman) + parseInt(female_usman);
 
                     row += `<tr>
                     <td class="text-center">${group}</td>
                     <td class="text-center">${male_sd}</td>
                     <td class="text-center">${female_sd}</td>
-                    <td class="text-center"><b>${parseInt(male_sd + female_sd)}</b></td>
+                    <td class="text-center"><b>${total_sd}</b></td>
                     <td class="text-center">${male_smp}</td>
                     <td class="text-center">${female_smp}</td>
-                    <td class="text-center"><b>${parseInt(male_smp + female_smp)}</b></td>
+                    <td class="text-center"><b>${total_smp}</b></td>
                     <td class="text-center">${male_sma}</td>
                     <td class="text-center">${female_sma}</td>
-                    <td class="text-center"><b>${parseInt(male_sma + female_sma)}</b></td>
+                    <td class="text-center"><b>${total_sma}</b></td>
                     <td class="text-center">${male_kuliah}</td>
                     <td class="text-center">${female_kuliah}</td>
-                    <td class="text-center"><b>${parseInt(male_kuliah + female_kuliah)}</b></td>
+                    <td class="text-center"><b>${total_kuliah}</b></td>
                     <td class="text-center">${male_usman}</td>
                     <td class="text-center">${female_usman}</td>
-                    <td class="text-center"><b>${parseInt(male_usman + female_usman)}</b></td>
+                    <td class="text-center"><b>${total_usman}</b></td>
                     </tr>`;
                 }
+
+                let grand_total_sd = parseInt(male_sd_total) + parseInt(female_sd_total);
+                let grand_total_smp = parseInt(male_smp_total) + parseInt(female_smp_total);
+                let grand_total_sma = parseInt(male_sma_total) + parseInt(female_sma_total);
+                let grand_total_kuliah = parseInt(male_kuliah_total) + parseInt(female_kuliah_total);
+                let grand_total_usman = parseInt(male_usman_total) + parseInt(female_usman_total);
 
                 row += `<tr>
                     <td class="text-center"><b>TOTAL</b></td>
                     <td bgcolor="#ececec" class="text-center"><b>${male_sd_total}</b></td>
                     <td bgcolor="#ececec" class="text-center"><b>${female_sd_total}</b></td>
-                    <td bgcolor="#c1c0b9" class="text-center"><b>${parseInt(male_sd_total + female_sd_total)}</b></td>
+                    <td bgcolor="#c1c0b9" class="text-center"><b>${grand_total_sd}</b></td>
                     <td bgcolor="#ececec" class="text-center"><b>${male_smp_total}</b></td>
                     <td bgcolor="#ececec" class="text-center"><b>${female_smp_total}</b></td>
-                    <td bgcolor="#c1c0b9" class="text-center"><b>${parseInt(male_smp_total + female_smp_total)}</b></td>
+                    <td bgcolor="#c1c0b9" class="text-center"><b>${grand_total_smp}</b></td>
                     <td bgcolor="#ececec" class="text-center"><b>${male_sma_total}</b></td>
                     <td bgcolor="#ececec" class="text-center"><b>${female_sma_total}</b></td>
-                    <td bgcolor="#c1c0b9" class="text-center"><b>${parseInt(male_sma_total + female_sma_total)}</b></td>
+                    <td bgcolor="#c1c0b9" class="text-center"><b>${grand_total_sma}</b></td>
                     <td bgcolor="#ececec" class="text-center"><b>${male_kuliah_total}</b></td>
                     <td bgcolor="#ececec" class="text-center"><b>${female_kuliah_total}</b></td>
-                    <td bgcolor="#c1c0b9" class="text-center"><b>${parseInt(male_kuliah_total + female_kuliah_total)}</b></td>
+                    <td bgcolor="#c1c0b9" class="text-center"><b>${grand_total_kuliah}</b></td>
                     <td bgcolor="#ececec" class="text-center"><b>${male_usman_total}</b></td>
                     <td bgcolor="#ececec" class="text-center"><b>${female_usman_total}</b></td>
-                    <td bgcolor="#c1c0b9" class="text-center"><b>${parseInt(male_usman_total + female_usman_total)}</b></td>
+                    <td bgcolor="#c1c0b9" class="text-center"><b>${grand_total_usman}</b></td>
                     </tr>`;
 
-                  let totalAllGenerus = parseInt(male_sd_total + female_sd_total + male_smp_total + female_smp_total + male_sma_total +
-                  female_sma_total + male_kuliah_total + female_kuliah_total + male_usman_total + female_usman_total);
+                  let totalAllGenerus = parseInt(male_sd_total) + parseInt(female_sd_total) + parseInt(male_smp_total) + parseInt(female_smp_total) + parseInt(male_sma_total) +
+                  parseInt(female_sma_total) + parseInt(male_kuliah_total) + parseInt(female_kuliah_total) + parseInt(male_usman_total) + parseInt(female_usman_total);
 
                   row += `<tr>
                           <td colspan="2" class="text-center"> <b>TOTAL GENERUS</b> </td>
@@ -350,34 +362,39 @@ function get_statistic_by_group_level_gender() {
 
                     for(let i = 0; i < groupData.length; i++) {
                         if (groupData[i].level === 'CABERAWIT') {
-                            male_cr = groupData[i].male; male_cr_total = male_cr_total + male_cr;
-                            female_cr = groupData[i].female; female_cr_total = female_cr_total + female_cr;
+                            male_cr = groupData[i].male; male_cr_total = parseInt(male_cr_total) + parseInt(male_cr);
+                            female_cr = groupData[i].female; female_cr_total = parseInt(female_cr_total) + parseInt(female_cr);
                         } else if (groupData[i].level === 'PRAREMAJA') {
-                            male_pr = groupData[i].male; male_pr_total = male_pr_total + male_pr;
-                            female_pr = groupData[i].female; female_pr_total = female_pr_total + female_pr;
+                            male_pr = groupData[i].male; male_pr_total = parseInt(male_pr_total) + parseInt(male_pr);
+                            female_pr = groupData[i].female; female_pr_total = parseInt(female_pr_total) + parseInt(female_pr);
                         } else if (groupData[i].level === 'REMAJA') {
-                            male_r = groupData[i].male; male_r_total = male_r_total + male_r;
-                            female_r = groupData[i].female; female_r_total = female_r_total + female_r;
+                            male_r = groupData[i].male; male_r_total = parseInt(male_r_total) + parseInt(male_r);
+                            female_r = groupData[i].female; female_r_total = parseInt(female_r_total) + parseInt(female_r);
                         } else if (groupData[i].level === 'USIA NIKAH') {
-                            male_unik = groupData[i].male; male_unik_total = male_unik_total + male_unik;
-                            female_unik = groupData[i].female; female_unik_total = female_unik_total + female_unik;
+                            male_unik = groupData[i].male; male_unik_total = parseInt(male_unik_total) + parseInt(male_unik);
+                            female_unik = groupData[i].female; female_unik_total = parseInt(female_unik_total) + parseInt(female_unik);
                         }
                     }
+
+                    let total_cr = parseInt(male_cr) + parseInt(female_cr);
+                    let total_pr = parseInt(male_pr) + parseInt(female_pr);
+                    let total_r = parseInt(male_r) + parseInt(female_r);
+                    let total_unik = parseInt(male_unik) + parseInt(female_unik);
 
                     row += `<tr>
                     <td class="text-center">${group}</td>
                     <td class="text-center">${male_cr}</td>
                     <td class="text-center">${female_cr}</td>
-                    <td class="text-center"><b>${parseInt(male_cr + female_cr)}</b></td>
+                    <td class="text-center"><b>${total_cr}</b></td>
                     <td class="text-center">${male_pr}</td>
                     <td class="text-center">${female_pr}</td>
-                    <td class="text-center"><b>${parseInt(male_pr + female_pr)}</b></td>
+                    <td class="text-center"><b>${total_pr}</b></td>
                     <td class="text-center">${male_r}</td>
                     <td class="text-center">${female_r}</td>
-                    <td class="text-center"><b>${parseInt(male_r + female_r)}</b></td>
+                    <td class="text-center"><b>${total_r}</b></td>
                     <td class="text-center">${male_unik}</td>
                     <td class="text-center">${female_unik}</td>
-                    <td class="text-center"><b>${parseInt(male_unik + female_unik)}</b></td>
+                    <td class="text-center"><b>${total_unik}</b></td>
                     </tr>`;
                 }
 
