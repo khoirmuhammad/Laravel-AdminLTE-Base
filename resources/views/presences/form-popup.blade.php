@@ -17,7 +17,7 @@
 @endsection
 
 @section('content')
-
+<button type="button" id="btn-show-classes" class="btn btn-block btn-outline-info btn-lg">Tampilkan Kelas</button>
   <div class="modal fade" id="modal-class-level">
     <div class="modal-dialog">
       <div class="modal-content">
@@ -89,14 +89,18 @@ $(document).ready(function() {
 
     // Role unless ppk
     $('#btnSelect').on('click', function(){
-        var group = $(".select2 option:selected").val();
+        var classes = $(".select2 option:selected").val();
         
-        if (group == undefined || group == null || group == '') {
+        if (classes == undefined || classes == null || classes == '') {
           swal("Info", "Silakan pilih kelas terlebih dahulu", "info"); return;
         }
 
-                
+        window.location.href = `/presensi/formulir?kelas=${classes}`;                
     });
+
+    $('#btn-show-classes').on('click', function() {
+      $('#modal-class-level').modal('show'); 
+    })
 
 });
 

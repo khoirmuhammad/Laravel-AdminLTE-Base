@@ -106,12 +106,12 @@
 
 @push('css')
 <style>
-  /* th:first-child, td:first-child
+  th:first-child, td:first-child
   {
     position:sticky;
     left:0px;
     background-color:rgb(233, 232, 232);
-  } */
+  }
 </style>
 @endpush
 

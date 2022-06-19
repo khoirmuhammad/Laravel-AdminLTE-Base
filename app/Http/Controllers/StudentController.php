@@ -342,10 +342,10 @@ class StudentController extends Controller
 
                 $this->save_log($action, $error, $log_key);
 
-                return response()->json(['status' => false, 'error_message' => "Terjadi Kesalaan Transaksi Database", 'log_key' => $log_key], 200);
+                return response()->json(['status' => false, 'error_message' => "Terjadi Kesalaan Transaksi Database", 'log_key' => $log_key], 500);
             }
 
-            return response()->json(['status' => true, 'data_insert' => $inserts, 'data_update' => $updates], 200);
+            return response()->json(['status' => true, 'data_insert' => $inserts, 'data_update' => $updates], 201);
 
         }
         catch(\Exception $ex)
@@ -487,10 +487,10 @@ class StudentController extends Controller
 
                 $this->save_log($action, $error, $log_key);
 
-                return response()->json(['status' => false, 'error_message' => "Terjadi Kesalaan Transaksi Database", 'log_key' => $log_key], 200);
+                return response()->json(['status' => false, 'error_message' => "Terjadi Kesalaan Transaksi Database", 'log_key' => $log_key], 500);
             }
             
-            return response()->json(['status' => true, 'data_insert' => $inserts, 'data_update' => $updates, 'data_delete' => $deletes], 200);                        
+            return response()->json(['status' => true, 'data_insert' => $inserts, 'data_update' => $updates, 'data_delete' => $deletes], 201);                        
         }
         catch(\Exception $ex)
         {
