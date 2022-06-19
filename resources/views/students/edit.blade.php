@@ -338,7 +338,11 @@ $(document).ready(function() {
             $('#student-id').val(response.data.id);
             $('#name').val(response.data.fullname);
 
-            let birthDate = response.data.birth_date.split(' ')[0].split('-').reverse().join('/');
+            let birthDate = null;
+            if (response.data.birth_date != null) {
+              birthDate = response.data.birth_date.split(' ')[0].split('-').reverse().join('/');
+            }
+            
             $('#birthdate').val(birthDate);
 
             if (response.data.gender == "Laki-laki") {

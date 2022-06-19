@@ -187,12 +187,12 @@
 
 @push('css')
 <style>
-  th:first-child, td:first-child
+  /* th:first-child, td:first-child
   {
     position:sticky;
     left:0px;
     background-color:rgb(233, 232, 232);
-  }
+  } */
 
   .hide {
         display: none;
@@ -331,7 +331,7 @@ function get_statistic_unik_pribumi_status(group) {
     success: function(response){
       if (response.data != undefined || response.data != null) {
         let unikStatisticTbl = document.querySelector("#unik-statistic-pribumi-status");
-
+        debugger;
         unikStatisticTbl.innerHTML = "";
 
         let row = `<tr>
@@ -342,11 +342,12 @@ function get_statistic_unik_pribumi_status(group) {
 
         let total_pribumi = response.data[0].total_pribumi[0].total;
         let total_nonpribumi = response.data[0].total_nonpribumi[0].total;
+        let totalAll = parseInt(total_pribumi) + parseInt(total_nonpribumi);
 
         row += `<tr>
                 <td class="text-center">` + total_pribumi + `</td>
                 <td class="text-center">` + total_nonpribumi + `</td>
-                <td class="text-center"><b>` + parseInt(total_pribumi + total_nonpribumi) + `</b></td>
+                <td class="text-center"><b>` + totalAll + `</b></td>
                 </tr>`;
 
         unikStatisticTbl.innerHTML = row;
@@ -368,7 +369,7 @@ function get_statistic_unik(group) {
         dataType: 'json',
         success: function(response){
             if (response.data != undefined || response.data != null) {
-
+                debugger;
                 let unikStatisticTbl = document.querySelector("#unik-statistic");
 
                 unikStatisticTbl.innerHTML = "";
@@ -385,19 +386,23 @@ function get_statistic_unik(group) {
 
                 let totalMale = 0;
                 let totalFemale = 0;
+                let totalAll = 0;
 
                 for(let i = 0; i < response.data.length; i++) {
 
-                    totalMale = parseInt(totalMale + response.data[i].male);
-                    totalFemale = parseInt(totalFemale + response.data[i].female);
+                    totalMale = parseInt(totalMale) + parseInt(response.data[i].male);
+                    totalFemale = parseInt(totalFemale) + parseInt(esponse.data[i].female);
+
+                    totalAll = parseInt(totalMale) + parseInt(totalFemale);
 
                     row += `<tr>
                             <td class="text-center">` + no + `</td>
                             <td class="text-center">` + response.data[i].education + `</td>
                             <td class="text-center">` + response.data[i].male + `</td>
                             <td class="text-center">` + response.data[i].female + `</td>
-                            <td class="text-center"><b>` + parseInt(response.data[i].male + response.data[i].female) + `</b></td>
+                            <td class="text-center"><b>` + totalAll + `</b></td>
                             </tr>`;
+                    totalAll = 0;
                     no++;
                 }
 
@@ -405,7 +410,7 @@ function get_statistic_unik(group) {
                         <td colspan="2" class="text-center"><b>TOTAL</b></td>
                         <td class="text-center"><b>${totalMale}</b></td>
                         <td class="text-center"><b>${totalFemale}</b></td>
-                        <td class="text-center"><b>${parseInt(totalMale + totalFemale)}</b></td>
+                        <td class="text-center"><b>${parseInt(totalMale) + parseInt(totalFemale)}</b></td>
                         </tr>`;
 
                 unikStatisticTbl.innerHTML = row;
@@ -425,7 +430,7 @@ function get_statistic_remaja(group) {
     success: function(response){
       if (response.data != undefined || response.data != null) {
         let remajaStatisticTbl = document.querySelector("#remaja-statistic");
-
+        debugger;
         remajaStatisticTbl.innerHTML = "";
 
         let row = `<tr>
@@ -437,6 +442,7 @@ function get_statistic_remaja(group) {
 
         let total_male = 0;
         let total_female = 0;
+        let totalAll = 0;
 
         for(let i = 0; i < response.data.length; i++) {
           if (response.data[i].gender == "Laki-laki")
@@ -445,11 +451,13 @@ function get_statistic_remaja(group) {
             total_female = response.data[i].total;
         }
 
+        totalAll = parseInt(total_male) + parseInt(total_female);
+
         row += `<tr>
                 <td class="text-center">REMAJA</td>
                 <td class="text-center">` + total_male + `</td>
                 <td class="text-center">` + total_female + `</td>
-                <td class="text-center"><b>` + parseInt(total_male + total_female) + `</b></td>
+                <td class="text-center"><b>` + totalAll + `</b></td>
                 </tr>`;
 
         remajaStatisticTbl.innerHTML = row;
@@ -484,6 +492,7 @@ function get_statistic_praremaja(group) {
 
         let total_male = 0;
         let total_female = 0;
+        let totalAll = 0;
 
         for(let i = 0; i < response.data.length; i++) {
           if (response.data[i].gender == "Laki-laki")
@@ -492,11 +501,13 @@ function get_statistic_praremaja(group) {
             total_female = response.data[i].total;
         }
 
+        totalAll = parseInt(total_male) + parseInt(total_female);
+
         row += `<tr>
                 <td class="text-center">PRAREMAJA</td>
                 <td class="text-center">` + total_male + `</td>
                 <td class="text-center">` + total_female + `</td>
-                <td class="text-center"><b>` + parseInt(total_male + total_female) + `</b></td>
+                <td class="text-center"><b>` + totalAll + `</b></td>
                 </tr>`;
 
         praremajaStatisticTbl.innerHTML = row;
@@ -535,19 +546,22 @@ function get_statistic_caberawit(group) {
 
                 let totalMale = 0;
                 let totalFemale = 0;
+                let totalAll = 0;
 
                 for(let i = 0; i < response.data.length; i++) {
 
-                    totalMale = parseInt(totalMale + response.data[i].male);
-                    totalFemale = parseInt(totalFemale + response.data[i].female);
+                    totalMale = parseInt(totalMale) + parseInt(response.data[i].male);
+                    totalFemale = parseInt(totalFemale) + parseInt(response.data[i].female);
+                    totalAll = parseInt(response.data[i].male) + parseInt(response.data[i].female);
 
                     row += `<tr>
                             <td class="text-center">` + no + `</td>
                             <td class="text-center">` + response.data[i].class + `</td>
                             <td class="text-center">` + response.data[i].male + `</td>
                             <td class="text-center">` + response.data[i].female + `</td>
-                            <td class="text-center"><b>` + parseInt(response.data[i].male + response.data[i].female) + `</b></td>
+                            <td class="text-center"><b>` + totalAll + `</b></td>
                             </tr>`;
+                    totalAll = 0;
                     no++;
                 }
 
@@ -555,7 +569,7 @@ function get_statistic_caberawit(group) {
                         <td colspan="2" class="text-center"><b>TOTAL</b></td>
                         <td class="text-center"><b>${totalMale}</b></td>
                         <td class="text-center"><b>${totalFemale}</b></td>
-                        <td class="text-center"><b>${parseInt(totalMale + totalFemale)}</b></td>
+                        <td class="text-center"><b>${parseInt(totalMale) + parseInt(totalFemale)}</b></td>
                         </tr>`;
 
                 caberawitStatisticTbl.innerHTML = row;
@@ -591,19 +605,22 @@ function get_statistic_general_education(group) {
 
                 let totalMale = 0;
                 let totalFemale = 0;
+                let totalAll = 0;
 
                 for(let i = 0; i < response.data.length; i++) {
 
-                    totalMale = parseInt(totalMale + response.data[i].male);
-                    totalFemale = parseInt(totalFemale + response.data[i].female);
+                    totalMale = parseInt(totalMale) + parseInt(response.data[i].male);
+                    totalFemale = parseInt(totalFemale) + parseInt(response.data[i].female);
+                    totalAll = parseInt(response.data[i].male) + parseInt(response.data[i].female);
 
                     row += `<tr>
                             <td class="text-center">` + no + `</td>
                             <td class="text-center">` + response.data[i].education + `</td>
                             <td class="text-center">` + response.data[i].male + `</td>
                             <td class="text-center">` + response.data[i].female + `</td>
-                            <td class="text-center"><b>` + parseInt(response.data[i].male + response.data[i].female) + `</b></td>
+                            <td class="text-center"><b>` + totalAll+ `</b></td>
                             </tr>`;
+                    totalAll = 0;
                     no++;
                 }
 
@@ -611,7 +628,7 @@ function get_statistic_general_education(group) {
                         <td colspan="2" class="text-center"><b>TOTAL</b></td>
                         <td class="text-center"><b>${totalMale}</b></td>
                         <td class="text-center"><b>${totalFemale}</b></td>
-                        <td class="text-center"><b>${parseInt(totalMale + totalFemale)}</b></td>
+                        <td class="text-center"><b>${parseInt(totalMale) + parseInt(totalFemale)}</b></td>
                         </tr>`;
 
                 generalStatisticTbl.innerHTML = row;
@@ -648,19 +665,23 @@ function get_statistic_general_level(group) {
 
                 let totalMale = 0;
                 let totalFemale = 0;
+                let totalAll = 0;
 
                 for(let i = 0; i < response.data.length; i++) {
 
-                    totalMale = parseInt(totalMale + response.data[i].male);
-                    totalFemale = parseInt(totalFemale + response.data[i].female);
+                    totalMale = parseInt(totalMale) + parseInt(response.data[i].male);
+                    totalFemale = parseInt(totalFemale) + parseInt(response.data[i].female);
+                    totalAll = parseInt(response.data[i].male) + parseInt(response.data[i].female);
 
                     row += `<tr>
                             <td class="text-center">` + no + `</td>
                             <td class="text-center">` + response.data[i].level + `</td>
                             <td class="text-center">` + response.data[i].male + `</td>
                             <td class="text-center">` + response.data[i].female + `</td>
-                            <td class="text-center"><b>` + parseInt(response.data[i].male + response.data[i].female) + `</b></td>
+                            <td class="text-center"><b>` + totalAll + `</b></td>
                             </tr>`;
+
+                    totalAll = 0;
                     no++;
                 }
 
@@ -668,7 +689,7 @@ function get_statistic_general_level(group) {
                         <td colspan="2" class="text-center"><b>TOTAL</b></td>
                         <td class="text-center"><b>${totalMale}</b></td>
                         <td class="text-center"><b>${totalFemale}</b></td>
-                        <td class="text-center"><b>${parseInt(totalMale + totalFemale)}</b></td>
+                        <td class="text-center"><b>${parseInt(totalMale) + parseInt(totalFemale)}</b></td>
                         </tr>`;
 
                 generalStatisticTbl.innerHTML = row;

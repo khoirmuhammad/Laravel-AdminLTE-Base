@@ -4,6 +4,7 @@ use App\Http\Controllers\AuthController;
 use App\Http\Controllers\MenuController;
 use App\Http\Controllers\PresenceController;
 use App\Http\Controllers\StudentController;
+use App\Http\Controllers\TeacherController;
 use App\Http\Middleware\IsSuperadmin;
 use Illuminate\Support\Facades\Route;
 
@@ -49,3 +50,7 @@ Route::get('/generus/statistika-ppd', [StudentController::class, 'village_statis
 
 
 Route::get('/presensi/popup', [PresenceController::class, 'get_form_presence_popup'])->middleware('auth');
+Route::get('/presensi/formulir', [PresenceController::class, 'get_form_presence'])->middleware('auth');
+
+Route::get('/pj-kelas', [TeacherController::class, 'get_list_teachers'])->middleware('auth');
+Route::get('/pj-kelas/tambah-pjkelas', [TeacherController::class, 'get_form_add_teacher'])->middleware('auth');

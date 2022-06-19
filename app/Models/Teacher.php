@@ -5,15 +5,13 @@ namespace App\Models;
 use Illuminate\Database\Eloquent\Factories\HasFactory;
 use Illuminate\Database\Eloquent\Model;
 
-class UserRole extends Model
+class Teacher extends Model
 {
     use HasFactory;
 
-    public $timestamps = false;
+    protected $primaryKey = 'id';
 
     protected $casts = [
-        'user_id' => 'string'
+        'id' => 'string'
       ];
-
-    protected $primaryKey = 'id';
 }

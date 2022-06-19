@@ -7,6 +7,7 @@ use Illuminate\Support\Facades\Route;
 use App\Http\Controllers\ApiGroupController;
 use App\Http\Controllers\ApiLevelController;
 use App\Http\Controllers\ApiStudentController;
+use App\Http\Controllers\ApiTeacherController;
 
 /*
 |--------------------------------------------------------------------------
@@ -53,3 +54,6 @@ Route::get('/education/education-list', [ApiEducationController::class, 'get_edu
 
 Route::get('/class-level/class-level-list/{groupId}/{levelId}', [ApiClassLevelController::class, 'get_class_level']);
 Route::get('/class-level/class-level-list-by-group', [ApiClassLevelController::class, 'get_class_level_by_group']);
+
+
+Route::post('/teacher/post-save-teacher', [ApiTeacherController::class, 'post_save_teacher']);

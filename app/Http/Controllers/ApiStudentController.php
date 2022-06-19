@@ -46,6 +46,8 @@ class ApiStudentController extends Controller
                 $student->updated_at = Carbon::now('Asia/Jakarta');
 
                 $student->save();
+
+                return response()->json(['status' => true, 'data' => $student], 201);
             }
             else
             {
@@ -67,11 +69,13 @@ class ApiStudentController extends Controller
                 $student->updated_at = Carbon::now('Asia/Jakarta');
 
                 $student->save();
+
+                return response()->json(['status' => true, 'data' => $student], 201);
             }
 
             
 
-            return response()->json(['status' => true, 'data' => $student], 200);
+            
         }
         catch(Exception $ex)
         {

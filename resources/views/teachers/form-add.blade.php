@@ -32,25 +32,14 @@
 </div>
 </div>
 <div class="card-body" id="card-body-id">
-   <form id="student-form">
+   <form id="teacher-form">
         <div class="row">
           <div class="col-md-6">
               <input type="hidden" id="group" value="{{ request()->session()->has('group') ? session('group') : "" }}"/>
 
               <div class="form-group">
-                  <label>Nama Lengkap</label>
-                  <input type="text" class="form-control" id="name" name="name" placeholder="Nama Lengkap">
-              </div>
-
-              <div class="form-group">
-                <label>Tanggal Lahir</label>
-                <div class="input-group">
-                
-                <div class="input-group-prepend">
-                  <span class="input-group-text"><i class="far fa-calendar-alt"></i></span>
-                </div>
-                <input type="text" id="birthdate" placeholder="Contoh 20 Januari 2020 | Format (dd/mm/yyyy) 20/01/2020" name="birthdate" class="form-control" data-inputmask-alias="datetime" data-inputmask-inputformat="dd/mm/yyyy" data-mask>
-                </div>
+                  <label>Nama</label>
+                  <input type="text" class="form-control" id="name" name="name" placeholder="Nama Penanggung Jawab Kelas">
               </div>
 
               <div class="form-group clearfix">
@@ -69,51 +58,65 @@
                   </div>
               </div>
 
-              
-            
-
-            <div class="form-group clearfix">
+              <div class="form-group">
                 <label>Status</label>
-                <div class="icheck-primary">
-                  <input type="radio" name="ispribumi" id="pribumi" value="1">
-                  <label for="pribumi">
-                      Pribumi
-                  </label>
-                </div>
-                <div class="icheck-secondary">
-                  <input type="radio" name="ispribumi" id="non-pribumi" value="0">
-                  <label for="non-pribumi">
-                    Non Pribumi
+                <select id="status" name="status" class="form-control" style="width: 100%;">
+                  <option value="">Pilih</option>
+                  <option value="MT">MT</option>
+                  <option value="MS">MS</option>
+                  <option value="Asisten">Asisten</option>
+                </select>
+              </div>
+
+              <div class="form-group clearfix">
+                <div class="icheck-primary d-inline">
+                  <input type="checkbox" id="isTeacher" name="isTeacher">
+                  <label for="isTeacher">
+                    Apakah Pengajar ?
                   </label>
                 </div>
             </div>
+
+            <div class="form-group clearfix">
+                <div class="icheck-success d-inline">
+                  <input type="checkbox" id="isAdminClass" name="isAdminClass">
+                  <label for="isAdminClass">
+                    Apakah Admin Kelas ?
+                  </label>
+                </div>
+            </div>
+
+            <div class="form-group clearfix">
+                <div class="icheck-danger d-inline">
+                  <input type="checkbox" id="isStudent" name="isStudent">
+                  <label for="isStudent">
+                    Apakah Seorang Generus ?
+                  </label>
+                </div>
+            </div>
+
+            <div class="form-group clearfix">
+                <div class="icheck-warning d-inline">
+                  <input type="checkbox" id="hasAccount" name="hasAccount">
+                  <label for="hasAccount">
+                    Apakah Sudah Punya Akun ?
+                  </label>
+                </div>
+                <input type="text" class="form-control mt-2 hide" id="username" name="username" placeholder="Masukkan Akun Pengguna">
+            </div>
+
+
 
           </div>
 
           <div class="col-md-6">
             
+            
 
-              <div class="form-group">
-                <label>Jenjang</label>
-                <select id="level" name="level" class="form-control" style="width: 100%;">
-                  <option value="">Pilih</option>
-                </select>
-              </div>
+            <div class="form-group clearfix" id="cb-class-level">
+                
+            </div>
 
-                <div class="form-group">
-                  <label>Kelas</label>
-                  <select id="class_level" name="class_level" class="form-control" style="width: 100%;">
-                    <option value="">Pilih</option>
-                  </select>
-                </div>
-
-                <div class="form-group">
-                  <label>Pendidikan</label>
-                  <select id="education" name="education" class="form-control" style="width: 100%;">
-                    <option value="">Pilih</option>
-                    
-                  </select>
-                </div>
           </div>
 
       </div>
@@ -121,11 +124,6 @@
       <div class="row">
         <div class="col-md-12">
           <div class="btn-group" role="group" aria-label="Button">
-            <button type="button" id="btn-save" class="btn btn-info">
-              <i id="save-icon" class="fa fa-save" aria-hidden="true"></i>
-              <i id="loading-icon-save" class="fa fa-spinner fa-spin hide"></i>
-              <span id="save-text">Save</span>
-            </button>
             <button type="submit" id="btn-submit" class="btn btn-success">
               <i id="submit-icon" class="fa fa-paper-plane" aria-hidden="true"></i>
               <i id="loading-icon-submit" class="fa fa-spinner fa-spin hide"></i>
@@ -199,40 +197,22 @@ Footer
 $(document).ready(function() {
     var CSRF_TOKEN = document.querySelector('meta[name="csrf-token"]').getAttribute("content");
 
-    $('.select2').select2()
-    //Datemask dd/mm/yyyy
-    $('#datemask').inputmask('dd/mm/yyyy', { 'placeholder': 'dd/mm/yyyy' })
-    //Money Euro
-    $('[data-mask]').inputmask();
+    get_class_levels();
 
-    get_level();
-    get_education();
-
-    // select2:select
-    $('#level').on('change', function (e) {
-      debugger;
-      var data = this.value;
-      
-      if (data != null) {
-        get_class_level(data);
-      }
+    $("#hasAccount").change(function() {
+        debugger;
+        if(this.checked) {
+            $('#username').css('display','block');
+            $('#username-error').css('display','block');
+        } else {
+            $('#username').css('display','none');
+            $('#username-error').css('display','none');
+        }
     });
-
-
-    $('#btn-save').on('click', function() {
-      debugger
-      let name = $('#name').val();
-
-      if (name == null || name == "") {
-        swal("Info", "Nama lengkap harus diisi", "info"); return;
-      }
-
-      post_save_student('save');
-    })
 
     $.validator.setDefaults({
       submitHandler: function () {
-        s swal({
+        swal({
         title: "Simpan Data",
         text: "Pastikan data yang diisi sesuai",
         icon: "warning",
@@ -241,59 +221,55 @@ $(document).ready(function() {
       })
       .then((willSave) => {
         if (willSave) {
-          post_save_student('submit');
+          post_save_teacher('submit');
         }
       });
+
+        
         
       }
     });
 
-    $('#student-form').validate({
+    $('#teacher-form').validate({
       ignore: [], 
       rules: {
         name: {
           required: true
         },
-        birthdate: {
-          required: true
-        },
         gender: {
           required: true
         },
-        ispribumi: {
-          required: true
-        },
-        level: {
+        status: {
           required: true
         },
         class_level: {
           required: true
         },
-        education: {
-          required: true
+        username: {
+            required: {
+                depends: function () {
+                    debugger;
+                    let hasAccountYet = $('#hasAccount').is(':checked');
+                    return hasAccountYet;
+                }
+            }
         }
       },
       messages: {
         name: {
           required: "Nama lengkap harus diisi"
         },
-        birthdate: {
-          required: "Tanggal lahir harus diiisi"
-        },
         gender: {
           required: "Jenis kelamin harus dipilih"
         },
-        ispribumi: {
-          required: "Status pribumi harus dipilih"
-        },
-        level: {
-          required: "Jenjang harus dipilih"
+        status: {
+          required: "Status pengajar harus dipilih"
         },
         class_level: {
-          required: "Kelas / Rombel harus dipilih"
+          required: "Kelas harus dipilih"
         },
-        education: {
-          required: "Pendidikan harus harus dipilih"
+        username: {
+            required: "Akun Pengguna harus diisi"
         }
       },
       errorElement: 'span',
@@ -313,50 +289,64 @@ $(document).ready(function() {
 
   });
 
-  function post_save_student(action) {
+  function post_save_teacher(action) {
+        debugger;
+        $(`#card-body-id`).addClass('opacity');
+        $(`#${action}-icon`).addClass('hide');
+        $(`#loading-icon-${action}`).removeClass('hide');
+        $(`#${action}-text`).text('Sedang Menyimpan...');
 
-      $(`#card-body-id`).addClass('opacity');
-      $(`#${action}-icon`).addClass('hide');
-      $(`#loading-icon-${action}`).removeClass('hide');
-      $(`#${action}-text`).text('Sedang Menyimpan...');
+        let name = $('#name').val();
+        let gender = $("input[name='gender']:checked").val();
+        let status = $('#status').val();
+        let isTeacher = $('#isTeacher').is(':checked');
+        let isAdminClass = $('#isAdminClass').is(':checked');
+        let isStudent = $('#isStudent').is(':checked');
+        let hasAccount = $('#hasAccount').is(':checked');
+        let username = $('#username').val();
+        let classString = null;
 
-      let name = $('#name').val();
-      let birthdate = $('#birthdate').val();
-      let gender = $("input[name='gender']:checked").val();
-      let ispribumi = $("input[name='ispribumi']:checked").val();
-      let level = $('#level').val();
-      let class_level = $('#class_level').val();
-      let education = $('#education').val();
+         let classes = [];
+            $.each($("input[name='class_level']:checked"), function(){
+                debugger;
+                classes.push($(this).val());
+            });
 
-      let student = {
+        if (classes.length > 0) {
+            classString = classes.join();
+        }
+
+      let teacher = {
         name: name,
-        birthdate: birthdate,
         gender: gender,
-        ispribumi: ispribumi,
-        level: level,
-        class_level: class_level,
-        education: education
+        status: status,
+        isTeacher: isTeacher,
+        isAdminClass: isAdminClass,
+        isStudent: isStudent,
+        hasAccount: hasAccount,
+        username: username,
+        classString: classString
       };
 
       $.ajax({
-        url:"/api/generus/post-save-student",
+       url:"/api/teacher/post-save-teacher",
         type: 'POST',
         dataType:'json',
         contentType: 'json',
-        data: JSON.stringify(student),
+        data: JSON.stringify(teacher),
         contentType: 'application/json; charset=utf-8',
         headers: {'X-CSRF-TOKEN': CSRF_TOKEN},
         success: function(response){
           debugger
 
-          swal("Berhasil", `Generus ${response.data.fullname} berhasil ditambahkan`, "success");
+          swal("Berhasil", `Penanggung Jawab ${response.data.name} berhasil ditambahkan`, "success");
 
           $(`#card-body-id`).removeClass('opacity');
           $(`#${action}-icon`).removeClass('hide');
           $(`#loading-icon-${action}`).addClass('hide');
           $(`#${action}-text`).text(action == 'save' ? 'Simpan' : 'Submit');
 
-          $("#student-form")[0].reset();
+          $("#teacher-form")[0].reset();
         },
         error: function(response) {
           debugger
@@ -380,38 +370,25 @@ $(document).ready(function() {
       });
   }
 
-  function get_level() {
-    $.ajax({
-      url:"/api/level/level-list",
-      method: 'GET',
-      dataType: 'json',
-      success: function(response){
-        if (response.data != undefined || response.data != null) {
-          for(let i = 0; i < response.data.length; i++) {
-            $("#level").append(`<option value="${response.data[i].id}">${response.data[i].name}</option>`);
-        }  
-        }
-      },
-      error: function(response) {
-
-      }
-    });
-  }
-
-  function get_class_level(level) {
+  function get_class_levels() {
     debugger
-    let group = $('#group').val();
+    let color = ['primary', 'secondary', 'success', 'warning', 'info', 'danger']
     $.ajax({
-      url:`/api/class-level/class-level-list/${group}/${level}`,
+      url:`/api/class-level/class-level-list-by-group`,
       method: 'GET',
       dataType: 'json',
       success: function(response){
         if (response.data != undefined || response.data != null) {
-          $('#class_level').empty().trigger("change");
-          $("#class_level").append(`<option value="">Pilih</option>`);
-          for(let i = 0; i < response.data.length; i++) {
-            $("#class_level").append(`<option value="${response.data[i].id}">${response.data[i].name}</option>`);
-        }  
+          $('#cb-class-level').empty().trigger("change");
+          $('#cb-class-level').append('<label>Pilih Kelas</label>');
+            for(let i = 0; i < response.data.length; i++) {
+                $("#cb-class-level").append(`<div class="icheck-${i < color.length ? color[i] : color[i-color.length]}">
+                    <input type="checkbox" id="class_level_${response.data[i].id}" name="class_level" value="${response.data[i].id}">
+                    <label for="class_level_${response.data[i].id}">
+                        Kelas ${response.data[i].name}
+                    </label>
+                </div>`);
+            }  
         }
       },
       error: function(response) {
@@ -420,23 +397,6 @@ $(document).ready(function() {
     });
   }
 
-  function get_education() {
-    $.ajax({
-      url:"/api/education/education-list",
-      method: 'GET',
-      dataType: 'json',
-      success: function(response){
-        if (response.data != undefined || response.data != null) {
-          for(let i = 0; i < response.data.length; i++) {
-            $("#education").append(`<option value="${response.data[i].id}">${response.data[i].name}</option>`);
-        }  
-        }
-      },
-      error: function(response) {
-
-      }
-    });
-  }
 
 
 
