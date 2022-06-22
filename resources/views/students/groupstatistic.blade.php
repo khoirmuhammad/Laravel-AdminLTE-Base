@@ -26,7 +26,7 @@
           <div class="card-body box-profile">
             <div class="text-center">
               <img class="profile-user-img img-fluid img-circle"
-                   src="/adminlte/dist/img/user4-128x128.jpg"
+                   src="{{ URL::asset('assets/ms-icon-310x310.png') }}"
                    alt="User profile picture">
             </div>
 
@@ -60,7 +60,7 @@
             <strong><i class="fas fa-map-marker-alt mr-1"></i> Sekretariat</strong>
 
             <p id="kbm-address" class="text-muted">
-              
+
             </p>
 
             <hr>
@@ -95,46 +95,46 @@
             <div class="tab-content">
               <div class="active tab-pane" id="general">
                 <table class="table table-bordered" id="general-statistic-level">
-                          
+
                 </table>
                 <br>
                 <table class="table table-bordered" id="general-statistic-education">
-                          
+
                 </table>
               </div>
               <!-- /.tab-pane -->
 
               <div class="tab-pane" id="caberawit">
                 <table class="table table-bordered" id="caberawit-statistic">
-                          
+
                 </table>
               </div>
               <!-- /.tab-pane -->
 
               <div class="tab-pane" id="praremaja">
                 <table class="table table-bordered" id="praremaja-statistic">
-                      
+
                 </table>
               </div>
               <!-- /.tab-pane -->
 
               <div class="tab-pane" id="remaja">
                 <table class="table table-bordered" id="remaja-statistic">
-                      
+
                 </table>
               </div>
               <!-- /.tab-pane -->
 
               <div class="tab-pane" id="unik">
-                
+
                 <table class="table table-bordered" id="unik-statistic">
-                          
+
                 </table>
 
                 <br>
 
                 <table class="table table-bordered" id="unik-statistic-pribumi-status">
-                      
+
                 </table>
               </div>
               <!-- /.tab-pane -->
@@ -218,7 +218,7 @@ $(document).ready(function() {
     let roleType = $('#role-type').val();
 
     if (roleType != 'ppk') {
-      $('#modal-group').modal('show'); 
+      $('#modal-group').modal('show');
     } else {
 
       $('#container-content').show();
@@ -239,7 +239,7 @@ $(document).ready(function() {
     // Role unless ppk
     $('#btnSelect').on('click', function(){
         var group = $(".select2 option:selected").val();
-        
+
         if (group == undefined || group == null || group == '') {
           swal("Info", "Silakan pilih PPK / KBM / MDT", "info"); return;
         }
@@ -257,19 +257,19 @@ $(document).ready(function() {
         get_statistic_unik(group);
         get_statistic_unik_pribumi_status(group);
 
-        
+
         $('#loading-icon-select').addClass('hide');
         $('#select-text').text('Pilih');
 
         $('#modal-group').modal('hide');
         $('#container-content').show();
 
-        
+
     });
 
-    
 
-    
+
+
 
 });
 
@@ -285,7 +285,7 @@ debugger;
       if (response.data != undefined || response.data != null) {
         for(let i = 0; i < response.data.length; i++) {
           $("#kbm-select2").append(`<option value="${response.data[i].id}">${response.data[i].name} - ${response.data[i].kbm_name}</option>`);
-        }        
+        }
 
       }
     },
@@ -391,7 +391,7 @@ function get_statistic_unik(group) {
                 for(let i = 0; i < response.data.length; i++) {
 
                     totalMale = parseInt(totalMale) + parseInt(response.data[i].male);
-                    totalFemale = parseInt(totalFemale) + parseInt(esponse.data[i].female);
+                    totalFemale = parseInt(totalFemale) + parseInt(response.data[i].female);
 
                     totalAll = parseInt(totalMale) + parseInt(totalFemale);
 

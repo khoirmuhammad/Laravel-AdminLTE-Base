@@ -8,6 +8,8 @@ use App\Http\Controllers\ApiGroupController;
 use App\Http\Controllers\ApiLevelController;
 use App\Http\Controllers\ApiStudentController;
 use App\Http\Controllers\ApiTeacherController;
+use App\Http\Controllers\ApiPresenceController;
+use App\Http\Controllers\ApiPresenceTeacherController;
 
 /*
 |--------------------------------------------------------------------------
@@ -56,4 +58,10 @@ Route::get('/class-level/class-level-list/{groupId}/{levelId}', [ApiClassLevelCo
 Route::get('/class-level/class-level-list-by-group', [ApiClassLevelController::class, 'get_class_level_by_group']);
 
 
+Route::get('/presence/get-students/{class_level}', [ApiPresenceController::class, 'select_student_class']);
+Route::post('/presence/post-student-presence',[ApiPresenceController::class, 'post_student_presence']);
+
 Route::post('/teacher/post-save-teacher', [ApiTeacherController::class, 'post_save_teacher']);
+
+Route::post('/presence-teacher/post-clockinout',[ApiPresenceTeacherController::class, 'post_teacher_presence']);
+Route::get('/presence-teacher/get-teacher-presence', [ApiPresenceTeacherController::class, 'get_current_presence_on_class']);

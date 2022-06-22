@@ -4,6 +4,7 @@ namespace App\Http\Controllers;
 
 use Exception;
 use Carbon\Carbon;
+use App\Models\ClassLevel;
 use App\Models\Log;
 use App\Models\User;
 use App\Models\Teacher;
@@ -15,7 +16,6 @@ use Illuminate\Support\Facades\Route;
 
 class ApiTeacherController extends Controller
 {
-    
     public function post_save_teacher(Request $request)
     {
         try
@@ -31,8 +31,6 @@ class ApiTeacherController extends Controller
                 $teacher->is_admin_class = $request->input('isAdminClass');
                 $teacher->is_student = $request->input('isStudent');
                 $teacher->class_level = $request->input('classString');
-                $teacher->group = session('group');
-                $teacher->created_at = Carbon::now('Asia/Jakarta');
                 $teacher->updated_at = Carbon::now('Asia/Jakarta');
 
                 // $teacher->save();
@@ -67,13 +65,14 @@ class ApiTeacherController extends Controller
             {
                 $username = $this->set_username($request->input('name'));
             }
-                
+
             DB::beginTransaction();
 
             $teacher = new Teacher();
 
             $teacher->id = Str::uuid()->toString();
             $teacher->name = $request->input('name');
+            $teacher->username = $username;
             $teacher->gender = $request->input('gender');
             $teacher->status = $request->input('status');
             $teacher->is_teacher = $request->input('isTeacher');
@@ -102,7 +101,7 @@ class ApiTeacherController extends Controller
             }
             else
             {
-                $user_id = User::where('username',$username)->first()->id; 
+                $user_id = User::where('username',$username)->first()->id;
             }
 
             $user_role = new UserRole();
@@ -113,7 +112,7 @@ class ApiTeacherController extends Controller
 
             DB::commit();
 
-            return response()->json(['status' => true, 'data' => $teacher], 201);  
+            return response()->json(['status' => true, 'data' => $teacher], 201);
         }
         catch(\PDOException $pdoEx)
         {
@@ -143,7 +142,7 @@ class ApiTeacherController extends Controller
         {
             $username = $username.$seq;
             $user = User::where('username',$username)->first();
-            $seq++;            
+            $seq++;
         }
 
         return $username;
@@ -158,7 +157,7 @@ class ApiTeacherController extends Controller
             $log->action = $action;
             $log->error_message = $error;
             $log->log_key = $log_key;
-            
+
             $log->save();
         }
         catch(\Exception $ex)
@@ -168,7 +167,7 @@ class ApiTeacherController extends Controller
             $log->action = 'save_log';
             $log->error_message = $ex->getMessage();
             $log->log_key = $log_key;
-            
+
             $log->save();
         }
     }
@@ -176,12 +175,12 @@ class ApiTeacherController extends Controller
     private function get_random_string() {
         $characters = env('RAND_STR_KEY');
         $randomString = '';
-      
+
         for ($i = 0; $i < 20; $i++) {
             $index = rand(0, strlen($characters) - 1);
             $randomString .= $characters[$index];
         }
-      
+
         return $randomString;
     }
 }

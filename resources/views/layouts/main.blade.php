@@ -4,7 +4,8 @@
 <head>
   <meta charset="utf-8">
   <meta name="viewport" content="width=device-width, initial-scale=1">
-  <title>DATINFO PPG {{ isset($title) ? ' | '.$title : '' }}</title>
+  <title>MDT Al A'laa {{ isset($title) ? ' | '.$title : '' }}</title>
+  <link rel="icon" href="{{ URL::asset('assets/favicon-16x16.png') }}" type="image/x-icon"/>
   <meta name="csrf-token" content="{{ csrf_token() }}">
 
   @include('layouts.inc.ext-css')

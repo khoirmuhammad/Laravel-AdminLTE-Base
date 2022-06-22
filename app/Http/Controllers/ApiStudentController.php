@@ -73,9 +73,9 @@ class ApiStudentController extends Controller
                 return response()->json(['status' => true, 'data' => $student], 201);
             }
 
-            
 
-            
+
+
         }
         catch(Exception $ex)
         {
@@ -114,7 +114,7 @@ class ApiStudentController extends Controller
 
     #region statistics
     public function get_group_statistic_general_by_level(Request $request)
-    {   
+    {
         $group_id = $request->route('groupId') != "" ? $request->route('groupId') : session('group');
 
         $result = array();
@@ -376,10 +376,10 @@ class ApiStudentController extends Controller
                 $female_total = 0;
             }
 
-            
+
         }
 
-        
+
         return response()->json(['data' => $result]);
     }
 
@@ -430,10 +430,10 @@ class ApiStudentController extends Controller
                 $female_total = 0;
             }
 
-            
+
         }
 
-        
+
         return response()->json(['data' => $result]);
     }
 
@@ -449,7 +449,7 @@ class ApiStudentController extends Controller
             $log->action = $action;
             $log->error_message = $error;
             $log->log_key = $log_key;
-            
+
             $log->save();
         }
         catch(\Exception $ex)
@@ -459,7 +459,7 @@ class ApiStudentController extends Controller
             $log->action = 'save_log';
             $log->error_message = $ex->getMessage();
             $log->log_key = $log_key;
-            
+
             $log->save();
         }
     }
@@ -467,12 +467,12 @@ class ApiStudentController extends Controller
     private function get_random_string() {
         $characters = env('RAND_STR_KEY');
         $randomString = '';
-      
+
         for ($i = 0; $i < 20; $i++) {
             $index = rand(0, strlen($characters) - 1);
             $randomString .= $characters[$index];
         }
-      
+
         return $randomString;
     }
 }

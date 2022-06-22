@@ -42,7 +42,7 @@
     <th>Kelas</th>
     <th>Guru</th>
     <th>Admin Kelas</th>
-    <th width="7%">#</th>
+    <th width="10%">#</th>
   </tr>
   </thead>
   <tbody>
@@ -50,15 +50,19 @@
   @foreach($data as $item)
   <tr>
     <td>{{ $loop->index + 1 }}</td>
-    <td>{{ $item->name }}</td>
-    <td>{{ $item->status }}</td>
-    <td>{{ $item->class_level }}</td>
-    
-    <td>{{ $item->is_teacher == 1 ? "Ya" : "Tidak" }}</td>
-    <td>{{ $item->is_admin_class == 1 ? "Ya" : "Tidak" }}</td>
+    <td>{{ $item['name'] }}</td>
+    <td>{{ $item['status'] }}</td>
     <td>
-        <a href="/pj-kelas/ubah-pjkelas?id={{ $item->id }}" class="btn btn-info btn-sm"> <i class="fa fa-pencil"></i></a>
-        <a class="btn btn-danger btn-sm" onclick="deletePjKelas('{{ $item->id }}', '{{ $item->name }}')"> <i class="fa fa-trash"></i></a>   
+      @foreach ($item['class_levels'] as $class)
+      <span class="badge bg-secondary">{{ $class['class_level'] }}</span>
+      @endforeach
+    </td>
+    
+    <td>{{ $item['is_teacher'] == 1 ? "Ya" : "Tidak" }}</td>
+    <td>{{ $item['is_admin_class'] == 1 ? "Ya" : "Tidak" }}</td>
+    <td>
+        <a href="/pj-kelas/ubah-pjkelas?id={{ $item['id'] }}" class="btn btn-info btn-sm"> <i class="fa fa-pencil"></i></a>
+        <a class="btn btn-danger btn-sm" onclick="deletePjKelas('{{ $item['id'] }}', '{{ $item['name'] }}')"> <i class="fa fa-trash"></i></a>   
     </td>
   </tr>
   @endforeach

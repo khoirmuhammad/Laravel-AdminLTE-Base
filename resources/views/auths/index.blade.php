@@ -3,8 +3,8 @@
 <head>
   <meta charset="utf-8">
   <meta name="viewport" content="width=device-width, initial-scale=1">
-  <title>DATINFO PPG | {{ $title }}</title>
-
+  <title>MDT Al A'laa | {{ $title }}</title>
+  <link rel="icon" href="{{ URL::asset('assets/favicon-16x16.png') }}" type="image/x-icon"/>
   <meta name="csrf-token" content="{{ csrf_token() }}">
 
   <!-- Google Font: Source Sans Pro -->
@@ -24,18 +24,25 @@
     .hide {
         display: none;
     }
+
+    .center {
+      display: block;
+      margin-left: auto;
+      margin-right: auto;
+      width: 50%;
+    }
 </style>
 
 </head>
-<body class="hold-transition login-page" id="login-page-id">
-<div class="login-box">
+<body class="hold-transition login-page" id="login-page-id" style="background-image: url('assets/background-img.jpg');">
+<div class="login-box" >
   <!-- /.login-logo -->
-  <div class="card card-outline card-primary">
+  <div class="card card-outline card-secondary">
     <div class="card-header text-center">
-      <a href="../../index2.html" class="h1"><b>Admin</b>LTE</a>
+      <img class="center" src="{{ asset('assets/ms-icon-310x310.png') }}" alt="MDT Al A'laa" style="width:80px;height:80px;">
     </div>
     <div class="card-body">
-      <p class="login-box-msg">Sign in to start your session</p>
+      <p class="login-box-msg">Masuk untuk memulai sesi Anda</p>
 
       <form action="#" method="post">
         <div class="input-group mb-3">
@@ -54,6 +61,7 @@
             </div>
           </div>
         </div>
+
         <div class="row">
           <div class="col-8">
             <div class="icheck-primary">
@@ -65,7 +73,7 @@
           </div>
           <!-- /.col -->
           <div class="col-4">
-            <button type="button" id="btnLogin" class="btn btn-primary btn-block">
+            <button type="button" id="btnLogin" class="btn btn-secondary btn-block">
               <i id="login-icon" class="fas fa-sign-in-alt"></i>
               <i id="loading-icon-login" class="fa fa-spinner fa-spin hide"></i>
               <span id="store-text">Login</span>
@@ -73,24 +81,17 @@
           </div>
           <!-- /.col -->
         </div>
+
+        <br>
+        <p class="mb-3" align="center">
+          <a href="#">Lupa Kata Sandi ?</a>
+        </p>
+        
+        <p class="cp-text" align="center">
+          © Hak Cipta 2022 MDT Al A'laa.
+      </p>
       </form>
 
-      <div class="social-auth-links text-center mt-2 mb-3">
-        <a href="#" class="btn btn-block btn-primary">
-          <i class="fab fa-facebook mr-2"></i> Sign in using Facebook
-        </a>
-        <a href="#" class="btn btn-block btn-danger">
-          <i class="fab fa-google-plus mr-2"></i> Sign in using Google+
-        </a>
-      </div>
-      <!-- /.social-auth-links -->
-
-      <p class="mb-1">
-        <a href="forgot-password.html">I forgot my password</a>
-      </p>
-      <p class="mb-0">
-        <a href="register.html" class="text-center">Register a new membership</a>
-      </p>
     </div>
     <!-- /.card-body -->
   </div>

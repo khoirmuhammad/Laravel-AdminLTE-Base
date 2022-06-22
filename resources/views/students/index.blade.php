@@ -47,7 +47,7 @@
     @endif
     <th>Pribumi</th>
     @if(session('role_type') == 'ppk')
-    <th width="7%">#</th>
+    <th width="10%">#</th>
     @endif
   </tr>
   </thead>
@@ -64,18 +64,18 @@
     @if(session('role_type') != 'ppk')
     <td>{{ $item->group }}</td>
     @endif
-    
+
     <td>{{ $item->isPribumi == 1 ? "Ya" : "Tidak" }}</td>
     @if(session('role_type') == 'ppk')
-    <td>    
+    <td>
       <a href="/generus/ubah-generus?id={{ $item->id }}" class="btn btn-info btn-sm"> <i class="fa fa-pencil"></i></a>
-      <a class="btn btn-danger btn-sm" onclick="deleteStudent('{{ $item->id }}', '{{ $item->fullname }}')"> <i class="fa fa-trash"></i></a>   
+      <a class="btn btn-danger btn-sm" onclick="deleteStudent('{{ $item->id }}', '{{ $item->fullname }}')"> <i class="fa fa-trash"></i></a>
     </td>
     @endif
   </tr>
   @endforeach
 
-  
+
 
   </tbody>
   <tfoot>
@@ -145,7 +145,7 @@ $(document).ready(function() {
         if (title != 'No' && title != '#') {
           $(this).html('<input type="text" class="form-control" placeholder="' + title + '" />');
         }
-        
+
     });
 
     // DataTable
@@ -163,7 +163,7 @@ $(document).ready(function() {
                 .columns()
                 .every(function () {
                     var that = this;
- 
+
                     $('input', this.footer()).on('keyup change clear', function () {
                         if (that.search() !== this.value) {
                             that.search(this.value).draw();
@@ -190,7 +190,7 @@ $(document).ready(function() {
     `;
   }
 
-  
+
 
   $(buttons).appendTo('#example1_wrapper .col-md-6:eq(0)');
 
@@ -198,7 +198,7 @@ $(document).ready(function() {
       window.location='{{ url("generus/tambah-generus") }}'
   });
 
-  
+
 
 });
 
