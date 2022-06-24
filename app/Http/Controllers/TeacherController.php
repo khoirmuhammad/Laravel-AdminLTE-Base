@@ -11,7 +11,7 @@ class TeacherController extends Controller
     public function get_list_teachers()
     {
         $data = $this->get_teachers(); //Teacher::where('group', session('group'))->get();
-        
+
         return view('teachers.index',[
             "title" => "Data PJ Kelas",
             "data" => $data
@@ -22,6 +22,13 @@ class TeacherController extends Controller
     {
         return view('teachers.form-add',[
             "title" => "Tambah PJ Kelas"
+        ]);
+    }
+
+    public function get_form_edit_teacher()
+    {
+        return view ('teachers.form-edit', [
+            'title' => "Ubah PJ Kelas"
         ]);
     }
 

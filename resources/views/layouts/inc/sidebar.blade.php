@@ -59,14 +59,14 @@
           @else
           <li class="nav-item">
             <a href="#" class="nav-link">
-              <i class="far fa-circle nav-icon"></i>
+              <i class="nav-icon {{ $sidebar['icon'] }}"></i>
               <p>{{ $sidebar['title']}}</p>
             </a>
           </li>
-          
+
           @endif
 
-          
+
           @endforeach
 
           <li class="nav-item">
@@ -78,7 +78,7 @@
             </a>
           </li>
 
-         
+
         </ul>
       </nav>
       <!-- /.sidebar-menu -->
@@ -107,7 +107,7 @@
         }
       });
 
-      
+
     }
 
     function post_logout() {

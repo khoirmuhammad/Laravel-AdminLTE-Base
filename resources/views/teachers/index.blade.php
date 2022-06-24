@@ -57,17 +57,17 @@
       <span class="badge bg-secondary">{{ $class['class_level'] }}</span>
       @endforeach
     </td>
-    
+
     <td>{{ $item['is_teacher'] == 1 ? "Ya" : "Tidak" }}</td>
     <td>{{ $item['is_admin_class'] == 1 ? "Ya" : "Tidak" }}</td>
     <td>
         <a href="/pj-kelas/ubah-pjkelas?id={{ $item['id'] }}" class="btn btn-info btn-sm"> <i class="fa fa-pencil"></i></a>
-        <a class="btn btn-danger btn-sm" onclick="deletePjKelas('{{ $item['id'] }}', '{{ $item['name'] }}')"> <i class="fa fa-trash"></i></a>   
+        <a class="btn btn-danger btn-sm" onclick="deletePjKelas('{{ $item['id'] }}', '{{ $item['name'] }}')"> <i class="fa fa-trash"></i></a>
     </td>
   </tr>
   @endforeach
 
-  
+
 
   </tbody>
   <tfoot>
@@ -131,7 +131,7 @@ $(document).ready(function() {
         if (title != 'No' && title != '#') {
           $(this).html('<input type="text" class="form-control" placeholder="' + title + '" />');
         }
-        
+
     });
 
     // DataTable
@@ -149,7 +149,7 @@ $(document).ready(function() {
                 .columns()
                 .every(function () {
                     var that = this;
- 
+
                     $('input', this.footer()).on('keyup change clear', function () {
                         if (that.search() !== this.value) {
                             that.search(this.value).draw();
@@ -176,7 +176,7 @@ $(document).ready(function() {
     `;
   }
 
-  
+
 
   $(buttons).appendTo('#example1_wrapper .col-md-6:eq(0)');
 
@@ -184,11 +184,12 @@ $(document).ready(function() {
       window.location='{{ url("pj-kelas/tambah-pjkelas") }}'
   });
 
-  
+
 
 });
 
 function deletePjKelas(id, name) {
+    debugger;
   swal({
         title: "Apakah Anda Yakin?",
         text: `Menghapus ${name} dari database!`,
@@ -198,29 +199,27 @@ function deletePjKelas(id, name) {
       })
       .then((willDelete) => {
         if (willDelete) {
-          performDeleteStudent(id, name);
+          performDeletePJKelas(id, name);
         }
       });
 
     return false;
   }
 
-  function performDeleteStudent(id, name) {
+  function performDeletePJKelas(id, name) {
     debugger;
     $.ajax({
-        url:"/api/generus/delete-student-by-id",
+        url:"/api/teacher/delete-teacher",
         type: 'DELETE',
         dataType:'json',
         contentType: 'json',
-        data: JSON.stringify({id:id}),
+        data: JSON.stringify({'id':id}),
         contentType: 'application/json; charset=utf-8',
         headers: {'X-CSRF-TOKEN': CSRF_TOKEN},
         success: function(response){
           debugger;
-          if (response.status) {
-            swal("Berhasil", `Generus ${name} berhasil dihapus`, "success");
+          swal("Berhasil", `Data Guru : ${name} berhasil dihapus`, "success");
             location.reload(true);
-          }
         },
         error: function(response) {
           debugger;

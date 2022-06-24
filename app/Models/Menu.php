@@ -14,4 +14,6 @@ class Menu extends Model
       ];
 
     protected $primaryKey = 'id';
+
+    public $timestamps = false;
 }

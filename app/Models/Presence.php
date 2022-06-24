@@ -19,6 +19,7 @@ class Presence extends Model
                 ->leftJoin('class_levels', 'students.class','=', 'class_levels.id')
                 ->where('students.group',$group)
                 ->where('students.class', $class_level)
+                ->where('filled_date', )
                 ->get(['presences.id','students.id as student_id','students.fullname','class_levels.id as level_id','class_levels.name as classname',
                     'presences.is_present', 'presences.is_permit', 'presences.is_absent','presences.permit_desc',
                     'presences.filled_by']);

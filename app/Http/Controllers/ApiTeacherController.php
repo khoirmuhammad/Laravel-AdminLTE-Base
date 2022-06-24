@@ -16,26 +16,22 @@ use Illuminate\Support\Facades\Route;
 
 class ApiTeacherController extends Controller
 {
+    public function get_teacher_by_id(Request $request)
+    {
+        $teacher_id = $request->route('id');
+
+        $result = Teacher::find($teacher_id);
+
+        return response()->json(['data' => $result]);
+    }
+
     public function post_save_teacher(Request $request)
     {
         try
         {
             if ($request->input('id') != null || $request->input('id') != '')
             {
-                $teacher = Teacher::find($request->input('id'));
-
-                $teacher->name = $request->input('name');
-                $teacher->gender = $request->input('gender');
-                $teacher->status = $request->input('status');
-                $teacher->is_teacher = $request->input('isTeacher');
-                $teacher->is_admin_class = $request->input('isAdminClass');
-                $teacher->is_student = $request->input('isStudent');
-                $teacher->class_level = $request->input('classString');
-                $teacher->updated_at = Carbon::now('Asia/Jakarta');
-
-                // $teacher->save();
-
-                return response()->json(['status' => true, 'data' => $teacher], 200);
+                return $this->update_teacher($request);
             }
             else
             {
@@ -51,6 +47,87 @@ class ApiTeacherController extends Controller
             $this->save_log($action, $error, $log_key);
 
             return response()->json(['status' => false, 'error_message' => "Terjadi Kesalahan Saat Menyimpan Data", 'log_key' => $log_key], 500);
+        }
+    }
+
+    public function delete_teacher(Request $request)
+    {
+        try
+        {
+            try
+            {
+                DB::beginTransaction();
+
+                $teacher = Teacher::find($request->input('id'));
+                $username = $teacher->username;
+
+                $user = User::where('username','=', $username)->first();
+                $user_id = $user->id;
+
+                $teacher->delete();
+
+                $user->delete();
+
+                UserRole::where('user_id','=', $user_id)->delete();
+
+                DB::commit();
+
+                return response()->json(['status' => $username], 201);
+            }
+            catch(\PDOException $pdoEx)
+            {
+                DB::rollback();
+
+                $error = $pdoEx->getMessage();
+                $action = explode('@',Route::getCurrentRoute()->getActionName())[1];
+                $log_key = strtoupper(auth()->user()->username . $this->get_random_string());
+
+                $this->save_log($action, $error, $log_key);
+
+                return response()->json(['status' => false, 'error_message' => "Terjadi Kesalaan Transaksi Database", 'log_key' => $log_key], 500);
+            }
+        }
+        catch(Exception $ex)
+        {
+            $error = $ex->getMessage();
+            $action = explode('@',Route::getCurrentRoute()->getActionName())[1];
+            $log_key = strtoupper(auth()->user()->username . $this->get_random_string());
+
+            $this->save_log($action, $error, $log_key);
+
+            return response()->json(['status' => false, 'error_message' => "Terjadi Kesalahan Saat Menghapus Data".$error, 'log_key' => $log_key], 500);
+        }
+    }
+
+    private function update_teacher($request)
+    {
+        try
+        {
+            $teacher = Teacher::find($request->input('id'));
+
+            $teacher->name = $request->input('name');
+            $teacher->gender = $request->input('gender');
+            $teacher->status = $request->input('status');
+            $teacher->is_teacher = $request->input('isTeacher');
+            $teacher->is_admin_class = $request->input('isAdminClass');
+            $teacher->is_student = $request->input('isStudent');
+            $teacher->class_level = $request->input('classString');
+            $teacher->group = session('group');
+            $teacher->updated_at = Carbon::now('Asia/Jakarta');
+
+            $teacher->save();
+
+            return response()->json(['status' => true], 204);
+        }
+        catch(Exception $ex)
+        {
+            $error = $ex->getMessage();
+            $action = explode('@',Route::getCurrentRoute()->getActionName())[1];
+            $log_key = strtoupper(auth()->user()->username . $this->get_random_string());
+
+            $this->save_log($action, $error, $log_key);
+
+            return response()->json(['status' => false, 'error_message' => "Terjadi Kesalaan Transaksi Database", 'log_key' => $log_key], 500);
         }
     }
 
@@ -106,7 +183,7 @@ class ApiTeacherController extends Controller
 
             $user_role = new UserRole();
             $user_role->user_id = $user_id;
-            $user_role->role_id = env('ROLE_GURU_KBM');
+            $user_role->role_id = env('ROLE_GURU_KBM_BB_KTG');
 
             $user_role->save();
 

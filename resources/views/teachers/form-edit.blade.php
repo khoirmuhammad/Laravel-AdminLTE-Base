@@ -36,7 +36,7 @@
         <div class="row">
           <div class="col-md-6">
               <input type="hidden" id="group" value="{{ request()->session()->has('group') ? session('group') : "" }}"/>
-
+                <input type="hidden" id="id" />
               <div class="form-group">
                   <label>Nama</label>
                   <input type="text" class="form-control" id="name" name="name" placeholder="Nama Penanggung Jawab Kelas">
@@ -198,6 +198,7 @@ $(document).ready(function() {
     var CSRF_TOKEN = document.querySelector('meta[name="csrf-token"]').getAttribute("content");
 
     get_class_levels();
+    set_form();
 
     $("#hasAccount").change(function() {
         debugger;
@@ -296,6 +297,7 @@ $(document).ready(function() {
         $(`#loading-icon-${action}`).removeClass('hide');
         $(`#${action}-text`).text('Sedang Menyimpan...');
 
+        let id = $('#id').val();
         let name = $('#name').val();
         let gender = $("input[name='gender']:checked").val();
         let status = $('#status').val();
@@ -317,6 +319,7 @@ $(document).ready(function() {
         }
 
       let teacher = {
+        id: id,
         name: name,
         gender: gender,
         status: status,
@@ -339,14 +342,14 @@ $(document).ready(function() {
         success: function(response){
           debugger
 
-          swal("Berhasil", `Data Guru : ${response.data.name} berhasil ditambahkan`, "success");
+          swal("Berhasil", `Data Guru : ${teacher.name} berhasil diperbarui`, "success");
 
           $(`#card-body-id`).removeClass('opacity');
           $(`#${action}-icon`).removeClass('hide');
           $(`#loading-icon-${action}`).addClass('hide');
           $(`#${action}-text`).text(action == 'save' ? 'Simpan' : 'Submit');
 
-          $("#teacher-form")[0].reset();
+          set_form();
         },
         error: function(response) {
           debugger
@@ -398,8 +401,64 @@ $(document).ready(function() {
   }
 
 
+  function set_form()
+  {
+    $.ajax({
+      url:`/api/teacher/get-teacher/${GetParameterValues('id')}`,
+      method: 'GET',
+      dataType: 'json',
+      success: function(response){
+        debugger;
+        if (response.data != undefined || response.data != null) {
+            let obj = response.data;
 
+            $('#id').val(obj.id);
+            $('#name').val(obj.name);
 
+            if (obj.name == 'Laki-laki')
+                $('#gender-male').prop('checked',true);
+            else
+            $('#gender-female').prop('checked',true);
+
+            $('#status').val(obj.status);
+
+            $('#isTeacher').prop('checked', obj.is_teacher ? true : false);
+            $('#isAdminClass').prop('checked', obj.is_admin_class ? true : false);
+            $('#isStudent').prop('checked', obj.is_student ? true : false);
+            $('#hasAccount').prop('checked', obj.username != '' ? true : false);
+            $('#hasAccount').prop('disabled', obj.username != '' ? true : false);
+            $('#username').val(obj.username);
+
+            if (obj.username != '') {
+                $('#username').css('display','block');
+                $('#username').prop('disabled',true);
+            }
+
+            if (obj.class_level != '' || obj.class_level != null) {
+                let classLevels = obj.class_level.split(',');
+
+                $.each(classLevels, function( index, value ) {
+                debugger
+                $(`#class_level_${value}`).prop('checked',true);
+            });
+            }
+        }
+      },
+      error: function(response) {
+
+      }
+    });
+  }
+
+  function GetParameterValues(param) {
+    var url = window.location.href.slice(window.location.href.indexOf('?') + 1).split('&');
+    for (var i = 0; i < url.length; i++) {
+        var urlparam = url[i].split('=');
+        if (urlparam[0] == param) {
+            return urlparam[1];
+        }
+    }
+  }
 
 </script>
 @endpush

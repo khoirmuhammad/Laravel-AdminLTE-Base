@@ -49,8 +49,13 @@ Route::get('/generus/statistika-ppk', [StudentController::class, 'group_statisti
 Route::get('/generus/statistika-ppd', [StudentController::class, 'village_statistic'])->middleware('auth');
 
 
+Route::get('/menu', [MenuController::class, 'index'])->middleware('auth');
+Route::get('/menu/tambah-menu', [MenuController::class, 'get_form_add'])->middleware('auth');
+Route::get('/menu/ubah-menu', [MenuController::class, 'get_form_edit'])->middleware('auth');
+
 Route::get('/presensi/popup', [PresenceController::class, 'get_form_presence_popup'])->middleware('auth');
 Route::get('/presensi/formulir', [PresenceController::class, 'get_form_presence'])->middleware('auth');
 
 Route::get('/pj-kelas', [TeacherController::class, 'get_list_teachers'])->middleware('auth');
 Route::get('/pj-kelas/tambah-pjkelas', [TeacherController::class, 'get_form_add_teacher'])->middleware('auth');
+Route::get('/pj-kelas/ubah-pjkelas', [TeacherController::class, 'get_form_edit_teacher'])->middleware('auth');
