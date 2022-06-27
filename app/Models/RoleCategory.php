@@ -14,4 +14,6 @@ class RoleCategory extends Model
     protected $casts = [
         'id' => 'string'
       ];
+
+      public $timestamps = false;
 }

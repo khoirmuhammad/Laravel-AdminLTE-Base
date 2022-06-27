@@ -12,7 +12,9 @@ use App\Http\Controllers\ApiTeacherController;
 use App\Http\Controllers\ApiPresenceController;
 use App\Http\Controllers\ApiPresenceTeacherController;
 use App\Http\Controllers\ApiRoleCategoriesController;
+use App\Http\Controllers\ApiRoleController;
 use App\Http\Controllers\ApiUserController;
+use App\Http\Controllers\ApiVillageController;
 
 /*
 |--------------------------------------------------------------------------
@@ -75,7 +77,9 @@ Route::post('/presence-teacher/post-clockinout',[ApiPresenceTeacherController::c
 Route::get('/presence-teacher/get-teacher-presence', [ApiPresenceTeacherController::class, 'get_current_presence_on_class']);
 
 Route::get('/role-categories', [ApiRoleCategoriesController::class, 'get_role_categories']);
-
+Route::post('/role-categories/post-save', [ApiRoleCategoriesController::class, 'post_save_role']);
+Route::get('/role-categories/role-category-by-id/{id}', [ApiRoleCategoriesController::class, 'get_role_category_by_id']);
+Route::delete('/role-categories/delete-role-category', [ApiRoleCategoriesController::class, 'delete_role_category']);
 
 Route::get('/menu/get-parent-menu', [ApiMenuController::class, 'get_parent_menu']);
 Route::post('/menu/save-menu', [ApiMenuController::class, 'post_save_menu']);
@@ -85,3 +89,8 @@ Route::delete('/menu/delete-menu', [ApiMenuController::class, 'delete_menu']);
 Route::get('/user/get-user-by-username', [ApiUserController::class, 'get_user_info_by_username']);
 Route::post('/user/update-menu', [ApiUserController::class, 'post_update_user']);
 Route::get('/user/get-check-old-password/{password}', [ApiUserController::class, 'get_check_old_password']);
+
+Route::get('/villages', [ApiVillageController::class, 'get_list_village']);
+
+Route::post('/role/post-save', [ApiRoleController::class, 'post_save_role']);
+Route::delete('/role/delete-role', [ApiRoleController::class, 'delete_role']);

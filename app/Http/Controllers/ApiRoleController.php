@@ -5,52 +5,25 @@ namespace App\Http\Controllers;
 use Exception;
 use App\Models\Log;
 use App\Models\Role;
-use App\Models\RoleCategory;
+use App\Models\UserRole;
 use Illuminate\Http\Request;
 use Illuminate\Support\Facades\Route;
 
-class ApiRoleCategoriesController extends Controller
+class ApiRoleController extends Controller
 {
-    public function get_role_categories()
-    {
-        $result = RoleCategory::all();
-        return response()->json(['data' => $result]);
-    }
-
-    public function get_role_category_by_id()
-    {
-        $id = request()->route('id');
-
-        $result = RoleCategory::find($id);
-
-        return response()->json(['data' => $result]);
-    }
-
     public function post_save_role()
     {
         try
         {
-            $exist_role = RoleCategory::find(request()->input('id'));
+            $role = new Role();
 
-            if ($exist_role)
-            {
-                $exist_role->name = request()->input('name');
+            $role->id = request()->input('id');
+            $role->category = request()->input('category');
+            $role->village_code = request()->input('village');
+            $role->group_code = request()->input('group');
 
-                $exist_role->save();
-
-                return response()->json(['status' => true], 204);
-            }
-            else
-            {
-                $new_role = new RoleCategory();
-
-                $new_role->id = request()->input('id');
-                $new_role->name = request()->input('name');
-
-                $new_role->save();
-
-                return response()->json(['status' => true, 'data' => $new_role], 201);
-            }
+            $role->save();
+            return response()->json(['status' => true, 'data' => $role], 201);
         }
         catch(Exception $ex)
         {
@@ -64,20 +37,19 @@ class ApiRoleCategoriesController extends Controller
         }
     }
 
-    public function delete_role_category(Request $request)
+    public function delete_role(Request $request)
     {
         try
         {
-            $roles = Role::where('category', $request->input('id'))->first();
+            $role = UserRole::where('role_id', $request->input('id'))->first();
 
-            if ($roles != null)
+            if ($role != null)
             {
-                return response()->json(['status' => false, 'error_message' => "Role Kategori Masih digunakan di table role"], 200);
+                return response()->json(['status' => false, 'error_message' => "Role Masih digunakan di table user role"], 200);
             }
             else
             {
-                RoleCategory::find($request->input('id'))->delete();
-
+                Role::find($request->input('id'))->delete();
                 return response()->json(['status' => true], 204);
             }
         }
@@ -108,7 +80,7 @@ class ApiRoleCategoriesController extends Controller
         catch(\Exception $ex)
         {
             $log = new Log();
-            $log->controller = 'ApiRoleCategories';
+            $log->controller = 'ApiRole';
             $log->action = 'save_log';
             $log->error_message = $ex->getMessage();
             $log->log_key = $log_key;

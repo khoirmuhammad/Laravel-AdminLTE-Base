@@ -5,6 +5,8 @@ use App\Http\Controllers\ClassLevelController;
 use App\Http\Controllers\MenuController;
 use App\Http\Controllers\MyProfileController;
 use App\Http\Controllers\PresenceController;
+use App\Http\Controllers\RoleCategoriesController;
+use App\Http\Controllers\RoleController;
 use App\Http\Controllers\StudentController;
 use App\Http\Controllers\TeacherController;
 use App\Http\Middleware\IsSuperadmin;
@@ -67,3 +69,11 @@ Route::get('/kelas/tambah-kelas', [ClassLevelController::class, 'get_form_add'])
 Route::get('/kelas/ubah-kelas', [ClassLevelController::class, 'get_form_edit'])->middleware('auth');
 
 Route::get('/profilku', [MyProfileController::class, 'index'])->middleware('auth');
+
+Route::get('/kategori-role', [RoleCategoriesController::class, 'index'])->middleware('auth');
+Route::get('/kategori-role/tambah-role', [RoleCategoriesController::class, 'get_form_add'])->middleware('auth');
+Route::get('/kategori-role/ubah-role', [RoleCategoriesController::class, 'get_form_edit'])->middleware('auth');
+
+Route::get('/role', [RoleController::class, 'index'])->middleware('auth');
+Route::get('/role/tambah-role', [RoleController::class, 'get_form_add'])->middleware('auth');
+Route::get('/role/ubah-role', [RoleController::class, 'get_form_edit'])->middleware('auth');

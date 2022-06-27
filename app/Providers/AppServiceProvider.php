@@ -34,7 +34,7 @@ class AppServiceProvider extends ServiceProvider
     {
         View::composer('*', function($view)
         {
-            
+
             $menus_based_on_role_category = collect($this->get_menu_based_on_role_category());
 
             $menus_parent = $menus_based_on_role_category->where('route','=','#')->sortBy('order');
@@ -63,7 +63,7 @@ class AppServiceProvider extends ServiceProvider
     {
         $role = session('role');
         $role_data = Role::where('id',$role)->first();
-        $role_category = $role_data != null ? $role_data->catgeory : null;
+        $role_category = $role_data != null ? $role_data->category : null;
 
         $menus_based_on_role_category = MenuRoleCategory::where('role_category_id', $role_category)->get();
 
