@@ -53,9 +53,14 @@ class TeacherController extends Controller
 
                 foreach($class_levels as $class_level)
                 {
-                    $class_level_array[] = [
-                        'class_level' => $class_level_master->where('id', $class_level)->first()->name
-                    ];
+                    $class_level_obj = $class_level_master->where('id', $class_level)->first();
+                    if ($class_level_obj != null)
+                    {
+                        $class_level_array[] = [
+                            'class_level' => $class_level_obj->name
+                        ];
+                    }
+
                 }
 
                 $result[] = [

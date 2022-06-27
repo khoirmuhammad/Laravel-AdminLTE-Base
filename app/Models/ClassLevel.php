@@ -16,6 +16,8 @@ class ClassLevel extends Model
         'id' => 'string'
       ];
 
+      public $timestamps = false;
+
       public static function get_class_level($group, $level)
       {
         $query1 = DB::table('class_levels')
@@ -40,6 +42,24 @@ class ClassLevel extends Model
                   ->where('group_id','=', '')
                   ->union($query1)
                   ->get();
+
+        return $query2;
+      }
+
+      public static function get_class_level_by_group_join_level()
+      {
+        $query1 = DB::table('class_levels')
+                    ->leftJoin('levels', 'levels.id','=','class_levels.level_id')
+                  ->where('class_levels.group_id','=',session('group'))
+                  ->select(['class_levels.id as id','class_levels.name as classname','class_levels.group_id',
+                  'class_levels.level_id as level_id','levels.name as levelname']);
+
+        $query2 = DB::table('class_levels')
+                    ->leftJoin('levels', 'levels.id','=','class_levels.level_id')
+                  ->where('class_levels.group_id','=', '')
+                  ->union($query1)
+                  ->select(['class_levels.id as id','class_levels.name as classname','class_levels.group_id',
+                'class_levels.level_id as level_id','levels.name as levelname'])->get();
 
         return $query2;
       }

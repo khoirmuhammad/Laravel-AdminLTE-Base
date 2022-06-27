@@ -206,7 +206,7 @@ class ApiMenuController extends Controller
         try
         {
             $log = new Log();
-            $log->controller = 'ApiTeacher';
+            $log->controller = 'ApiMenu';
             $log->action = $action;
             $log->error_message = $error;
             $log->log_key = $log_key;

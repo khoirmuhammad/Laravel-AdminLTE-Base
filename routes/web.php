@@ -1,7 +1,9 @@
 <?php
 
 use App\Http\Controllers\AuthController;
+use App\Http\Controllers\ClassLevelController;
 use App\Http\Controllers\MenuController;
+use App\Http\Controllers\MyProfileController;
 use App\Http\Controllers\PresenceController;
 use App\Http\Controllers\StudentController;
 use App\Http\Controllers\TeacherController;
@@ -59,3 +61,9 @@ Route::get('/presensi/formulir', [PresenceController::class, 'get_form_presence'
 Route::get('/pj-kelas', [TeacherController::class, 'get_list_teachers'])->middleware('auth');
 Route::get('/pj-kelas/tambah-pjkelas', [TeacherController::class, 'get_form_add_teacher'])->middleware('auth');
 Route::get('/pj-kelas/ubah-pjkelas', [TeacherController::class, 'get_form_edit_teacher'])->middleware('auth');
+
+Route::get('/kelas', [ClassLevelController::class, 'index'])->middleware('auth');
+Route::get('/kelas/tambah-kelas', [ClassLevelController::class, 'get_form_add'])->middleware('auth');
+Route::get('/kelas/ubah-kelas', [ClassLevelController::class, 'get_form_edit'])->middleware('auth');
+
+Route::get('/profilku', [MyProfileController::class, 'index'])->middleware('auth');

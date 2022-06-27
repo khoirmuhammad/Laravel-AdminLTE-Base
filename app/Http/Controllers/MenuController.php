@@ -11,8 +11,6 @@ class MenuController extends Controller
 {
     public function index()
     {
-        dd(Role::where('id',session('role'))->first());
-        //dd($this->get_menu_based_on_role_category());
         //https://codepen.io/n3k1t/pen/OJMGgyq
         $data = Menu::where('route','#')->orderBy('order')->get();
 

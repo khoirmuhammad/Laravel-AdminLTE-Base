@@ -12,6 +12,7 @@ use App\Http\Controllers\ApiTeacherController;
 use App\Http\Controllers\ApiPresenceController;
 use App\Http\Controllers\ApiPresenceTeacherController;
 use App\Http\Controllers\ApiRoleCategoriesController;
+use App\Http\Controllers\ApiUserController;
 
 /*
 |--------------------------------------------------------------------------
@@ -58,6 +59,9 @@ Route::get('/education/education-list', [ApiEducationController::class, 'get_edu
 
 Route::get('/class-level/class-level-list/{groupId}/{levelId}', [ApiClassLevelController::class, 'get_class_level']);
 Route::get('/class-level/class-level-list-by-group', [ApiClassLevelController::class, 'get_class_level_by_group']);
+Route::post('/class-level/post-save-classname',[ApiClassLevelController::class, 'post_save_classname']);
+Route::get('/class-level/class-level-by-id/{id}', [ApiClassLevelController::class, 'get_class_level_by_id']);
+Route::delete('/class-level/delete-class-level', [ApiClassLevelController::class, 'delete_classname']);
 
 
 Route::get('/presence/get-students/{class_level}', [ApiPresenceController::class, 'select_student_class']);
@@ -77,3 +81,7 @@ Route::get('/menu/get-parent-menu', [ApiMenuController::class, 'get_parent_menu'
 Route::post('/menu/save-menu', [ApiMenuController::class, 'post_save_menu']);
 Route::get('/menu/get-menu-roles/{id}', [ApiMenuController::class, 'get_menu_rith_roles']);
 Route::delete('/menu/delete-menu', [ApiMenuController::class, 'delete_menu']);
+
+Route::get('/user/get-user-by-username', [ApiUserController::class, 'get_user_info_by_username']);
+Route::post('/user/update-menu', [ApiUserController::class, 'post_update_user']);
+Route::get('/user/get-check-old-password/{password}', [ApiUserController::class, 'get_check_old_password']);
