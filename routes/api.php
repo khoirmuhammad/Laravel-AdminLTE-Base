@@ -87,10 +87,19 @@ Route::get('/menu/get-menu-roles/{id}', [ApiMenuController::class, 'get_menu_rit
 Route::delete('/menu/delete-menu', [ApiMenuController::class, 'delete_menu']);
 
 Route::get('/user/get-user-by-username', [ApiUserController::class, 'get_user_info_by_username']);
-Route::post('/user/update-menu', [ApiUserController::class, 'post_update_user']);
+Route::get('/user/get-user-roles-by-id/{id}', [ApiUserController::class, 'get_user_roles_by_id']);
+Route::post('/user/insert-user', [ApiUserController::class, 'post_insert_user']);
+Route::post('/user/update-user', [ApiUserController::class, 'post_update_user']);
+Route::post('/user/update-user-profile', [ApiUserController::class, 'post_update_user_profile']);
 Route::get('/user/get-check-old-password/{password}', [ApiUserController::class, 'get_check_old_password']);
+Route::delete('/user/delete-user', [ApiUserController::class, 'delete_user']);
 
 Route::get('/villages', [ApiVillageController::class, 'get_list_village']);
 
+Route::get('/role/role-daerah', [ApiRoleController::class, 'get_role_daerah']);
+Route::get('/role/role-desa/{village}', [ApiRoleController::class, 'get_role_desa']);
+Route::get('/role/role-desa', [ApiRoleController::class, 'get_all_role_desa']);
+Route::get('/role/role-kelompok/{group}', [ApiRoleController::class, 'get_role_kelompok']);
+Route::get('/role/role-kelompok', [ApiRoleController::class, 'get_all_role_kelompok']);
 Route::post('/role/post-save', [ApiRoleController::class, 'post_save_role']);
 Route::delete('/role/delete-role', [ApiRoleController::class, 'delete_role']);

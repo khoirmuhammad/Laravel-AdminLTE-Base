@@ -11,6 +11,41 @@ use Illuminate\Support\Facades\Route;
 
 class ApiRoleController extends Controller
 {
+    public function get_role_daerah()
+    {
+        $data = Role::where('village_code','=', null)->where('group_code','=',null)->get(['id']);
+
+        return response()->json(['data' => $data]);
+    }
+
+    public function get_role_desa()
+    {
+        $data = Role::where('village_code','=', request()->route('village'))->where('group_code','=', null)->get(['id']);
+
+        return response()->json(['data' => $data]);
+    }
+
+    public function get_all_role_desa()
+    {
+        $data = Role::where('village_code','<>', null)->where('group_code','=', null)->get(['id']);
+
+        return response()->json(['data' => $data]);
+    }
+
+    public function get_role_kelompok()
+    {
+        $data = Role::where('village_code','<>', null)->where('group_code','=',request()->route('group'))->get(['id']);
+
+        return response()->json(['data' => $data]);
+    }
+
+    public function get_all_role_kelompok()
+    {
+        $data = Role::where('village_code','<>', null)->where('group_code','<>',null)->get(['id']);
+
+        return response()->json(['data' => $data]);
+    }
+
     public function post_save_role()
     {
         try

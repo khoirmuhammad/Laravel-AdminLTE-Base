@@ -150,21 +150,11 @@ $(document).ready(function() {
         },
     });
 
-  let buttons;
-
-  if ($('#role_type').val() != 'ppk') {
-    buttons = `
-    <div class="btn-group" role="group" aria-label="Button">
-      <button type="button" id="print-student" class="btn btn-success btn-sm"><i class="fa fa-file-excel-o" aria-hidden="true"></i> Cetak Data</button>
-    </div>
-    `;
-  } else {
-    buttons = `
+  let buttons = `
     <div class="btn-group" role="group" aria-label="Button">
       <button type="button" id="add-role" class="btn btn-primary btn-sm"><i class="fa fa-user-plus" aria-hidden="true"></i> Tambah Data</button>
     </div>
     `;
-  }
 
 
 

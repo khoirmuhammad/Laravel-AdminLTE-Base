@@ -73,7 +73,7 @@ class AuthController extends Controller
                     'status' => false,
                     'message' => 'Akun anda belum diresgistrasi'
                 ];
-    
+
                 return response()->json(['response' => $response]);
             }
             else
@@ -126,7 +126,7 @@ class AuthController extends Controller
             }
         }
 
-        
+
     }
 
     public function post_logout(Request $request)
@@ -159,16 +159,19 @@ class AuthController extends Controller
                 {
                     request()->session()->put('group', $role_data->group_code);
                     request()->session()->put('role_type', 'ppk');
+                    request()->session()->put('role', $role_id);
                 }
                 else if ($role_data->group_code == null && $role_data->village_code != null)
                 {
                     request()->session()->put('village', $role_data->village_code);
                     request()->session()->put('role_type', 'ppd');
+                    request()->session()->put('role', $role_id);
                 }
                 else
                 {
                     request()->session()->put('role_type', 'ppg');
-                }    
+                    request()->session()->put('role', $role_id);
+                }
             }
         }
     }

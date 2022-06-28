@@ -32,66 +32,58 @@
             </div>
         </div>
         <div class="card-body">
-            <a href="/menu/tambah-menu" class="btn btn-primary btn-sm mb-2"><i class="fas fa-plus"></i> Tambah Menu</a>
-            <input type="hidden" id="role_type" value="{{ request()->session()->has('role_type')? session('role_type'): '' }}" />
-            <table class="table table-bordered table-sm">
+            <input type="hidden" id="role_type"
+                value="{{ request()->session()->has('role_type')? session('role_type'): '' }}" />
+            <table id="example1" class="table table-bordered table-striped table-sm">
                 <thead>
                     <tr>
-                        <th>#</th>
-                        <th>Judul Menu</th>
-                        <th>Urutan</th>
-                        <th>Icon</th>
-                        <th>#</th>
+                        <th>No</th>
+                        <th width="25%">Nama Lengkap</th>
+                        <th>Nama Pengguna</th>
+                        <th>Email</th>
+                        <td>Role</td>
+                        <th width="10%">#</th>
                     </tr>
                 </thead>
-
                 <tbody>
-                    @foreach($data as $item)
-                    <tr data-toggle="collapse" data-target="#id{{ $item['order'] }}" class="accordion-toggle">
-                        <td><button class="btn btn-default btn-xs"><span class="fa fa-expand" aria-hidden="true"></span></button></td>
-                        <td>{{ $item['title'] }}</td>
-                        <td>{{ $item['order'] }}</td>
-                        <td>{{ $item['icon'] }}</td>
-                        <td>
-                            <a href="/menu/ubah-menu?id={{ $item['id'] }}" class="btn btn-info btn-sm"> <i class="fa fa-pencil"></i></a>
-                            <a class="btn btn-danger btn-sm" onclick="deleteMenu('{{ $item['id'] }}', '{{ $item['title'] }}')"> <i class="fa fa-trash"></i></a>
-                          </td>
-                    </tr>
 
-                    <tr>
-                        <td colspan="12" class="hiddenRow">
-                            <div class="accordian-body collapse" id="id{{ $item['order'] }}">
-                                <table class="table table-striped">
-                                    <thead>
-                                        <tr class="info">
-                                            <th>Judul Menu</th>
-                                            <th>Urutan</th>
-                                            <th>URL</th>
-                                            <th>Icon</th>
-                                            <th>#</th>
-                                        </tr>
-                                    </thead>
+                    @foreach ($data as $item)
+                        <tr>
+                            <td>{{ $loop->index + 1 }}</td>
+                            <td>{{ $item['name'] }}</td>
+                            <td>{{ $item['username'] }}</td>
+                            <td>{{ $item['email'] }}</td>
+                            <td>
+                                @foreach ($item['roles'] as $role)
+                                    <span class="badge bg-success">{{ $role->role_id }}</span>
+                                @endforeach
+                            </td>
+                            <td>
+                                <a href="/pengguna/ubah-pengguna?id={{ $item['id'] }}" class="btn btn-info btn-sm"> <i
+                                        class="fa fa-pencil"></i></a>
+                                @if ($item['username'] != auth()->user()->username)
+                                <a class="btn btn-danger btn-sm"
+                                onclick="deletePengguna('{{ $item['id'] }}','{{ $item['name'] }}')"> <i
+                                    class="fa fa-trash"></i></a>
+                                @endif
 
-                                    <tbody>
-                                        @foreach($item['children'] as $itemChild)
-                                        <tr>
-                                            <td>{{ $itemChild->title }}</td>
-                                            <td>{{ $itemChild->order }}</td>
-                                            <td>{{ $itemChild->route }}</td>
-                                            <td>{{ $itemChild->icon }}</td>
-                                            <td>
-                                                <a href="/menu/ubah-menu?id={{ $itemChild->id }}" class="btn btn-info btn-sm"> <i class="fa fa-pencil"></i></a>
-                                                <a class="btn btn-danger btn-sm" onclick="deleteMenu('{{ $itemChild->id }}', '{{ $itemChild->title }}')"> <i class="fa fa-trash"></i></a>
-                                              </td>
-                                        </tr>
-                                        @endforeach
-                                    </tbody>
-                                </table>
-                            </div>
-                        </td>
-                    </tr>
+                            </td>
+                        </tr>
                     @endforeach
+
+
+
                 </tbody>
+                <tfoot>
+                    <tr>
+                        <th>No</th>
+                        <th width="25%">Nama Lengkap</th>
+                        <th>Nama Pengguna</th>
+                        <th>Email</th>
+                        <td>Role</td>
+                        <th width="10%">#</th>
+                    </tr>
+                </tfoot>
             </table>
         </div>
         <!-- /.card-body -->
@@ -104,11 +96,6 @@
 @endsection
 
 @push('css')
-    <style>
-        .hiddenRow {
-            padding: 0 !important;
-        }
-    </style>
     <!-- Font Awesome -->
     <link rel="stylesheet" href="/adminlte/plugins/fontawesome-free/css/all.min.css">
     <!-- DataTables -->
@@ -172,61 +159,51 @@
                 },
             });
 
-            let buttons;
-
-            if ($('#role_type').val() != 'ppk') {
-                buttons = `
+            let buttons = `
     <div class="btn-group" role="group" aria-label="Button">
-      <button type="button" id="print-student" class="btn btn-success btn-sm"><i class="fa fa-file-excel-o" aria-hidden="true"></i> Cetak Data</button>
+      <button type="button" id="add-user" class="btn btn-primary btn-sm"><i class="fa fa-user-plus" aria-hidden="true"></i> Tambah Data</button>
     </div>
     `;
-            } else {
-                buttons = `
-    <div class="btn-group" role="group" aria-label="Button">
-      <button type="button" id="add-student" class="btn btn-primary btn-sm"><i class="fa fa-user-plus" aria-hidden="true"></i> Tambah Data</button>
-      <button type="button" id="print-student" class="btn btn-success btn-sm"><i class="fa fa-file-excel-o" aria-hidden="true"></i> Cetak Data</button>
-    </div>
-    `;
-            }
 
 
 
             $(buttons).appendTo('#example1_wrapper .col-md-6:eq(0)');
 
-            $('#add-student').on('click', function() {
-                window.location = '{{ url('generus/tambah-generus') }}'
+            $('#add-user').on('click', function() {
+                window.location = '{{ url('pengguna/tambah-pengguna') }}'
             });
 
 
 
         });
 
-        function deleteMenu(id, title) {
+        function deletePengguna(id, name) {
+            debugger;
             swal({
                     title: "Apakah Anda Yakin?",
-                    text: `Menghapus ${title} dari database!`,
+                    text: `Menghapus ${name} dari database!`,
                     icon: "warning",
                     buttons: true,
                     dangerMode: true,
                 })
                 .then((willDelete) => {
                     if (willDelete) {
-                        performDeleteMenu(id, title);
+                        performDeletePengguna(id, name);
                     }
                 });
 
             return false;
         }
 
-        function performDeleteMenu(id, title) {
+        function performDeletePengguna(id, name) {
             debugger;
             $.ajax({
-                url: "/api/menu/delete-menu",
+                url: "/api/user/delete-user",
                 type: 'DELETE',
                 dataType: 'json',
                 contentType: 'json',
                 data: JSON.stringify({
-                    id: id
+                    'id': id
                 }),
                 contentType: 'application/json; charset=utf-8',
                 headers: {
@@ -234,8 +211,20 @@
                 },
                 success: function(response) {
                     debugger;
-                    swal("Berhasil", `Menu ${title} berhasil dihapus`, "success");
-                    location.reload(true);
+                    if (response == undefined) {
+                        swal("Berhasil", `Data Pengguna : ${name} berhasil dihapus`, "success");
+                        location.reload(true);
+                    } else {
+                        if (response.status) {
+                            swal("Berhasil", `Data Role : ${name} berhasil dihapus`, "success");
+                            location.reload(true);
+                        } else {
+                            swal("Peringatan", `${response.error_message}`, "info");
+                        }
+                    }
+
+
+
                 },
                 error: function(response) {
                     debugger;

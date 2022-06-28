@@ -9,6 +9,7 @@ use App\Http\Controllers\RoleCategoriesController;
 use App\Http\Controllers\RoleController;
 use App\Http\Controllers\StudentController;
 use App\Http\Controllers\TeacherController;
+use App\Http\Controllers\UserController;
 use App\Http\Middleware\IsSuperadmin;
 use Illuminate\Support\Facades\Route;
 
@@ -77,3 +78,7 @@ Route::get('/kategori-role/ubah-role', [RoleCategoriesController::class, 'get_fo
 Route::get('/role', [RoleController::class, 'index'])->middleware('auth');
 Route::get('/role/tambah-role', [RoleController::class, 'get_form_add'])->middleware('auth');
 Route::get('/role/ubah-role', [RoleController::class, 'get_form_edit'])->middleware('auth');
+
+Route::get('/pengguna', [UserController::class, 'index'])->middleware('auth');
+Route::get('/pengguna/tambah-pengguna', [UserController::class, 'get_form_add'])->middleware('auth');
+Route::get('/pengguna/ubah-pengguna', [UserController::class, 'get_form_edit'])->middleware('auth');

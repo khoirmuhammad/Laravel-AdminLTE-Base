@@ -394,7 +394,7 @@
 
         function proceedModify(user) {
             $.ajax({
-                url: "/api/user/update-menu",
+                url: "/api/user/update-user-profile",
                 type: 'POST',
                 dataType: 'json',
                 contentType: 'json',
