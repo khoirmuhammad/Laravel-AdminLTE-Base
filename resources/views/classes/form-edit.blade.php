@@ -232,8 +232,7 @@
                 },
                 error: function(response) {
                     debugger
-                    let error_message = response.responseJSON.error_message == undefined ? response.responseJSON
-                        .message : response.responseJSON.error_message;
+                    let error_message = response.responseJSON.error_message;
                     let logKey = response.responseJSON.log_key;
 
                     let alert_message;
@@ -272,7 +271,7 @@
                     }
                 },
                 error: function(response) {
-
+                    swal("Gagal", response.status + "-" + response.statusText, "error");
                 }
             });
         }

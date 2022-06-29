@@ -38,7 +38,7 @@ class ApiRoleCategoriesController extends Controller
 
                 $exist_role->save();
 
-                return response()->json(['status' => true], 204);
+                return response()->json(204);
             }
             else
             {
@@ -49,7 +49,7 @@ class ApiRoleCategoriesController extends Controller
 
                 $new_role->save();
 
-                return response()->json(['status' => true, 'data' => $new_role], 201);
+                return response()->json(201);
             }
         }
         catch(Exception $ex)
@@ -60,7 +60,7 @@ class ApiRoleCategoriesController extends Controller
 
             $this->save_log($action, $error, $log_key);
 
-            return response()->json(['status' => false, 'error_message' => "Terjadi Kesalahan Saat Menghapus Data", 'log_key' => $log_key], 500);
+            return response()->json(['error_message' => "Terjadi Kesalahan Saat Menyimpan Data", 'log_key' => $log_key], 500);
         }
     }
 
@@ -72,13 +72,13 @@ class ApiRoleCategoriesController extends Controller
 
             if ($roles != null)
             {
-                return response()->json(['status' => false, 'error_message' => "Role Kategori Masih digunakan di table role"], 200);
+                return response()->json(['error_message' => "Role Kategori Masih digunakan di table role"], 409);
             }
             else
             {
                 RoleCategory::find($request->input('id'))->delete();
 
-                return response()->json(['status' => true], 204);
+                return response()->json(204);
             }
         }
         catch(Exception $ex)
@@ -89,7 +89,7 @@ class ApiRoleCategoriesController extends Controller
 
             $this->save_log($action, $error, $log_key);
 
-            return response()->json(['status' => false, 'error_message' => "Terjadi Kesalahan Saat Menghapus Data", 'log_key' => $log_key], 500);
+            return response()->json(['error_message' => "Terjadi Kesalahan Saat Menghapus Data", 'log_key' => $log_key], 500);
         }
     }
 

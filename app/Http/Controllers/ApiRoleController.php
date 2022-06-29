@@ -58,7 +58,7 @@ class ApiRoleController extends Controller
             $role->group_code = request()->input('group');
 
             $role->save();
-            return response()->json(['status' => true, 'data' => $role], 201);
+            return response()->json(201);
         }
         catch(Exception $ex)
         {
@@ -68,7 +68,7 @@ class ApiRoleController extends Controller
 
             $this->save_log($action, $error, $log_key);
 
-            return response()->json(['status' => false, 'error_message' => "Terjadi Kesalahan Saat Menghapus Data", 'log_key' => $log_key], 500);
+            return response()->json(['error_message' => "Terjadi Kesalahan Saat Menyimpan Data", 'log_key' => $log_key], 500);
         }
     }
 
@@ -80,12 +80,12 @@ class ApiRoleController extends Controller
 
             if ($role != null)
             {
-                return response()->json(['status' => false, 'error_message' => "Role Masih digunakan di table user role"], 200);
+                return response()->json(['error_message' => "Role Masih digunakan di table user role"], 409);
             }
             else
             {
                 Role::find($request->input('id'))->delete();
-                return response()->json(['status' => true], 204);
+                return response()->json(204);
             }
         }
         catch(Exception $ex)
@@ -96,7 +96,7 @@ class ApiRoleController extends Controller
 
             $this->save_log($action, $error, $log_key);
 
-            return response()->json(['status' => false, 'error_message' => "Terjadi Kesalahan Saat Menghapus Data", 'log_key' => $log_key], 500);
+            return response()->json(['error_message' => "Terjadi Kesalahan Saat Menghapus Data", 'log_key' => $log_key], 500);
         }
     }
 

@@ -53,13 +53,20 @@
                             <td>{{ $item->group_id == '' ? 'Umum' : '' }}</td>
                             <td>{{ $item->levelname }}</td>
                             <td>
-                                @if ($item->group_id != '')
+                                @if (session('role_type') == 'ppk' && $item->group_id != '')
+                                    <a href="/kelas/ubah-kelas?id={{ $item->id }}" class="btn btn-info btn-xs"> <i
+                                            class="fa fa-pencil"></i></a>
+                                    <a class="btn btn-danger btn-xs"
+                                        onclick="deleteClass('{{ $item->id }}', '{{ $item->classname }}')"> <i
+                                            class="fa fa-trash"></i></a>
+                                @elseif (session('role_type') == 'ppg' && $item->group_id == '')
                                     <a href="/kelas/ubah-kelas?id={{ $item->id }}" class="btn btn-info btn-xs"> <i
                                             class="fa fa-pencil"></i></a>
                                     <a class="btn btn-danger btn-xs"
                                         onclick="deleteClass('{{ $item->id }}', '{{ $item->classname }}')"> <i
                                             class="fa fa-trash"></i></a>
                                 @endif
+
                             </td>
                         </tr>
                     @endforeach
@@ -151,21 +158,11 @@
                 },
             });
 
-            let buttons;
-
-            if ($('#role_type').val() != 'ppk') {
-                buttons = `
-    <div class="btn-group" role="group" aria-label="Button">
-      <button type="button" id="print-student" class="btn btn-success btn-sm"><i class="fa fa-file-excel-o" aria-hidden="true"></i> Cetak Data</button>
-    </div>
-    `;
-            } else {
-                buttons = `
+            let buttons = `
     <div class="btn-group" role="group" aria-label="Button">
       <button type="button" id="add-kelas" class="btn btn-primary btn-sm"><i class="fa fa-user-plus" aria-hidden="true"></i> Tambah Data</button>
     </div>
     `;
-            }
 
 
 
@@ -214,23 +211,29 @@
                 success: function(response) {
                     debugger;
                     swal("Berhasil", `Data Kelas : ${name} berhasil dihapus`, "success");
-                    location.reload(true);
+                    setTimeout(function() {
+                        location.reload(true);
+                    }, 2000);
                 },
                 error: function(response) {
-                    debugger;
-                    let error_message = response.responseJSON.error_message == undefined ? response.responseJSON
-                        .message : response.responseJSON.error_message;
-                    let logKey = response.responseJSON.log_key;
+                    if (response.status == 409) {
+                        swal("Peringatan", `${response.responseJSON.error_message}`, "info");
+                    } else if (response.status == 500) {
+                        let error_message = response.responseJSON.error_message;
+                        let logKey = response.responseJSON.log_key;
 
-                    let alert_message;
+                        let alert_message;
 
-                    if (logKey == undefined)
-                        alert_message = error_message;
-                    else
-                        alert_message =
-                        `${error_message}. Copy dan beritaukan kode log berikut ke admin = ${logKey}`;
+                        if (logKey == undefined)
+                            alert_message = error_message;
+                        else
+                            alert_message =
+                            `${error_message}. Copy dan beritaukan kode log berikut ke admin = ${logKey}`;
 
-                    swal("Gagal", alert_message, "error");
+                        swal("Gagal", alert_message, "error");
+                    } else {
+                        swal("Peringatan", `${response.status} - ${response.statusText}`, "error");
+                    }
                 }
             });
         }

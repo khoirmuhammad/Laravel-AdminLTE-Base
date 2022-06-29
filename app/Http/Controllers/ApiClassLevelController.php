@@ -58,7 +58,7 @@ class ApiClassLevelController extends Controller
 
             $this->save_log($action, $error, $log_key);
 
-            return response()->json(['status' => false, 'error_message' => "Terjadi Kesalahan Saat Menyimpan Data", 'log_key' => $log_key], 500);
+            return response()->json(['error_message' => "Terjadi Kesalahan Saat Menyimpan Data", 'log_key' => $log_key], 500);
         }
     }
 
@@ -72,19 +72,19 @@ class ApiClassLevelController extends Controller
 
             if ($teacher != null)
             {
-                return response()->json(['status' => false, 'error_message' => 'Ubah data guru dari kelas ini'], 403);
+                return response()->json(['error_message' => 'Kelas masih digunakan. Ubah data guru dari kelas ini'], 409);
             }
 
             $student = Student::where('class','=', $id)->first();
 
             if ($student != null)
             {
-                return response()->json(['status' => false, 'error_message' => 'Ubah data generus dari kelas ini'], 403);
+                return response()->json(['error_message' => 'Kelas masih digunakan. Ubah data generus dari kelas ini'], 409);
             }
 
             ClassLevel::find($id)->delete();
 
-            return response()->json(['status' => true], 204);
+            return response()->json(204);
         }
         catch(Exception $ex)
         {
@@ -94,7 +94,7 @@ class ApiClassLevelController extends Controller
 
             $this->save_log($action, $error, $log_key);
 
-            return response()->json(['status' => false, 'error_message' => "Terjadi Kesalahan Saat Menghapus Data", 'log_key' => $log_key], 500);
+            return response()->json(['error_message' => "Terjadi Kesalahan Saat Menghapus Data", 'log_key' => $log_key], 500);
         }
     }
 
@@ -109,7 +109,7 @@ class ApiClassLevelController extends Controller
 
             $class_level->save();
 
-            return response()->json(['status' => true], 204);
+            return response()->json(204);
         }
         catch(Exception $ex)
         {
@@ -119,7 +119,7 @@ class ApiClassLevelController extends Controller
 
             $this->save_log($action, $error, $log_key);
 
-            return response()->json(['status' => false, 'error_message' => "Terjadi Kesalahan Saat Menyimpan Data", 'log_key' => $log_key], 500);
+            return response()->json(['error_message' => "Terjadi Kesalahan Saat Menyimpan Data", 'log_key' => $log_key], 500);
         }
     }
 
@@ -131,12 +131,12 @@ class ApiClassLevelController extends Controller
 
             $class_level->id = Str::uuid()->toString();
             $class_level->name = $request->input('classname');
-            $class_level->group_id = session('group');
+            $class_level->group_id = session('group') == null ? "" : session('group');
             $class_level->level_id = $request->input('level');
 
             $class_level->save();
 
-            return response()->json(['status' => true, 'data' => $class_level], 201);
+            return response()->json(201);
         }
         catch(Exception $ex)
         {
@@ -146,7 +146,7 @@ class ApiClassLevelController extends Controller
 
             $this->save_log($action, $error, $log_key);
 
-            return response()->json(['status' => false, 'error_message' => "Terjadi Kesalahan Saat Menyimpan Data", 'log_key' => $log_key], 500);
+            return response()->json(['error_message' => "Terjadi Kesalahan Saat Menyimpan Data", 'log_key' => $log_key], 500);
         }
     }
 

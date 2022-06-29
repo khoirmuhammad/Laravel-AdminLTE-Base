@@ -217,7 +217,7 @@
                 success: function(response) {
                     debugger
 
-                    swal("Berhasil", `Data Kelas : ${response.data.name} berhasil ditambahkan`, "success");
+                    swal("Berhasil", `Data Kelas : ${classes.classname} berhasil ditambahkan`, "success");
 
                     $(`#card-body-id`).removeClass('opacity');
                     $(`#submit-icon`).removeClass('hide');
@@ -228,8 +228,7 @@
                 },
                 error: function(response) {
                     debugger
-                    let error_message = response.responseJSON.error_message == undefined ? response.responseJSON
-                        .message : response.responseJSON.error_message;
+                    let error_message = response.responseJSON.error_message;
                     let logKey = response.responseJSON.log_key;
 
                     let alert_message;
