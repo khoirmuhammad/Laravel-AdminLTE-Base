@@ -10,6 +10,7 @@ use App\Http\Controllers\ApiMenuController;
 use App\Http\Controllers\ApiStudentController;
 use App\Http\Controllers\ApiTeacherController;
 use App\Http\Controllers\ApiPresenceController;
+use App\Http\Controllers\ApiPresenceDateConfigController;
 use App\Http\Controllers\ApiPresenceTeacherController;
 use App\Http\Controllers\ApiRoleCategoriesController;
 use App\Http\Controllers\ApiRoleController;
@@ -103,3 +104,8 @@ Route::get('/role/role-kelompok/{group}', [ApiRoleController::class, 'get_role_k
 Route::get('/role/role-kelompok', [ApiRoleController::class, 'get_all_role_kelompok']);
 Route::post('/role/post-save', [ApiRoleController::class, 'post_save_role']);
 Route::delete('/role/delete-role', [ApiRoleController::class, 'delete_role']);
+
+Route::get('/schedule/get-schedule-group', [ApiPresenceDateConfigController::class, 'get_schedule_by_group']);
+Route::post('/schedule/post-insert', [ApiPresenceDateConfigController::class, 'post_insert_schedules']);
+Route::put('/schedule/put-update', [ApiPresenceDateConfigController::class, 'put_update_schedule']);
+Route::delete('/schedule/delete-schedule', [ApiPresenceDateConfigController::class, 'delete_schedule']);

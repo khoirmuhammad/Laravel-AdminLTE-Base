@@ -1,17 +1,18 @@
 <?php
 
-use App\Http\Controllers\AuthController;
-use App\Http\Controllers\ClassLevelController;
-use App\Http\Controllers\MenuController;
-use App\Http\Controllers\MyProfileController;
-use App\Http\Controllers\PresenceController;
-use App\Http\Controllers\RoleCategoriesController;
-use App\Http\Controllers\RoleController;
-use App\Http\Controllers\StudentController;
-use App\Http\Controllers\TeacherController;
-use App\Http\Controllers\UserController;
 use App\Http\Middleware\IsSuperadmin;
 use Illuminate\Support\Facades\Route;
+use App\Http\Controllers\AuthController;
+use App\Http\Controllers\MenuController;
+use App\Http\Controllers\RoleController;
+use App\Http\Controllers\UserController;
+use App\Http\Controllers\StudentController;
+use App\Http\Controllers\TeacherController;
+use App\Http\Controllers\PresenceController;
+use App\Http\Controllers\MyProfileController;
+use App\Http\Controllers\ClassLevelController;
+use App\Http\Controllers\RoleCategoriesController;
+use App\Http\Controllers\PresenceDateConfigController;
 
 
 /*
@@ -82,3 +83,5 @@ Route::get('/role/ubah-role', [RoleController::class, 'get_form_edit'])->middlew
 Route::get('/pengguna', [UserController::class, 'index'])->middleware('auth');
 Route::get('/pengguna/tambah-pengguna', [UserController::class, 'get_form_add'])->middleware('auth');
 Route::get('/pengguna/ubah-pengguna', [UserController::class, 'get_form_edit'])->middleware('auth');
+
+Route::get('/konfigurasi-presensi',[PresenceDateConfigController::class, 'get_form_add'])->middleware('auth');

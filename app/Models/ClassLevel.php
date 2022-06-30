@@ -18,33 +18,55 @@ class ClassLevel extends Model
 
       public $timestamps = false;
 
-    //   public static function get_class_level($group, $level)
-    //   {
-    //     $query1 = DB::table('class_levels')
-    //               ->where('group_id','=','')
-    //               ->where('level_id','=', $level);
+      public static function get_class_level($group, $level)
+      {
+        // remaja & unik
+        if ($level == "3110ea5d-d75c-11ec-b5a0-5ce0c508bbb3" || $level == "3110c8d4-d75c-11ec-b5a0-5ce0c508bbb3")
+        {
+            $level = array('3110ea5d-d75c-11ec-b5a0-5ce0c508bbb3','3110c8d4-d75c-11ec-b5a0-5ce0c508bbb3');
 
-    //     $query2 = DB::table('class_levels')
-    //               ->where('group_id','=',$group)
-    //               ->where('level_id','=', $level)
-    //               ->union($query1)
-    //               ->get();
+            $query1 = DB::table('class_levels')
+            ->where('group_id','=','')
+            ->whereIn('level_id', $level);
 
-    //     return $query2;
-    //   }
+            $query2 = DB::table('class_levels')
+                        ->where('group_id','=',$group)
+                        ->whereIn('level_id', $level)
+                        ->union($query1)
+                        ->get();
 
-    //   public static function get_class_level_by_group()
-    //   {
-    //     $query1 = DB::table('class_levels')
-    //               ->where('group_id','=',session('group'));
+            return $query2;
 
-    //     $query2 = DB::table('class_levels')
-    //               ->where('group_id','=', '')
-    //               ->union($query1)
-    //               ->get();
+        }
+        else
+        {
+            $query1 = DB::table('class_levels')
+            ->where('group_id','=','')
+            ->where('level_id','=', $level);
 
-    //     return $query2;
-    //   }
+            $query2 = DB::table('class_levels')
+                        ->where('group_id','=',$group)
+                        ->where('level_id','=', $level)
+                        ->union($query1)
+                        ->get();
+
+            return $query2;
+        }
+
+      }
+
+      public static function get_class_level_by_group()
+      {
+        $query1 = DB::table('class_levels')
+                  ->where('group_id','=',session('group'));
+
+        $query2 = DB::table('class_levels')
+                  ->where('group_id','=', '')
+                  ->union($query1)
+                  ->get();
+
+        return $query2;
+      }
 
       public static function get_class_level_by_group_join_level()
       {

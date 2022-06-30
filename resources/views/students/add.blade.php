@@ -45,7 +45,7 @@
               <div class="form-group">
                 <label>Tanggal Lahir</label>
                 <div class="input-group">
-                
+
                 <div class="input-group-prepend">
                   <span class="input-group-text"><i class="far fa-calendar-alt"></i></span>
                 </div>
@@ -69,8 +69,8 @@
                   </div>
               </div>
 
-              
-            
+
+
 
             <div class="form-group clearfix">
                 <label>Status</label>
@@ -91,7 +91,7 @@
           </div>
 
           <div class="col-md-6">
-            
+
 
               <div class="form-group">
                 <label>Jenjang</label>
@@ -111,7 +111,7 @@
                   <label>Pendidikan</label>
                   <select id="education" name="education" class="form-control" style="width: 100%;">
                     <option value="">Pilih</option>
-                    
+
                   </select>
                 </div>
           </div>
@@ -158,7 +158,7 @@ Footer
 <link rel="stylesheet" href="/adminlte/plugins/select2/css/select2.min.css">
 <link rel="stylesheet" href="/adminlte/plugins/select2-bootstrap4-theme/select2-bootstrap4.min.css">
 
-  
+
 <link rel="stylesheet" href="/adminlte/dist/css/adminlte.min.css">
 
 
@@ -212,7 +212,7 @@ $(document).ready(function() {
     $('#level').on('change', function (e) {
       debugger;
       var data = this.value;
-      
+
       if (data != null) {
         get_class_level(data);
       }
@@ -232,7 +232,7 @@ $(document).ready(function() {
 
     $.validator.setDefaults({
       submitHandler: function () {
-        s swal({
+        swal({
         title: "Simpan Data",
         text: "Pastikan data yang diisi sesuai",
         icon: "warning",
@@ -244,12 +244,12 @@ $(document).ready(function() {
           post_save_student('submit');
         }
       });
-        
+
       }
     });
 
     $('#student-form').validate({
-      ignore: [], 
+      ignore: [],
       rules: {
         name: {
           required: true
@@ -389,7 +389,7 @@ $(document).ready(function() {
         if (response.data != undefined || response.data != null) {
           for(let i = 0; i < response.data.length; i++) {
             $("#level").append(`<option value="${response.data[i].id}">${response.data[i].name}</option>`);
-        }  
+        }
         }
       },
       error: function(response) {
@@ -411,7 +411,7 @@ $(document).ready(function() {
           $("#class_level").append(`<option value="">Pilih</option>`);
           for(let i = 0; i < response.data.length; i++) {
             $("#class_level").append(`<option value="${response.data[i].id}">${response.data[i].name}</option>`);
-        }  
+        }
         }
       },
       error: function(response) {
@@ -429,7 +429,7 @@ $(document).ready(function() {
         if (response.data != undefined || response.data != null) {
           for(let i = 0; i < response.data.length; i++) {
             $("#education").append(`<option value="${response.data[i].id}">${response.data[i].name}</option>`);
-        }  
+        }
         }
       },
       error: function(response) {

@@ -86,7 +86,7 @@
         <p class="mb-3" align="center">
           <a href="#">Lupa Kata Sandi ?</a>
         </p>
-        
+
         <p class="cp-text" align="center">
           © Hak Cipta 2022 MDT Al A'laa.
       </p>
@@ -101,7 +101,7 @@
 
 
 
-<div class="modal fade" id="modal-roles">
+<div class="modal fade" id="modal-roles" data-keyboard="false" data-backdrop="static">
     <div class="modal-dialog">
       <div class="modal-content">
         <div class="modal-header">
@@ -115,7 +115,7 @@
           <div class="col-sm-6">
             <!-- radio -->
             <div class="form-group clearfix" id="roles-radio">
-              
+
             </div>
 
         </div>
@@ -146,7 +146,7 @@
     $(document).ready(function() {
 
         $('#txtUsername').focus();
-        
+
         var CSRF_TOKEN = document.querySelector('meta[name="csrf-token"]').getAttribute("content");
 
         $('#txtPassword').on('keypress', function (e) {
@@ -155,7 +155,7 @@
          }
         });
 
-        $('#btnLogin').on('click', function() {         
+        $('#btnLogin').on('click', function() {
           authentication();
         });
 
@@ -201,9 +201,9 @@
                   } else {
                     $('#loading-icon-proceed').addClass('hide');
                     $('#proceed-text').text('Lanjutkan');
-                    
+
                     swal("Error", response.response.message, "error"); return;
-                    
+
                   }
                 },
                 error: function(response) {
@@ -251,7 +251,7 @@
                     $('#login-icon').removeClass('hide');
                     $('#loading-icon-login').addClass('hide');
                     $('#store-text').text('Login');
-                    
+
                     if (response.response.status) {
                       let roles = response.response.data;
 
@@ -266,7 +266,7 @@
                           </div>`);
                       });
 
-                      $('#modal-roles').modal('show'); 
+                      $('#modal-roles').modal('show');
 
                     } else {
                       swal("Error", response.response.message, "error"); return;
