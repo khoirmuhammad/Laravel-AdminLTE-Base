@@ -260,7 +260,7 @@
                     }
                 },
                 error: function(response) {
-
+                    swal("Gagal", response.status + "-" + response.statusText, "error");
                 }
             });
         }
@@ -370,19 +370,22 @@
                 },
                 error: function(response) {
                     debugger
-                    let error_message = response.responseJSON.error_message == undefined ? response.responseJSON
-                        .message : response.responseJSON.error_message;
-                    let logKey = response.responseJSON.log_key;
+                    if (response.status == 500) {
+                        let error_message = response.responseJSON.error_message;
+                        let logKey = response.responseJSON.log_key;
 
-                    let alert_message;
+                        let alert_message;
 
-                    if (logKey == undefined)
-                        alert_message = error_message;
-                    else
-                        alert_message =
-                        `${error_message}. Copy dan beritaukan kode log berikut ke admin = ${logKey}`;
+                        if (logKey == undefined)
+                            alert_message = error_message;
+                        else
+                            alert_message =
+                            `${error_message}. Copy dan beritaukan kode log berikut ke admin = ${logKey}`;
 
-                    swal("Gagal", alert_message, "error");
+                        swal("Gagal", alert_message, "error");
+                    } else {
+                        swal("Gagal", response.status + "-" + response.statusText, "error");
+                    }
 
                     $(`#card-body-id`).removeClass('opacity');
                     $(`#submit-icon`).removeClass('hide');
@@ -414,7 +417,7 @@
                     }
                 },
                 error: function(response) {
-
+                    swal("Gagal", response.status + "-" + response.statusText, "error");
                 }
             });
         }
@@ -441,7 +444,7 @@
                     }
                 },
                 error: function(response) {
-
+                    swal("Gagal", response.status + "-" + response.statusText, "error");
                 }
             });
         }
@@ -468,7 +471,7 @@
                     }
                 },
                 error: function(response) {
-
+                    swal("Gagal", response.status + "-" + response.statusText, "error");
                 }
             });
         }
@@ -495,7 +498,7 @@
                     }
                 },
                 error: function(response) {
-
+                    swal("Gagal", response.status + "-" + response.statusText, "error");
                 }
             });
         }
@@ -522,7 +525,7 @@
                     }
                 },
                 error: function(response) {
-
+                    swal("Gagal", response.status + "-" + response.statusText, "error");
                 }
             });
         }

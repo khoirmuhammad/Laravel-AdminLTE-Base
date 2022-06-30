@@ -155,7 +155,7 @@ class ApiClassLevelController extends Controller
         try
         {
             $log = new Log();
-            $log->controller = 'ApiTeacher';
+            $log->controller = 'ApiClassLevel';
             $log->action = $action;
             $log->error_message = $error;
             $log->log_key = $log_key;

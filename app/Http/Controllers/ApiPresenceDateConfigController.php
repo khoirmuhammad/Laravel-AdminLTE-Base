@@ -120,7 +120,7 @@ class ApiPresenceDateConfigController extends Controller
         try
         {
             $log = new Log();
-            $log->controller = 'ApiMenu';
+            $log->controller = 'ApiPresenceDateConfig';
             $log->action = $action;
             $log->error_message = $error;
             $log->log_key = $log_key;
@@ -130,7 +130,7 @@ class ApiPresenceDateConfigController extends Controller
         catch(\Exception $ex)
         {
             $log = new Log();
-            $log->controller = 'ApiRole';
+            $log->controller = 'ApiPresenceDateConfig';
             $log->action = 'save_log';
             $log->error_message = $ex->getMessage();
             $log->log_key = $log_key;

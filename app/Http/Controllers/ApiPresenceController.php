@@ -72,7 +72,7 @@ class ApiPresenceController extends Controller
         try
         {
             $log = new Log();
-            $log->controller = 'ApiPresenceTeacher';
+            $log->controller = 'ApiPresence';
             $log->action = $action;
             $log->error_message = $error;
             $log->log_key = $log_key;

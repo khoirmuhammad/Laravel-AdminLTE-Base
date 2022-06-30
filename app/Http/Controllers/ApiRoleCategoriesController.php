@@ -98,7 +98,7 @@ class ApiRoleCategoriesController extends Controller
         try
         {
             $log = new Log();
-            $log->controller = 'ApiMenu';
+            $log->controller = 'ApiRoleCategories';
             $log->action = $action;
             $log->error_message = $error;
             $log->log_key = $log_key;

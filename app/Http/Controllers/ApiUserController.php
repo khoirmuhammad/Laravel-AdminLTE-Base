@@ -118,7 +118,7 @@ class ApiUserController extends Controller
 
                 DB::commit();
 
-                return response()->json(['status' => true, 'data' => $user], 201);
+                return response()->json(201);
             } catch (\PDOException $pdoEx) {
                 DB::rollback();
 
@@ -128,7 +128,7 @@ class ApiUserController extends Controller
 
                 $this->save_log($action, $error, $log_key);
 
-                return response()->json(['status' => false, 'error_message' => "Terjadi Kesalaan Transaksi Database", 'log_key' => $log_key], 500);
+                return response()->json(['error_message' => "Terjadi Kesalaan Transaksi Database", 'log_key' => $log_key], 500);
             }
         } catch (Exception $ex) {
             $error = $ex->getMessage();
@@ -137,7 +137,7 @@ class ApiUserController extends Controller
 
             $this->save_log($action, $error, $log_key);
 
-            return response()->json(['status' => false, 'error_message' => "Terjadi Kesalaan Transaksi Database", 'log_key' => $log_key], 500);
+            return response()->json(['error_message' => "Terjadi Kesalaan Menyimpan Data", 'log_key' => $log_key], 500);
         }
     }
 
@@ -199,7 +199,7 @@ class ApiUserController extends Controller
 
                 DB::commit();
 
-                return response()->json(['status' => true, 'data' => $user], 204);
+                return response()->json(204);
             } catch (\PDOException $pdoEx) {
                 DB::rollback();
 
@@ -209,7 +209,7 @@ class ApiUserController extends Controller
 
                 $this->save_log($action, $error, $log_key);
 
-                return response()->json(['status' => false, 'error_message' => "Terjadi Kesalaan Transaksi Database", 'log_key' => $log_key], 500);
+                return response()->json(['error_message' => "Terjadi Kesalaan Transaksi Database", 'log_key' => $log_key], 500);
             }
         } catch (Exception $ex) {
             $error = $ex->getMessage();
@@ -218,7 +218,7 @@ class ApiUserController extends Controller
 
             $this->save_log($action, $error, $log_key);
 
-            return response()->json(['status' => false, 'error_message' => "Terjadi Kesalaan Transaksi Database", 'log_key' => $log_key], 500);
+            return response()->json(['error_message' => "Terjadi Kesalaan Memperbarui Data", 'log_key' => $log_key], 500);
         }
     }
 
@@ -238,7 +238,7 @@ class ApiUserController extends Controller
 
             $user->save();
 
-            return response()->json(['status' => true, 'data' => $user], 201);
+            return response()->json(201);
         } catch (Exception $ex) {
             $error = $ex->getMessage();
             $action = explode('@', Route::getCurrentRoute()->getActionName())[1];
@@ -246,7 +246,7 @@ class ApiUserController extends Controller
 
             $this->save_log($action, $error, $log_key);
 
-            return response()->json(['status' => false, 'error_message' => "Terjadi Kesalaan Transaksi Database", 'log_key' => $log_key], 500);
+            return response()->json(['error_message' => "Terjadi Kesalaan Transaksi Database", 'log_key' => $log_key], 500);
         }
     }
 
@@ -264,6 +264,11 @@ class ApiUserController extends Controller
 
             if ($roleType == "ppg" && str_contains($role, "superadmin")) {
                 UserRole::where('user_id', $id)->delete();
+
+                $check_user = UserRole::where('user_id', $id)->get()->count();
+                if ($check_user == 0) {
+                    User::find($id)->delete();
+                }
             } else if ($roleType == "ppd" && str_contains($role, "admin")) {
                 $user_roles = UserRole::where('user_id', $id)->get();
 
@@ -298,7 +303,7 @@ class ApiUserController extends Controller
             }
 
             DB::commit();
-            return response()->json(['status' => true], 201);
+            return response()->json(204);
         } catch (\PDOException $pdoEx) {
             DB::rollback();
 
@@ -335,7 +340,7 @@ class ApiUserController extends Controller
     {
         try {
             $log = new Log();
-            $log->controller = 'ApiTeacher';
+            $log->controller = 'ApiUser';
             $log->action = $action;
             $log->error_message = $error;
             $log->log_key = $log_key;

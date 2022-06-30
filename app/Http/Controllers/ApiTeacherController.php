@@ -46,7 +46,7 @@ class ApiTeacherController extends Controller
 
             $this->save_log($action, $error, $log_key);
 
-            return response()->json(['status' => false, 'error_message' => "Terjadi Kesalahan Saat Menyimpan Data", 'log_key' => $log_key], 500);
+            return response()->json(['error_message' => "Terjadi Kesalahan Saat Menyimpan Data", 'log_key' => $log_key], 500);
         }
     }
 
@@ -66,13 +66,18 @@ class ApiTeacherController extends Controller
 
                 $teacher->delete();
 
-                $user->delete();
+                // Kedepan diubah sesuai role guru di KBM
+                UserRole::where('user_id','=', $user_id)->where('role_id', env('ROLE_GURU_KBM_BB_KTG'))->delete();
 
-                UserRole::where('user_id','=', $user_id)->delete();
+                $check_user_role = UserRole::where('user_id','=', $user_id)->first();
+
+                if ($check_user_role == null) {
+                    $user->delete();
+                }
 
                 DB::commit();
 
-                return response()->json(['status' => $username], 201);
+                return response()->json(204);
             }
             catch(\PDOException $pdoEx)
             {
@@ -84,7 +89,7 @@ class ApiTeacherController extends Controller
 
                 $this->save_log($action, $error, $log_key);
 
-                return response()->json(['status' => false, 'error_message' => "Terjadi Kesalaan Transaksi Database", 'log_key' => $log_key], 500);
+                return response()->json(['error_message' => "Terjadi Kesalaan Transaksi Database", 'log_key' => $log_key], 500);
             }
         }
         catch(Exception $ex)
@@ -95,7 +100,7 @@ class ApiTeacherController extends Controller
 
             $this->save_log($action, $error, $log_key);
 
-            return response()->json(['status' => false, 'error_message' => "Terjadi Kesalahan Saat Menghapus Data".$error, 'log_key' => $log_key], 500);
+            return response()->json(['error_message' => "Terjadi Kesalahan Saat Menghapus Data".$error, 'log_key' => $log_key], 500);
         }
     }
 
@@ -117,7 +122,7 @@ class ApiTeacherController extends Controller
 
             $teacher->save();
 
-            return response()->json(['status' => true], 204);
+            return response()->json(204);
         }
         catch(Exception $ex)
         {
@@ -127,7 +132,7 @@ class ApiTeacherController extends Controller
 
             $this->save_log($action, $error, $log_key);
 
-            return response()->json(['status' => false, 'error_message' => "Terjadi Kesalaan Transaksi Database", 'log_key' => $log_key], 500);
+            return response()->json(['error_message' => "Terjadi Kesalaan Transaksi Database", 'log_key' => $log_key], 500);
         }
     }
 
@@ -183,13 +188,13 @@ class ApiTeacherController extends Controller
 
             $user_role = new UserRole();
             $user_role->user_id = $user_id;
-            $user_role->role_id = env('ROLE_GURU_KBM_BB_KTG');
+            $user_role->role_id = env('ROLE_GURU_KBM_BB_KTG'); // Kedepan diubah sesuai role guru di KBM
 
             $user_role->save();
 
             DB::commit();
 
-            return response()->json(['status' => true, 'data' => $teacher], 201);
+            return response()->json(201);
         }
         catch(\PDOException $pdoEx)
         {
@@ -201,7 +206,7 @@ class ApiTeacherController extends Controller
 
             $this->save_log($action, $error, $log_key);
 
-            return response()->json(['status' => false, 'error_message' => "Terjadi Kesalaan Transaksi Database", 'log_key' => $log_key], 500);
+            return response()->json(['error_message' => "Terjadi Kesalaan Transaksi Database", 'log_key' => $log_key], 500);
         }
     }
 

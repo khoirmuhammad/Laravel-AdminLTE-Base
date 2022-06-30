@@ -62,9 +62,9 @@
                                 <a href="/pengguna/ubah-pengguna?id={{ $item['id'] }}" class="btn btn-info btn-sm"> <i
                                         class="fa fa-pencil"></i></a>
                                 @if ($item['username'] != auth()->user()->username)
-                                <a class="btn btn-danger btn-sm"
-                                onclick="deletePengguna('{{ $item['id'] }}','{{ $item['name'] }}')"> <i
-                                    class="fa fa-trash"></i></a>
+                                    <a class="btn btn-danger btn-sm"
+                                        onclick="deletePengguna('{{ $item['id'] }}','{{ $item['name'] }}')"> <i
+                                            class="fa fa-trash"></i></a>
                                 @endif
 
                             </td>
@@ -211,23 +211,33 @@
                 },
                 success: function(response) {
                     debugger;
-                    if (response == undefined) {
-                        swal("Berhasil", `Data Pengguna : ${name} berhasil dihapus`, "success");
+                    swal("Berhasil", `Data Pengguna : ${name} berhasil dihapus`, "success");
+                    setTimeout(function() {
                         location.reload(true);
-                    } else {
-                        if (response.status) {
-                            swal("Berhasil", `Data Role : ${name} berhasil dihapus`, "success");
-                            location.reload(true);
-                        } else {
-                            swal("Peringatan", `${response.error_message}`, "info");
-                        }
-                    }
+                    }, 2000);
 
 
 
                 },
                 error: function(response) {
-                    debugger;
+                    if (response.status == 409) {
+                        swal("Peringatan", `${response.responseJSON.error_message}`, "info");
+                    } else if (response.status == 500) {
+                        let error_message = response.responseJSON.error_message;
+                        let logKey = response.responseJSON.log_key;
+
+                        let alert_message;
+
+                        if (logKey == undefined)
+                            alert_message = error_message;
+                        else
+                            alert_message =
+                            `${error_message}. Copy dan beritaukan kode log berikut ke admin = ${logKey}`;
+
+                        swal("Gagal", alert_message, "error");
+                    } else {
+                        swal("Peringatan", `${response.status} - ${response.statusText}`, "error");
+                    }
                 }
             });
         }

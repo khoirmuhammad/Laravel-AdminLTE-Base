@@ -92,7 +92,7 @@ class ApiPresenceTeacherController extends Controller
         catch(\Exception $ex)
         {
             $log = new Log();
-            $log->controller = 'ApiStudent';
+            $log->controller = 'ApiPresenceTeacher';
             $log->action = 'save_log';
             $log->error_message = $ex->getMessage();
             $log->log_key = $log_key;

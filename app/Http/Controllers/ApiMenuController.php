@@ -55,7 +55,7 @@ class ApiMenuController extends Controller
 
             $this->save_log($action, $error, $log_key);
 
-            return response()->json(['status' => false, 'error_message' => "Terjadi Kesalahan Saat Menyimpan Data", 'log_key' => $log_key], 500);
+            return response()->json(['error_message' => "Terjadi Kesalahan Saat Menyimpan Data", 'log_key' => $log_key], 500);
         }
     }
 
@@ -85,7 +85,7 @@ class ApiMenuController extends Controller
 
                 $this->save_log($action, $error, $log_key);
 
-                return response()->json(['status' => false, 'error_message' => "Terjadi Kesalaan Transaksi Database", 'log_key' => $log_key], 500);
+                return response()->json(['error_message' => "Terjadi Kesalaan Transaksi Database", 'log_key' => $log_key], 500);
             }
         }
         catch(Exception $ex)
@@ -96,7 +96,7 @@ class ApiMenuController extends Controller
 
             $this->save_log($action, $error, $log_key);
 
-            return response()->json(['status' => false, 'error_message' => "Terjadi Kesalahan Saat Menghapus Data", 'log_key' => $log_key], 500);
+            return response()->json(['error_message' => "Terjadi Kesalahan Saat Menghapus Data", 'log_key' => $log_key], 500);
         }
     }
 
@@ -135,7 +135,7 @@ class ApiMenuController extends Controller
 
             DB::commit();
 
-            return response()->json(['status' => true, 'data' => $menu], 201);
+            return response()->json(201);
         }
         catch(\PDOException $pdoEx)
         {
@@ -147,7 +147,7 @@ class ApiMenuController extends Controller
 
             $this->save_log($action, $error, $log_key);
 
-            return response()->json(['status' => false, 'error_message' => "Terjadi Kesalaan Transaksi Database", 'log_key' => $log_key], 500);
+            return response()->json(['error_message' => "Terjadi Kesalaan Transaksi Database", 'log_key' => $log_key], 500);
         }
     }
 
@@ -185,7 +185,7 @@ class ApiMenuController extends Controller
 
             DB::commit();
 
-            return response()->json(['status' => true, 'data' => $menu], 204);
+            return response()->json(204);
         }
         catch(\PDOException $pdoEx)
         {
@@ -197,7 +197,7 @@ class ApiMenuController extends Controller
 
             $this->save_log($action, $error, $log_key);
 
-            return response()->json(['status' => false, 'error_message' => "Terjadi Kesalaan Transaksi Database", 'log_key' => $log_key], 500);
+            return response()->json(['error_message' => "Terjadi Kesalaan Transaksi Database", 'log_key' => $log_key], 500);
         }
     }
 
@@ -216,7 +216,7 @@ class ApiMenuController extends Controller
         catch(\Exception $ex)
         {
             $log = new Log();
-            $log->controller = 'ApiTeacher';
+            $log->controller = 'ApiMenu';
             $log->action = 'save_log';
             $log->error_message = $ex->getMessage();
             $log->log_key = $log_key;

@@ -92,8 +92,9 @@
                         <div class="form-group">
                             <label>Konfirmasi Kata Sandi Baru</label>
                             <div class="input-group">
-                                <input type="password" name="confirmNewPassword" id="confirmNewPassword" class="form-control"
-                                    data-toggle="password" placeholder="Konfirmasi Kata Sandi Baru" disabled>
+                                <input type="password" name="confirmNewPassword" id="confirmNewPassword"
+                                    class="form-control" data-toggle="password" placeholder="Konfirmasi Kata Sandi Baru"
+                                    disabled>
                                 <div class="input-group-append">
                                     <span class="input-group-text">
                                         <i class="bi bi-eye-slash" id="toggleConfirmNewPassword"></i>
@@ -132,7 +133,8 @@
 @push('css')
     <link rel="stylesheet" href="https://cdn.jsdelivr.net/npm/bootstrap-icons@1.3.0/font/bootstrap-icons.css" />
     <!-- Google Font: Source Sans Pro -->
-    <link rel="stylesheet" href="https://fonts.googleapis.com/css?family=Source+Sans+Pro:300,400,400i,700&display=fallback">
+    <link rel="stylesheet"
+        href="https://fonts.googleapis.com/css?family=Source+Sans+Pro:300,400,400i,700&display=fallback">
     <!-- Font Awesome -->
     <link rel="stylesheet" href="/adminlte/plugins/fontawesome-free/css/all.min.css">
     <!-- Theme style -->
@@ -218,11 +220,11 @@
                     $('#confirmNewPassword').prop('disabled', true);
 
                     $('#oldPassword').removeClass('is-invalid');
-                    $('#oldPassword-error').css('display','none');
+                    $('#oldPassword-error').css('display', 'none');
                     $('#newPassword').removeClass('is-invalid');
-                    $('#newPassword-error').css('display','none');
+                    $('#newPassword-error').css('display', 'none');
                     $('#confirmNewPassword').removeClass('is-invalid');
-                    $('#confirmNewPassword-error').css('display','none');
+                    $('#confirmNewPassword-error').css('display', 'none');
                 }
             })
 
@@ -257,7 +259,7 @@
                     },
                     oldPassword: {
                         required: {
-                            depends: function () {
+                            depends: function() {
                                 debugger;
                                 let isChangePassword = $('#isChangePassword').is(':checked');
                                 return isChangePassword;
@@ -266,7 +268,7 @@
                     },
                     newPassword: {
                         required: {
-                            depends: function () {
+                            depends: function() {
                                 debugger;
                                 let isChangePassword = $('#isChangePassword').is(':checked');
                                 return isChangePassword;
@@ -275,7 +277,7 @@
                     },
                     confirmNewPassword: {
                         required: {
-                            depends: function () {
+                            depends: function() {
                                 debugger;
                                 let isChangePassword = $('#isChangePassword').is(':checked');
                                 return isChangePassword;
@@ -348,46 +350,45 @@
             }
 
             //123
-            if (password != $('#confirmNewPassword').val())
-            {
+            if (password != $('#confirmNewPassword').val()) {
                 swal("Peringatan", "Konfirmasi Kata Sandi Baru Tidak Sama", "info");
                 SetBackSubmitBehaviour();
                 return;
             }
 
             await fetch('/api/user/get-check-old-password/' + oldPassword)
-            .then((response) => {
-                if (response.status >= 200 && response.status <= 299) {
-                    return response.json();
-                } else {
-                    swal("Peringatan", response.statusText, "info");
+                .then((response) => {
+                    if (response.status >= 200 && response.status <= 299) {
+                        return response.json();
+                    } else {
+                        swal("Peringatan", response.statusText, "info");
+                        SetBackSubmitBehaviour();
+                        return;
+                    }
+                })
+                .then((jsonResponse) => {
+                    if (!jsonResponse.data) {
+                        swal("Peringatan", "Kata Sandi Lama Tidak Sesuai", "info");
+                        SetBackSubmitBehaviour();
+                        return;
+                    } else {
+                        user = {
+                            id: id,
+                            fullname: fullname,
+                            email: email,
+                            password: password,
+                            password_change: isPasswordChanged
+                        };
+
+                        proceedModify(user);
+                    }
+
+                }).catch((error) => {
+                    // Handle the error
+                    swal("Peringatan", error, "info");
                     SetBackSubmitBehaviour();
                     return;
-                }
-            })
-            .then((jsonResponse) => {
-                if (!jsonResponse.data) {
-                    swal("Peringatan", "Kata Sandi Lama Tidak Sesuai", "info");
-                    SetBackSubmitBehaviour();
-                    return;
-                } else {
-                    user = {
-                        id: id,
-                        fullname: fullname,
-                        email: email,
-                        password: password,
-                        password_change: isPasswordChanged
-                    };
-
-                    proceedModify(user);
-                }
-
-            }).catch((error) => {
-                // Handle the error
-                swal("Peringatan", error, "info");
-                SetBackSubmitBehaviour();
-                return;
-            });
+                });
 
 
         }
@@ -414,19 +415,23 @@
                 },
                 error: function(response) {
                     debugger
-                    let error_message = response.responseJSON.error_message == undefined ? response.responseJSON
-                        .message : response.responseJSON.error_message;
-                    let logKey = response.responseJSON.log_key;
+                    if (response.status == 500) {
+                        let error_message = response.responseJSON.error_message;
+                        let logKey = response.responseJSON.log_key;
 
-                    let alert_message;
+                        let alert_message;
 
-                    if (logKey == undefined)
-                        alert_message = error_message;
-                    else
-                        alert_message =
-                        `${error_message}. Copy dan beritaukan kode log berikut ke admin = ${logKey}`;
+                        if (logKey == undefined)
+                            alert_message = error_message;
+                        else
+                            alert_message =
+                            `${error_message}. Copy dan beritaukan kode log berikut ke admin = ${logKey}`;
 
-                    swal("Gagal", alert_message, "error");
+                        swal("Gagal", alert_message, "error");
+                    } else {
+                        swal("Gagal", response.status + "-" + response.statusText, "error");
+                    }
+
 
                     SetBackSubmitBehaviour();
                 }
@@ -453,7 +458,7 @@
                     }
                 },
                 error: function(response) {
-
+                    swal("Gagal", response.status + "-" + response.statusText, "error");
                 }
             });
         }
@@ -486,6 +491,5 @@
             $('#newPassword').prop('disabled', true);
             $('#confirmNewPassword').prop('disabled', true);
         }
-
     </script>
 @endpush
