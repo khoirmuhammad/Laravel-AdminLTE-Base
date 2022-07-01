@@ -11,7 +11,7 @@ class TeacherController extends Controller
     public function get_list_teachers()
     {
         $data = $this->get_teachers(); //Teacher::where('group', session('group'))->get();
-        
+
         return view('teachers.index',[
             "title" => "Data PJ Kelas",
             "data" => $data
@@ -22,6 +22,13 @@ class TeacherController extends Controller
     {
         return view('teachers.form-add',[
             "title" => "Tambah PJ Kelas"
+        ]);
+    }
+
+    public function get_form_edit_teacher()
+    {
+        return view ('teachers.form-edit', [
+            'title' => "Ubah PJ Kelas"
         ]);
     }
 
@@ -46,9 +53,14 @@ class TeacherController extends Controller
 
                 foreach($class_levels as $class_level)
                 {
-                    $class_level_array[] = [
-                        'class_level' => $class_level_master->where('id', $class_level)->first()->name
-                    ];
+                    $class_level_obj = $class_level_master->where('id', $class_level)->first();
+                    if ($class_level_obj != null)
+                    {
+                        $class_level_array[] = [
+                            'class_level' => $class_level_obj->name
+                        ];
+                    }
+
                 }
 
                 $result[] = [

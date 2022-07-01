@@ -8,4 +8,12 @@ use Illuminate\Database\Eloquent\Model;
 class RoleCategory extends Model
 {
     use HasFactory;
+
+    protected $primaryKey = 'id';
+
+    protected $casts = [
+        'id' => 'string'
+      ];
+
+      public $timestamps = false;
 }

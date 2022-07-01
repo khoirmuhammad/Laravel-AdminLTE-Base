@@ -6,10 +6,16 @@ use Illuminate\Http\Request;
 use Illuminate\Support\Facades\Route;
 use App\Http\Controllers\ApiGroupController;
 use App\Http\Controllers\ApiLevelController;
+use App\Http\Controllers\ApiMenuController;
 use App\Http\Controllers\ApiStudentController;
 use App\Http\Controllers\ApiTeacherController;
 use App\Http\Controllers\ApiPresenceController;
+use App\Http\Controllers\ApiPresenceDateConfigController;
 use App\Http\Controllers\ApiPresenceTeacherController;
+use App\Http\Controllers\ApiRoleCategoriesController;
+use App\Http\Controllers\ApiRoleController;
+use App\Http\Controllers\ApiUserController;
+use App\Http\Controllers\ApiVillageController;
 
 /*
 |--------------------------------------------------------------------------
@@ -56,12 +62,50 @@ Route::get('/education/education-list', [ApiEducationController::class, 'get_edu
 
 Route::get('/class-level/class-level-list/{groupId}/{levelId}', [ApiClassLevelController::class, 'get_class_level']);
 Route::get('/class-level/class-level-list-by-group', [ApiClassLevelController::class, 'get_class_level_by_group']);
+Route::post('/class-level/post-save-classname',[ApiClassLevelController::class, 'post_save_classname']);
+Route::get('/class-level/class-level-by-id/{id}', [ApiClassLevelController::class, 'get_class_level_by_id']);
+Route::delete('/class-level/delete-class-level', [ApiClassLevelController::class, 'delete_classname']);
 
 
 Route::get('/presence/get-students/{class_level}', [ApiPresenceController::class, 'select_student_class']);
 Route::post('/presence/post-student-presence',[ApiPresenceController::class, 'post_student_presence']);
 
+Route::get('/teacher/get-teacher/{id}', [ApiTeacherController::class, 'get_teacher_by_id']);
 Route::post('/teacher/post-save-teacher', [ApiTeacherController::class, 'post_save_teacher']);
+Route::delete('/teacher/delete-teacher', [ApiTeacherController::class, 'delete_teacher']);
 
 Route::post('/presence-teacher/post-clockinout',[ApiPresenceTeacherController::class, 'post_teacher_presence']);
 Route::get('/presence-teacher/get-teacher-presence', [ApiPresenceTeacherController::class, 'get_current_presence_on_class']);
+
+Route::get('/role-categories', [ApiRoleCategoriesController::class, 'get_role_categories']);
+Route::post('/role-categories/post-save', [ApiRoleCategoriesController::class, 'post_save_role']);
+Route::get('/role-categories/role-category-by-id/{id}', [ApiRoleCategoriesController::class, 'get_role_category_by_id']);
+Route::delete('/role-categories/delete-role-category', [ApiRoleCategoriesController::class, 'delete_role_category']);
+
+Route::get('/menu/get-parent-menu', [ApiMenuController::class, 'get_parent_menu']);
+Route::post('/menu/save-menu', [ApiMenuController::class, 'post_save_menu']);
+Route::get('/menu/get-menu-roles/{id}', [ApiMenuController::class, 'get_menu_rith_roles']);
+Route::delete('/menu/delete-menu', [ApiMenuController::class, 'delete_menu']);
+
+Route::get('/user/get-user-by-username', [ApiUserController::class, 'get_user_info_by_username']);
+Route::get('/user/get-user-roles-by-id/{id}', [ApiUserController::class, 'get_user_roles_by_id']);
+Route::post('/user/insert-user', [ApiUserController::class, 'post_insert_user']);
+Route::post('/user/update-user', [ApiUserController::class, 'post_update_user']);
+Route::post('/user/update-user-profile', [ApiUserController::class, 'post_update_user_profile']);
+Route::get('/user/get-check-old-password/{password}', [ApiUserController::class, 'get_check_old_password']);
+Route::delete('/user/delete-user', [ApiUserController::class, 'delete_user']);
+
+Route::get('/villages', [ApiVillageController::class, 'get_list_village']);
+
+Route::get('/role/role-daerah', [ApiRoleController::class, 'get_role_daerah']);
+Route::get('/role/role-desa/{village}', [ApiRoleController::class, 'get_role_desa']);
+Route::get('/role/role-desa', [ApiRoleController::class, 'get_all_role_desa']);
+Route::get('/role/role-kelompok/{group}', [ApiRoleController::class, 'get_role_kelompok']);
+Route::get('/role/role-kelompok', [ApiRoleController::class, 'get_all_role_kelompok']);
+Route::post('/role/post-save', [ApiRoleController::class, 'post_save_role']);
+Route::delete('/role/delete-role', [ApiRoleController::class, 'delete_role']);
+
+Route::get('/schedule/get-schedule-group', [ApiPresenceDateConfigController::class, 'get_schedule_by_group']);
+Route::post('/schedule/post-insert', [ApiPresenceDateConfigController::class, 'post_insert_schedules']);
+Route::put('/schedule/put-update', [ApiPresenceDateConfigController::class, 'put_update_schedule']);
+Route::delete('/schedule/delete-schedule', [ApiPresenceDateConfigController::class, 'delete_schedule']);

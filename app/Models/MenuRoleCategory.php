@@ -8,4 +8,10 @@ use Illuminate\Database\Eloquent\Model;
 class MenuRoleCategory extends Model
 {
     use HasFactory;
+
+    public $timestamps = false;
+
+    protected $casts = [
+        'menu_id' => 'string'
+      ];
 }

@@ -148,16 +148,11 @@
         href="https://fonts.googleapis.com/css?family=Source+Sans+Pro:300,400,400i,700&display=fallback">
     <!-- Font Awesome -->
     <link rel="stylesheet" href="/adminlte/plugins/fontawesome-free/css/all.min.css">
-    <!-- Theme style -->
-    <link rel="stylesheet" href="/adminlte/dist/css/adminlte.min.css">
     <!-- icheck bootstrap -->
     <link rel="stylesheet" href="/adminlte/plugins/icheck-bootstrap/icheck-bootstrap.min.css">
     <!-- Select2 -->
     <link rel="stylesheet" href="/adminlte/plugins/select2/css/select2.min.css">
     <link rel="stylesheet" href="/adminlte/plugins/select2-bootstrap4-theme/select2-bootstrap4.min.css">
-
-
-    <link rel="stylesheet" href="/adminlte/dist/css/adminlte.min.css">
 
 
     <link rel="stylesheet" href="https://cdnjs.cloudflare.com/ajax/libs/font-awesome/4.7.0/css/font-awesome.min.css">
@@ -278,8 +273,11 @@
                       Aksi
                     </th>
                   </tr></thead>`;
+                        debugger;
+                        let students_orig = response.data.students_orig;
+                        let students_presence = response.data.students_presence;
 
-                        for (let i = 0; i < response.data.length; i++) {
+                        for (let i = 0; i < students_orig.length; i++) {
                             let no = parseInt(i + 1);
 
                             let hdId = `hdId${i+1}`;
@@ -289,13 +287,14 @@
                             let btnIdPermit = `btnPermit${i+1}`;
                             let btnIdAbsent = `btnAbsent${i+1}`;
 
-                            let presenceId = response.data[i].id == null ? 0 : response.data[i].id;
-                            let stdId = response.data[i].student_id;
-                            let name = response.data[i].fullname;
-                            let filledBy = response.data[i].filled_by == null ? '' : response.data[i].filled_by;
-                            let is_present = response.data[i].is_present;
-                            let is_permit = response.data[i].is_permit;
-                            let is_absent = response.data[i].is_absent;
+                            let presenceId = students_orig[i].id == null ? 0 : students_orig[i].id;
+                            let stdId = students_orig[i].student_id;
+                            let name = students_orig[i].fullname;
+
+                            let filledBy = students_presence.length == 0 ? '' : queryStudentPresence('filled_by', stdId, students_presence);
+                            let is_present = students_presence.length == 0 ? false : queryStudentPresence('is_present', stdId, students_presence);
+                            let is_permit = students_presence.length == 0 ? false : queryStudentPresence('is_permit', stdId, students_presence);
+                            let is_absent = students_presence.length == 0 ? false : queryStudentPresence('is_absent', stdId, students_presence);
 
                             let isTextShow = is_present || is_permit || is_absent ? '' : 'hide';
                             let isBtnHide = is_present || is_permit || is_absent ? 'hide' : '';
@@ -333,9 +332,31 @@
                     }
                 },
                 error: function(response) {
-                    debugger;
+                    swal("Gagal", response.status + "-" + response.statusText, "error");
                 }
             });
+        }
+
+        function queryStudentPresence(field, studentId, source) {
+            let data = null;
+
+            source.filter(function(val) {
+                debugger;
+                if (val.student_id == studentId) {
+                    if (field == 'filled_by') {
+                        data = val.filled_by;
+                    } else if (field == 'is_present') {
+                        data = val.is_present;
+                    } else if (field == 'is_permit') {
+                        data = val.is_permit;
+                    } else if (field == 'is_absent') {
+                        data = val.is_absent;
+                    }
+                }
+            });
+
+            return data;
+
         }
 
         function proceedClockInOut(type) {
@@ -400,7 +421,7 @@
                     }
                 },
                 error: function(response) {
-                    debugger;
+                    swal("Gagal", response.status + "-" + response.statusText, "error");
                 }
             });
         }
@@ -439,7 +460,7 @@
                         }
                 },
                 error: function(response) {
-
+                    swal("Gagal", response.status + "-" + response.statusText, "error");
                 }
             });
         }
@@ -535,7 +556,7 @@
                     }
                 },
                 error: function(response) {
-                    debugger;
+                    swal("Gagal", response.status + "-" + response.statusText, "error");
                 }
             });
         }

@@ -23,7 +23,7 @@ class ApiGroupController extends Controller
         return response()->json(['data' => $result]);
     }
 
-    public function get_group_list_by_vallage(Request $request)
+    public function get_group_list_by_village(Request $request)
     {
         $result = Group::group_list($request->route('villageId'));
 

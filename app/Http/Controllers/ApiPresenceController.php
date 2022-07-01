@@ -16,7 +16,13 @@ class ApiPresenceController extends Controller
         $class_level = request()->route('class_level');
         $group = session('group');
 
-        $result = Presence::select_student_class($group, $class_level);
+        $result_students_orig = Presence::select_students($group, $class_level); // select_student_class($group, $class_level);
+        $result_students_presence = Presence::select_student_presence_class($group, $class_level);
+
+        $result = [
+            'students_orig' => $result_students_orig,
+            'students_presence' => $result_students_presence
+        ];
 
         return response()->json(['data' => $result]);
     }
@@ -66,7 +72,7 @@ class ApiPresenceController extends Controller
         try
         {
             $log = new Log();
-            $log->controller = 'ApiPresenceTeacher';
+            $log->controller = 'ApiPresence';
             $log->action = $action;
             $log->error_message = $error;
             $log->log_key = $log_key;
