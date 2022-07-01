@@ -332,7 +332,7 @@
                     }
                 },
                 error: function(response) {
-                    debugger;
+                    swal("Gagal", response.status + "-" + response.statusText, "error");
                 }
             });
         }
@@ -421,7 +421,7 @@
                     }
                 },
                 error: function(response) {
-                    debugger;
+                    swal("Gagal", response.status + "-" + response.statusText, "error");
                 }
             });
         }
@@ -460,7 +460,7 @@
                         }
                 },
                 error: function(response) {
-
+                    swal("Gagal", response.status + "-" + response.statusText, "error");
                 }
             });
         }
@@ -556,7 +556,7 @@
                     }
                 },
                 error: function(response) {
-                    debugger;
+                    swal("Gagal", response.status + "-" + response.statusText, "error");
                 }
             });
         }
