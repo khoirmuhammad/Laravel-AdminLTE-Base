@@ -76,7 +76,8 @@
 
 
   <script src="/adminlte/plugins/jquery/jquery.min.js"></script>
-  <script src="https://unpkg.com/sweetalert/dist/sweetalert.min.js"></script>
+  <script src="/otherjs/sweetalert.js"></script>
+    {{-- <script src="https://unpkg.com/sweetalert/dist/sweetalert.min.js"></script> --}}
   <script>
     var CSRF_TOKEN = document.querySelector('meta[name="csrf-token"]').getAttribute("content");
 

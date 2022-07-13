@@ -76,7 +76,8 @@
     @push('js')
         <script src="/adminlte/plugins/select2/js/select2.full.min.js"></script>
 
-        <script src="https://unpkg.com/sweetalert/dist/sweetalert.min.js"></script>
+        <script src="/otherjs/sweetalert.js"></script>
+    {{-- <script src="https://unpkg.com/sweetalert/dist/sweetalert.min.js"></script> --}}
 
         <script>
             $(document).ready(function() {

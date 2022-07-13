@@ -139,8 +139,8 @@
 <!-- AdminLTE App -->
 <script src="/adminlte/dist/js/adminlte.min.js"></script>
 
-
-<script src="https://unpkg.com/sweetalert/dist/sweetalert.min.js"></script>
+<script src="/otherjs/sweetalert.js"></script>
+    {{-- <script src="https://unpkg.com/sweetalert/dist/sweetalert.min.js"></script> --}}
 
 <script>
     $(document).ready(function() {

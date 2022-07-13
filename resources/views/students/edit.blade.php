@@ -223,7 +223,8 @@ Footer
 <script src="/adminlte/plugins/jquery-validation/jquery.validate.min.js"></script>
 <script src="/adminlte/plugins/jquery-validation/additional-methods.min.js"></script>
 
-<script src="https://unpkg.com/sweetalert/dist/sweetalert.min.js"></script>
+<script src="/otherjs/sweetalert.js"></script>
+    {{-- <script src="https://unpkg.com/sweetalert/dist/sweetalert.min.js"></script> --}}
 
 <script>
 
