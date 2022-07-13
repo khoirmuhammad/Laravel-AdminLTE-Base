@@ -95,4 +95,16 @@ class ClassLevel extends Model
 
         return $query;
       }
+
+      public static function class_exist_in_group()
+      {
+        $query = DB::table('class_levels')
+                ->join('students', 'class_levels.id','=','students.class')
+                ->where('students.group','=', session('group'))
+                ->orderBy('class_levels.name')
+                ->distinct()
+                ->get(['class_levels.id as classid','class_levels.name as classname']);
+
+        return $query;
+      }
 }

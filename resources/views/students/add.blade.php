@@ -88,10 +88,40 @@
                 </div>
             </div>
 
+            <div class="form-group">
+                <label>Alamat Asal</label>
+                <textarea id="address_source" name="address_source" class="form-control" rows="3" placeholder="Tuliskan alamat asal jika generus non pribumi"></textarea>
+            </div>
+
           </div>
 
           <div class="col-md-6">
 
+                <div class="form-group">
+                    <label>Nama Orang Tua</label>
+                    <input type="text" class="form-control" id="parent" name="parent" placeholder="Nama Ayah / Nama Ibu">
+                </div>
+
+                <div class="form-group">
+                    <label>Kontak Orang Tua</label>
+                    <input type="text" class="form-control" id="parent_phone" name="parent_phone" placeholder="No HP Ayah / No HP Ibu">
+                </div>
+
+                <div class="form-group clearfix">
+                    <label>Generus Akselerasi (GP)</label>
+                    <div class="icheck-info">
+                      <input type="radio" name="is_accel" id="accel" value="1">
+                      <label for="accel">
+                          Ya
+                      </label>
+                    </div>
+                    <div class="icheck-warning">
+                      <input type="radio" name="is_accel" id="non-accel" value="0">
+                      <label for="non-accel">
+                        Tidak
+                      </label>
+                    </div>
+                </div>
 
               <div class="form-group">
                 <label>Jenjang</label>
@@ -99,6 +129,8 @@
                   <option value="">Pilih</option>
                 </select>
               </div>
+
+
 
                 <div class="form-group">
                   <label>Kelas</label>
@@ -271,6 +303,9 @@ $(document).ready(function() {
         },
         education: {
           required: true
+        },
+        is_accel: {
+            required: true
         }
       },
       messages: {
@@ -294,6 +329,9 @@ $(document).ready(function() {
         },
         education: {
           required: "Pendidikan harus harus dipilih"
+        },
+        is_accel: {
+            required: "Status Generus GP harus dipilih"
         }
       },
       errorElement: 'span',
@@ -327,6 +365,10 @@ $(document).ready(function() {
       let level = $('#level').val();
       let class_level = $('#class_level').val();
       let education = $('#education').val();
+      let address_source = $('#address_source').val();
+      let parent = $('#parent').val();
+      let parent_phone = $('#parent_phone').val();
+      let isaccel = $("input[name='is_accel']:checked").val();
 
       let student = {
         name: name,
@@ -335,7 +377,11 @@ $(document).ready(function() {
         ispribumi: ispribumi,
         level: level,
         class_level: class_level,
-        education: education
+        education: education,
+        address_source: address_source,
+        parent: parent,
+        parent_phone: parent_phone,
+        isaccel: isaccel
       };
 
       $.ajax({

@@ -51,6 +51,7 @@
             </div>
             <!-- /.modal-dialog -->
         </div>
+    </div>
     @endsection
 
     @push('css')

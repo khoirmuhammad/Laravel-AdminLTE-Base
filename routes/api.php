@@ -68,6 +68,8 @@ Route::delete('/class-level/delete-class-level', [ApiClassLevelController::class
 
 
 Route::get('/presence/get-students/{class_level}', [ApiPresenceController::class, 'select_student_class']);
+Route::get('/presence/get-recap-presence', [ApiPresenceController::class, 'get_recap_presence']);
+Route::get('/presence/get-recap-presence-in-class', [ApiPresenceController::class, 'get_recap_presence_in_class']);
 Route::post('/presence/post-student-presence',[ApiPresenceController::class, 'post_student_presence']);
 
 Route::get('/teacher/get-teacher/{id}', [ApiTeacherController::class, 'get_teacher_by_id']);

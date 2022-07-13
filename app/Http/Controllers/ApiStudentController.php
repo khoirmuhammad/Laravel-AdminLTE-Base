@@ -40,6 +40,11 @@ class ApiStudentController extends Controller
                 $student->class = $request->input('class_level');
                 $student->education = $request->input('education');
                 $student->isPribumi = $request->input('ispribumi');
+                $student->isPribumi = $request->input('ispribumi');
+                $student->address_source = $request->input('address_source');
+                $student->parent = $request->input('parent');
+                $student->parent_phone = $request->input('parent_phone');
+                $student->is_accel = $request->input('isaccel');
                 $student->group = session('group');
                 $student->village = Group::where('id',session('group'))->first()->village_id;
                 $student->updated_by = auth()->user()->username;
@@ -61,6 +66,10 @@ class ApiStudentController extends Controller
                 $student->class = $request->input('class_level');
                 $student->education = $request->input('education');
                 $student->isPribumi = $request->input('ispribumi');
+                $student->address_source = $request->input('address_source');
+                $student->parent = $request->input('parent');
+                $student->parent_phone = $request->input('parent_phone');
+                $student->is_accel = $request->input('isaccel');
                 $student->group = session('group');
                 $student->village = Group::where('id',session('group'))->first()->village_id;
                 $student->created_by = auth()->user()->username;

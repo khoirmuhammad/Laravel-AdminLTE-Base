@@ -35,7 +35,7 @@
             <div class="row justify-content-center">
                 <div class="col-md-4">
                     <h5 style="text-align: center;"><strong id="date-id"></strong></h5>
-                    <h3 style="text-align: center;"><strong>16:00 - 17:30</strong></h3>
+                    <h3 style="text-align: center;"><strong>{{ $start }} - {{ $end }}</strong></h3>
                     <input type="hidden" id="username-id" value="{{ auth()->user()->username }}">
                     <input type="hidden" id="teacher-presence-id" value="0">
                     <table class="table table-bordered">
@@ -47,8 +47,8 @@
                             <tr>
                                 <th style="text-align: center;font-size:14px">
                                     <span id="text-in" class="hide">Presensi Masuk 10:35</span>
-                                    <button class="btn btn-block btn-primary btn-sm" id="clock-in"> <i class="fa fa-check"
-                                            aria-hidden="true"></i> Masuk</button>
+                                    <button class="btn btn-block btn-primary btn-sm" id="clock-in"> <i id="icon-in" class="fa fa-check"
+                                            aria-hidden="true"></i> <i id="loading-icon-in" class="fa fa-spinner fa-spin hide"></i> <span id="span-in"> Masuk</span></button>
                                 </th>
                                 <th style="text-align: center;font-size:14px">
                                     <span id="text-out" class="hide">Presensi Keluar 10:35</span>
@@ -108,37 +108,7 @@
             <!-- /.modal-dialog -->
         </div>
     </div>
-    <div class="modal fade" id="modal-clockin">
-        <div class="modal-dialog">
-            <div class="modal-content">
-                <div class="modal-header">
-                    <h4 class="modal-title">Jam Masuk</h4>
-                    <button type="button" class="close" data-dismiss="modal" aria-label="Close">
-                        <span aria-hidden="true">&times;</span>
-                    </button>
-                </div>
-                <div class="modal-body">
 
-                    <div class="col-sm-12">
-                        <div class="form-group">
-                            <label>Rencana Pembelajaran</label>
-                            <textarea id="plan-learning-id" class="form-control" rows="3" placeholder="Tuliskan rencana pembelajaran"></textarea>
-                        </div>
-                    </div>
-
-                    <div class="modal-footer justify-content-between">
-                        <button type="button" class="btn btn-default" data-dismiss="modal">Tutup</button>
-                        <button type="button" id="btnClockIn" class="btn btn-primary">
-                            <i id="loading-icon-precense-in" class="fa fa-spinner fa-spin hide"></i>
-                            <span id="precense-in-text">Presensi Masuk</span>
-                        </button>
-                    </div>
-                </div>
-                <!-- /.modal-content -->
-            </div>
-            <!-- /.modal-dialog -->
-        </div>
-    </div>
 @endsection
 
 
@@ -202,7 +172,12 @@
                 }
 
                 $('#modal-clockout').modal('hide');
-                $('#modal-clockin').modal('show');
+
+                $('#loading-icon-in').removeClass('hide');
+                $('#icon-in').addClass('hide');
+                $('#span-in').text('');
+
+                proceedClockInOut('in');
             })
 
             $('#clock-out').on('click', function() {
@@ -213,13 +188,33 @@
                     return;
                 }
 
-                $('#modal-clockin').modal('hide');
-                $('#modal-clockout').modal('show');
+                let totalPrecense = parseInt($('#presence-id > > tr').length - 1);
+                let actualPresence = 0;
+
+                $('#presence-id > > tr').each(function(index, tr) {
+                    debugger;
+                    if (index != 0 && index <= totalPrecense) {
+                        let hdId = $(`#hdId${index}`).length;
+
+                        if (hdId != 0) {
+                            if ($(`#hdId${index}`).val() != 0) {
+                                actualPresence = actualPresence + 1;
+                            }
+                        }
+                    }
+                });
+
+                if (totalPrecense == actualPresence) {
+                    alert('ok')
+                } else {
+                    swal("Info", `Mohon lengkapi presensi generus di kelas ini`, "info");
+                    return
+                }
+
+                return;
+                //$('#modal-clockout').modal('show');
             })
 
-            $('#btnClockIn').on('click', function() {
-                proceedClockInOut('in');
-            })
 
             $('#btnClockOut').on('click', function() {
                 proceedClockInOut('out');
@@ -287,10 +282,11 @@
                             let btnIdPermit = `btnPermit${i+1}`;
                             let btnIdAbsent = `btnAbsent${i+1}`;
 
-                            let presenceId = students_orig[i].id == null ? 0 : students_orig[i].id;
+
                             let stdId = students_orig[i].student_id;
                             let name = students_orig[i].fullname;
 
+                            let presenceId = students_presence.length == 0 ? '0' :  queryStudentPresence('id', stdId, students_presence);
                             let filledBy = students_presence.length == 0 ? '' : queryStudentPresence('filled_by', stdId, students_presence);
                             let is_present = students_presence.length == 0 ? false : queryStudentPresence('is_present', stdId, students_presence);
                             let is_permit = students_presence.length == 0 ? false : queryStudentPresence('is_permit', stdId, students_presence);
@@ -351,6 +347,8 @@
                         data = val.is_permit;
                     } else if (field == 'is_absent') {
                         data = val.is_absent;
+                    } else if (field == "id") {
+                        data = val.id;
                     }
                 }
             });
@@ -492,7 +490,7 @@
                     content: "input",
                     })
                     .then((note) => {
-                        if (note == null) {
+                        if (note == null || note == '') {
                             swal(`Mohon menuliskan alasan izin`);
                             return;
                         } else {
@@ -556,6 +554,7 @@
                     }
                 },
                 error: function(response) {
+                    debugger;
                     swal("Gagal", response.status + "-" + response.statusText, "error");
                 }
             });
