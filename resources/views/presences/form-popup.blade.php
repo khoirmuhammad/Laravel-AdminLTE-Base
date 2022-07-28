@@ -110,7 +110,7 @@
 
             function populate_class_select2() {
                 debugger;
-                let url = "/api/class-level/class-level-list-by-group";
+                let url = "/api/class-level/class-level-list-exist-in-group";
                 $.ajax({
                     url: url,
                     method: 'GET',

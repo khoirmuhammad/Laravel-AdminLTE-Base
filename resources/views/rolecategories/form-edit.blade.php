@@ -59,6 +59,10 @@
                 <div class="row">
                     <div class="col-md-12">
                         <div class="btn-group" role="group" aria-label="Button">
+                            <button type="button" id="btn-back" class="btn btn-secondary">
+                                <i id="back-icon" class="fa fa-arrow-left" aria-hidden="true"></i>
+                                <span>Kembali</span>
+                            </button>
                             <button type="submit" id="btn-submit" class="btn btn-success">
                                 <i id="submit-icon" class="fa fa-paper-plane" aria-hidden="true"></i>
                                 <i id="loading-icon-submit" class="fa fa-spinner fa-spin hide"></i>
@@ -185,6 +189,10 @@
                 }
             });
 
+            $('#btn-back').on('click', function() {
+                window.location='{{ url("kategori-role") }}'
+            });
+
         });
 
         function post_save_teacher(action) {
@@ -249,6 +257,8 @@
                     $(`#submit-text`).text('Submit');
                 }
             });
+
+
         }
 
         function set_form() {

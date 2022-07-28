@@ -5,6 +5,7 @@ use App\Http\Controllers\ApiEducationController;
 use Illuminate\Http\Request;
 use Illuminate\Support\Facades\Route;
 use App\Http\Controllers\ApiGroupController;
+use App\Http\Controllers\ApiLessonController;
 use App\Http\Controllers\ApiLevelController;
 use App\Http\Controllers\ApiMenuController;
 use App\Http\Controllers\ApiStudentController;
@@ -60,8 +61,10 @@ Route::get('/level/level-list', [ApiLevelController::class, 'get_levels']);
 
 Route::get('/education/education-list', [ApiEducationController::class, 'get_education']);
 
+Route::get('/class-level/class-level-list-by-level/{levelId}', [ApiClassLevelController::class, 'get_class_level_by_level']);
 Route::get('/class-level/class-level-list/{groupId}/{levelId}', [ApiClassLevelController::class, 'get_class_level']);
 Route::get('/class-level/class-level-list-by-group', [ApiClassLevelController::class, 'get_class_level_by_group']);
+Route::get('/class-level/class-level-list-exist-in-group', [ApiClassLevelController::class, 'get_class_level_exist_in_group']);
 Route::post('/class-level/post-save-classname',[ApiClassLevelController::class, 'post_save_classname']);
 Route::get('/class-level/class-level-by-id/{id}', [ApiClassLevelController::class, 'get_class_level_by_id']);
 Route::delete('/class-level/delete-class-level', [ApiClassLevelController::class, 'delete_classname']);
@@ -69,6 +72,7 @@ Route::delete('/class-level/delete-class-level', [ApiClassLevelController::class
 
 Route::get('/presence/get-students/{class_level}', [ApiPresenceController::class, 'select_student_class']);
 Route::get('/presence/get-recap-presence', [ApiPresenceController::class, 'get_recap_presence']);
+Route::get('/presence/get-analysis-presence', [ApiPresenceController::class, 'get_analysis_presence']);
 Route::get('/presence/get-recap-presence-in-class', [ApiPresenceController::class, 'get_recap_presence_in_class']);
 Route::post('/presence/post-student-presence',[ApiPresenceController::class, 'post_student_presence']);
 
@@ -111,3 +115,6 @@ Route::get('/schedule/get-schedule-group', [ApiPresenceDateConfigController::cla
 Route::post('/schedule/post-insert', [ApiPresenceDateConfigController::class, 'post_insert_schedules']);
 Route::put('/schedule/put-update', [ApiPresenceDateConfigController::class, 'put_update_schedule']);
 Route::delete('/schedule/delete-schedule', [ApiPresenceDateConfigController::class, 'delete_schedule']);
+
+Route::get('/lesson/get-all-lesson-name', [ApiLessonController::class, 'get_all_lessons_name']);
+Route::post('/lesson/post-jurnal-history', [ApiLessonController::class, 'post_save_jurnal_history']);

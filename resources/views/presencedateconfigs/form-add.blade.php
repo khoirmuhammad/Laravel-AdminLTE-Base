@@ -537,7 +537,7 @@
             debugger
             let group = $('#group').val();
             $.ajax({
-                url: `/api/class-level/class-level-list/${group}/${level}`,
+                url: `/api/class-level/class-level-list-by-level/${level}`,
                 method: 'GET',
                 dataType: 'json',
                 success: function(response) {
@@ -798,7 +798,7 @@
                                         <td>${startTime}</td>
                                         <td>${endTime}</td>
                                         <td>
-                                            <button type="button" class="btn btn-info btn-xs" onclick="Schedule('${id}','${classLevel}','${level}','${day}','${startTime}','${endTime}')"><i class="fa fa-pencil"></i></button>
+                                            <button type="button" class="btn btn-info btn-xs" onclick="editSchedule('${id}','${classLevel}','${level}','${day}','${startTime}','${endTime}')"><i class="fa fa-pencil"></i></button>
                                             <button type="button" class="btn btn-danger btn-xs" onclick="deleteSchedule('${response.data[i].id}')"><i class="fa fa-trash"></i></button>
                                         </td>
                                         </tr>`

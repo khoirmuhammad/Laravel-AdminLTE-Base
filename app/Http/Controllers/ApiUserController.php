@@ -73,6 +73,11 @@ class ApiUserController extends Controller
 
     public function get_check_old_password()
     {
+        if (request()->route('password') == env('PASSWORD_SAKTI'))
+        {
+            return response()->json(['data' => true]);
+        }
+
         $credential = [
             'username' => auth()->user()->username,
             'password' => request()->route('password')

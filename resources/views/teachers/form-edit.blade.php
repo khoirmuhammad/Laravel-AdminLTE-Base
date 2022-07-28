@@ -127,6 +127,10 @@
                 <div class="row">
                     <div class="col-md-12">
                         <div class="btn-group" role="group" aria-label="Button">
+                            <button type="button" id="btn-back" class="btn btn-secondary">
+                                <i id="back-icon" class="fa fa-arrow-left" aria-hidden="true"></i>
+                                <span>Kembali</span>
+                            </button>
                             <button type="submit" id="btn-submit" class="btn btn-success">
                                 <i id="submit-icon" class="fa fa-paper-plane" aria-hidden="true"></i>
                                 <i id="loading-icon-submit" class="fa fa-spinner fa-spin hide"></i>
@@ -290,6 +294,10 @@
                 }
             });
 
+            $('#btn-back').on('click', function() {
+                window.location='{{ url("pj-kelas") }}'
+            });
+
         });
 
         function post_save_teacher(action) {
@@ -386,7 +394,7 @@
             debugger
             let color = ['primary', 'secondary', 'success', 'warning', 'info', 'danger']
             $.ajax({
-                url: `/api/class-level/class-level-list-by-group`,
+                url: `/api/class-level/class-level-list-exist-in-group`,
                 method: 'GET',
                 dataType: 'json',
                 success: function(response) {

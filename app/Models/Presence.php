@@ -75,7 +75,8 @@ class Presence extends Model
         left JOIN presences pr on st.id = pr.student_id
         JOIN class_levels cl on pr.class_level_id = cl.id WHERE cl.id = '". $class_level ."' and month(pr.filled_date) = ". $month ."
         and year(pr.filled_date) = ". $current_year ."
-        GROUP by st.fullname, st.id, cl.name");
+        GROUP by st.fullname, st.id, cl.name
+        ORDER by SUM(is_present) DESC, SUM(is_permit) DESC, SUM(is_absent) ASC, st.fullname");
 
         return collect($query);
     }

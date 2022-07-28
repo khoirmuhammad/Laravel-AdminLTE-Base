@@ -91,6 +91,19 @@ class ApiPresenceController extends Controller
         return response()->json(['data' => $result]);
     }
 
+    public function get_analysis_presence()
+    {
+        $classes = ClassLevel::get_class_level_with_exist_student_by_group();
+        $data_class = array();
+
+        foreach($classes as $class)
+        {
+            array_push($data_class, $class->name);
+        }
+
+        return response()->json(['data_class' => $data_class]);
+    }
+
     public function post_student_presence(Request $request)
     {
         try

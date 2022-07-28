@@ -152,6 +152,10 @@
       <div class="row">
         <div class="col-md-12">
           <div class="btn-group" role="group" aria-label="Button">
+            <button type="button" id="btn-back" class="btn btn-secondary">
+                <i id="back-icon" class="fa fa-arrow-left" aria-hidden="true"></i>
+                <span>Kembali</span>
+            </button>
             <button type="button" id="btn-save" class="btn btn-info">
               <i id="save-icon" class="fa fa-save" aria-hidden="true"></i>
               <i id="loading-icon-save" class="fa fa-spinner fa-spin hide"></i>
@@ -349,6 +353,10 @@ $(document).ready(function() {
         $(element).removeClass('is-invalid');
       }
     });
+
+    $('#btn-back').on('click', function() {
+                window.location='{{ url("generus") }}'
+            });
 
 
   });
