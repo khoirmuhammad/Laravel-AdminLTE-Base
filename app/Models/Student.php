@@ -95,7 +95,7 @@ class Student extends Model
                 ->orderBy('education.order')
                 ->groupBy(['students.education','education.name','students.gender'])
                 ->get(['education.name','students.gender',DB::raw('count(*) as total')]);
-                
+
         return $result;
     }
 
@@ -128,6 +128,17 @@ class Student extends Model
         $result = DB::table('students')
                 ->where('group', '=', $group_id) //7079bef5-d75c-11ec-b5a0-5ce0c508bbb3
                 ->where('level', '=', '3110ea5d-d75c-11ec-b5a0-5ce0c508bbb3')
+                ->groupBy('gender')
+                ->get(['gender', DB::raw('count(gender) as total')]);
+
+        return $result;
+    }
+
+    public static function select_student_unik_by_gender($group_id)
+    {
+        $result = DB::table('students')
+                ->where('group', '=', $group_id) // 7079bef5-d75c-11ec-b5a0-5ce0c508bbb3
+                ->where('level', '=', '3110c8d4-d75c-11ec-b5a0-5ce0c508bbb3')
                 ->groupBy('gender')
                 ->get(['gender', DB::raw('count(gender) as total')]);
 

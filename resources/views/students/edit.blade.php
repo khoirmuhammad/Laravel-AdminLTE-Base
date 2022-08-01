@@ -40,7 +40,7 @@
 
               <div class="form-group">
                   <label>Nama Lengkap</label>
-                  <input type="text" class="form-control" id="name" name="name" placeholder="Nama Lengkap">
+                  <input type="text" class="form-control" id="name" name="name" placeholder="Nama Lengkap" onkeypress="return checkChar();">
               </div>
 
               <div class="form-group">
@@ -50,7 +50,7 @@
                 <div class="input-group-prepend">
                   <span class="input-group-text"><i class="far fa-calendar-alt"></i></span>
                 </div>
-                <input type="text" id="birthdate" placeholder="Contoh 20 Januari 2020 | Format (dd/mm/yyyy) 20/01/2020" name="birthdate" class="form-control" data-inputmask-alias="datetime" data-inputmask-inputformat="dd/mm/yyyy" data-mask>
+                <input type="text" id="birthdate" placeholder="Contoh 20 Januari 2020 | Format (dd/mm/yyyy) 20/01/2020" name="birthdate" class="form-control" data-inputmask-alias="datetime" data-inputmask-inputformat="dd/mm/yyyy" data-mask onkeypress="return checkChar();">
                 </div>
               </div>
 
@@ -91,7 +91,7 @@
 
             <div class="form-group">
                 <label>Alamat Asal</label>
-                <textarea id="address_source" name="address_source" class="form-control" rows="3" placeholder="Tuliskan alamat asal jika generus non pribumi"></textarea>
+                <textarea id="address_source" name="address_source" class="form-control" rows="3" placeholder="Tuliskan alamat asal jika generus non pribumi" onkeypress="return checkChar();"></textarea>
             </div>
 
           </div>
@@ -100,12 +100,12 @@
 
             <div class="form-group">
                 <label>Nama Orang Tua</label>
-                <input type="text" class="form-control" id="parent" name="parent" placeholder="Nama Ayah / Nama Ibu">
+                <input type="text" class="form-control" id="parent" name="parent" placeholder="Nama Ayah / Nama Ibu" onkeypress="return checkChar();">
             </div>
 
             <div class="form-group">
                 <label>Kontak Orang Tua</label>
-                <input type="text" class="form-control" id="parent_phone" name="parent_phone" placeholder="No HP Ayah / No HP Ibu">
+                <input type="text" class="form-control" id="parent_phone" name="parent_phone" placeholder="No HP Ayah / No HP Ibu" onkeypress="return checkChar();">
             </div>
 
             <div class="form-group clearfix">
@@ -584,7 +584,27 @@ $(document).ready(function() {
   }
 
 
-
+  function checkChar() {
+    if(event.keyCode == 39) {
+				event.keyCode = 0;
+				swal('Peringatan',"Tidak diizinkan menggunakan petik 1 (')","info")
+			} else if (event.keyCode == 34) {
+                event.keyCode = 0;
+				swal('Peringatan',"Tidak diizinkan menggunakan petik 2","info")
+            } else if (event.keyCode == 96) {
+                event.keyCode = 0;
+				swal('Peringatan',"Tidak diizinkan menggunakan backtick (`)","info")
+            } else if (event.keyCode == 60) {
+                event.keyCode = 0;
+				swal('Peringatan',"Tidak diizinkan menggunakan tanda (<)","info")
+            } else if (event.keyCode == 62) {
+                event.keyCode = 0;
+				swal('Peringatan',"Tidak diizinkan menggunakan tanda (>)","info")
+            } else if (event.keyCode == 47) {
+                event.keyCode = 0;
+				swal('Peringatan',"Tidak diizinkan menggunakan tanda (/)","info")
+            }
+		}
 
 </script>
 @endpush

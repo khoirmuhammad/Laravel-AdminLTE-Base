@@ -9,12 +9,13 @@ use App\Models\Lesson;
 use App\Models\LessonHistory;
 use Illuminate\Http\Request;
 use Illuminate\Support\Facades\Route;
+use Mockery\Undefined;
 
 class ApiLessonController extends Controller
 {
     public function get_all_lessons_name(Request $request)
     {
-        $class_level = $request->class_level;
+        $class_level = $request->class_level == null ? null : $request->class_level;
 
         $result = Lesson::get_all_lesson($class_level);
 

@@ -10,8 +10,20 @@ class Lesson extends Model
 {
     use HasFactory;
 
-    public static function get_all_lesson($class_level)
+    protected $casts = [
+        'id' => 'string'
+      ];
+
+    protected $primaryKey = 'id';
+
+    public static function get_all_lesson($class_level = null)
     {
+        if ($class_level == null){
+            return DB::table('lessons')
+            ->join('class_levels', 'lessons.class_level', 'class_levels.id')
+            ->get(['lessons.id','lessons.name', 'lessons.category_code','class_levels.name as classname', 'lessons.semester']);
+        }
+
         $level_id = DB::table('class_levels')->where('id',$class_level)->first()->level_id;
         $class_levels = DB::table('class_levels')->where('level_id', $level_id)->get('id');
 
@@ -24,7 +36,7 @@ class Lesson extends Model
 
         $query = DB::table('lessons')
                 ->join('class_levels', 'lessons.class_level', 'class_levels.id')
-                ->whereIn('lessons.class_level',$class_levels_arr)->get(['lessons.id','lessons.name','class_levels.name as classname']);
+                ->whereIn('lessons.class_level',$class_levels_arr)->get(['lessons.id','lessons.name','lessons.category_code','class_levels.name as classname','lessons.semester']);
 
         return $query;
     }

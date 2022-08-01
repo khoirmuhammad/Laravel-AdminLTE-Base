@@ -71,67 +71,6 @@
                 </div>
             </div>
 
-            <input type="hidden" id="hdJurnal" value="0" />
-
-                <div class="row mb-5">
-                    <div class="col-md-4">
-                        <label>Materi Kelas</label>
-                        <select id="lesson-select-1" class="form-control" style="width: 100%;">
-                            <option value="">Pilih</option>
-                        </select>
-                    </div>
-                    <div class="col-md-2">
-                        <label>Persentase</label>
-                        <input type="number" id="percentage-1" name="percentage-1" placeholder="Ex : 10.6 / 8"
-                                    class="form-control" />
-                    </div>
-                    <div class="col-md-6">
-                        <label>Catatan</label>
-                        <textarea class="form-control" id="remark-1" rows="2" name="remark-1" placeholder="Catatan Pendukung"></textarea>
-                    </div>
-                </div>
-
-                <div class="row mb-5">
-                    <div class="col-md-4">
-                        <label>Materi Kelas</label>
-                        <select id="lesson-select-2" class="form-control" style="width: 100%;">
-                            <option value="">Pilih</option>
-                        </select>
-                    </div>
-                    <div class="col-md-2">
-                        <label>Persentase</label>
-                        <input type="number" id="percentage-2" name="percentage-2" placeholder="Ex : 10.6 / 8"
-                                    class="form-control" />
-                    </div>
-                    <div class="col-md-6">
-                        <label>Catatan</label>
-                        <textarea class="form-control" id="remark-2" rows="2" name="remark-2" placeholder="Catatan Pendukung"></textarea>
-                    </div>
-                </div>
-
-                <div class="row mb-2">
-                    <div class="col-md-4">
-                        <label>Materi Kelas</label>
-                        <select id="lesson-select-3" class="form-control" style="width: 100%;">
-                            <option value="">Pilih</option>
-                        </select>
-                    </div>
-                    <div class="col-md-2">
-                        <label>Persentase</label>
-                        <input type="number" id="percentage-3" name="percentage-3" placeholder="Ex : 10.6 / 8"
-                                    class="form-control" />
-                    </div>
-                    <div class="col-md-6">
-                        <label>Catatan</label>
-                        <textarea class="form-control" id="remark-3" rows="2" name="remark-3" placeholder="Catatan Pendukung"></textarea>
-                    </div>
-                </div>
-
-            <div class="row">
-                <div class="col-md-12">
-                    <button class="btn btn-success" id="btnSaveJurnal">Simpan Jurnal <i class="fa fa-save"></i></button>
-                </div>
-            </div>
         </div>
         <!-- /.card-body -->
         <div class="card-footer">
@@ -271,8 +210,8 @@
                 });
 
                 if (totalPrecense == actualPresence) {
-                    SaveJurnal();
                     //$('#modal-clockout').modal('show');
+                    proceedClockInOut('out');
                 } else {
                     swal("Info", `Mohon lengkapi presensi generus di kelas ini`, "info");
                     return
@@ -287,18 +226,7 @@
                 proceedClockInOut('out');
             })
 
-            $('#btnSaveJurnal').on('click', function() {
-                debugger;
-                let isTeacherPresence = $('#teacher-presence-id').val() == "0" ? false : true;
 
-                if (isTeacherPresence) {
-                    SaveJurnal();
-                } else {
-                    swal("Info", `Mohon Presensi Masuk Terlebih Dahulu`, "info");
-                    return
-                }
-
-            })
         });
 
 
@@ -652,67 +580,6 @@
                     swal("Gagal", response.status + "-" + response.statusText, "error");
                 }
             });
-        }
-
-        function SaveJurnal() {
-            $lesson1 = $('#lesson-select-1').val();
-            $lesson2 = $('#lesson-select-2').val();
-            $lesson3 = $('#lesson-select-3').val();
-
-            $recap1 = $lesson1 != "" ? true : false;
-            $recap2 = $lesson2 != "" ? true : false;
-            $recap3 = $lesson3 != "" ? true : false;
-
-            if ($recap1 || $recap2 || $recap3) {
-
-                arr_jurnal = [];
-
-                if ($recap1) {
-                    arr_jurnal.push({
-                        lesson_id : $lesson1,
-                        percentage : $('#percentage-1').val(),
-                        remark: $('#remark-1').val(),
-                        teacher_presence_id: $('#teacher-presence-id').val()
-                    });
-                }
-
-                if ($recap2) {
-                    arr_jurnal.push({
-                        lesson_id : $lesson2,
-                        percentage : $('#percentage-2').val(),
-                        remark: $('#remark-2').val(),
-                        teacher_presence_id: $('#teacher-presence-id').val()
-                    });
-                }
-
-                if ($recap3) {
-                    arr_jurnal.push({
-                        lesson_id : $lesson3,
-                        percentage : $('#percentage-3').val(),
-                        remark: $('#remark-3').val(),
-                        teacher_presence_id: $('#teacher-presence-id').val()
-                    });
-                }
-
-                $.ajax({
-                    url:"/api/lesson/post-jurnal-history",
-                    type: 'POST',
-                    dataType:'json',
-                    contentType: 'json',
-                    data: JSON.stringify(arr_jurnal),
-                    contentType: 'application/json; charset=utf-8',
-                    headers: {'X-CSRF-TOKEN': CSRF_TOKEN},
-                    success: function(response){
-                        debugger;
-                        $('#hdJurnal').val("1");
-                    }, error: function(response){
-                        debugger;
-                    }
-                });
-
-            } else {
-                swal("Info", `Mohon lengkapi jurnal pengajaran`, "info");
-            }
         }
 
         function populate_lesson_select() {

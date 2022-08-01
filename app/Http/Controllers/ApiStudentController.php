@@ -33,17 +33,16 @@ class ApiStudentController extends Controller
             {
                 $student = Student::find($request->input('id'));
 
-                $student->fullname = $request->input('name');
-                $student->birth_date = Carbon::createFromFormat('d/m/Y', $request->input('birthdate'))->format('Y-m-d H:i:s');
-                $student->gender = $request->input('gender');
-                $student->level = $request->input('level');
-                $student->class = $request->input('class_level');
-                $student->education = $request->input('education');
-                $student->isPribumi = $request->input('ispribumi');
-                $student->isPribumi = $request->input('ispribumi');
-                $student->address_source = $request->input('address_source');
-                $student->parent = $request->input('parent');
-                $student->parent_phone = $request->input('parent_phone');
+                $student->fullname = $request->input('name') == "" ? null : $request->input('name');
+                $student->birth_date = $request->input('birthdate') == "" ? null : Carbon::createFromFormat('d/m/Y', $request->input('birthdate'))->format('Y-m-d H:i:s');
+                $student->gender = $request->input('gender') == "" ? null : $request->input('gender');
+                $student->level = $request->input('level') == "" ? null : $request->input('level');
+                $student->class = $request->input('class_level') == "" ? null : $request->input('class_level');
+                $student->education = $request->input('education') == "" ? null : $request->input('education');
+                $student->isPribumi = $request->input('ispribumi') == "" ? null : $request->input('ispribumi');
+                $student->address_source = $request->input('address_source') == "" ? null : $request->input('address_source');
+                $student->parent = $request->input('parent') == "" ? null : $request->input('parent');
+                $student->parent_phone = $request->input('parent_phone') == "" ? null : $request->input('parent_phone');
                 $student->is_accel = $request->input('isaccel');
                 $student->group = session('group');
                 $student->village = Group::where('id',session('group'))->first()->village_id;
@@ -59,17 +58,17 @@ class ApiStudentController extends Controller
                 $student = new Student();
 
                 $student->id = Str::uuid()->toString();
-                $student->fullname = $request->input('name');
-                $student->birth_date = Carbon::createFromFormat('d/m/Y', $request->input('birthdate'))->format('Y-m-d H:i:s');
-                $student->gender = $request->input('gender');
-                $student->level = $request->input('level');
-                $student->class = $request->input('class_level');
-                $student->education = $request->input('education');
-                $student->isPribumi = $request->input('ispribumi');
-                $student->address_source = $request->input('address_source');
-                $student->parent = $request->input('parent');
-                $student->parent_phone = $request->input('parent_phone');
-                $student->is_accel = $request->input('isaccel');
+                $student->fullname = $request->input('name') == "" ? null : $request->input('name');
+                $student->birth_date = $request->input('birthdate') == "" ? null : Carbon::createFromFormat('d/m/Y', $request->input('birthdate'))->format('Y-m-d H:i:s');
+                $student->gender = $request->input('gender') == "" ? null : $request->input('gender');
+                $student->level = $request->input('level') == "" ? null : $request->input('level');
+                $student->class = $request->input('class_level') == "" ? null : $request->input('class_level');
+                $student->education = $request->input('education') == "" ? null : $request->input('education');
+                $student->isPribumi = $request->input('ispribumi') == "" ? null : $request->input('ispribumi');
+                $student->address_source = $request->input('address_source') == "" ? null : $request->input('address_source');
+                $student->parent = $request->input('parent') == "" ? null : $request->input('parent');
+                $student->parent_phone = $request->input('parent_phone') == "" ? null : $request->input('parent_phone');
+                $student->is_accel = $request->input('isaccel') == "" ? null : $request->input('isaccel');
                 $student->group = session('group');
                 $student->village = Group::where('id',session('group'))->first()->village_id;
                 $student->created_by = auth()->user()->username;
