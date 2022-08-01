@@ -11,6 +11,7 @@ use App\Http\Controllers\TeacherController;
 use App\Http\Controllers\PresenceController;
 use App\Http\Controllers\MyProfileController;
 use App\Http\Controllers\ClassLevelController;
+use App\Http\Controllers\LessonController;
 use App\Http\Controllers\RoleCategoriesController;
 use App\Http\Controllers\PresenceDateConfigController;
 
@@ -61,6 +62,8 @@ Route::get('/menu/ubah-menu', [MenuController::class, 'get_form_edit'])->middlew
 
 Route::get('/presensi/popup', [PresenceController::class, 'get_form_presence_popup'])->middleware('auth');
 Route::get('/presensi/formulir', [PresenceController::class, 'get_form_presence'])->middleware('auth');
+Route::get('/presensi/rekapitulasi', [PresenceController::class, 'get_recap_presence'])->middleware('auth');
+Route::get('/presensi/rekapitulasi2', [PresenceController::class, 'get_recap_presence2'])->middleware('auth');
 
 Route::get('/pj-kelas', [TeacherController::class, 'get_list_teachers'])->middleware('auth');
 Route::get('/pj-kelas/tambah-pjkelas', [TeacherController::class, 'get_form_add_teacher'])->middleware('auth');
@@ -85,3 +88,6 @@ Route::get('/pengguna/tambah-pengguna', [UserController::class, 'get_form_add'])
 Route::get('/pengguna/ubah-pengguna', [UserController::class, 'get_form_edit'])->middleware('auth');
 
 Route::get('/konfigurasi-presensi',[PresenceDateConfigController::class, 'get_form_add'])->middleware('auth');
+
+Route::get('/kurikulum/jurnal-popup', [LessonController::class, 'get_form_jurnal_popup'])->middleware('auth');
+Route::get('/kurikulum/jurnal', [LessonController::class, 'get_form_jurnal'])->middleware('auth');

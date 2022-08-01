@@ -33,7 +33,7 @@
         </div>
         <div class="card-body" id="card-body-id">
             <div class="col-md-12 text-center">
-                <h3 class="animate-charcter"> Tidak ada presensi tersedia untuk hari ini. Periksa kembali jadwal KBM</h3>
+                <h3 class="animate-charcter"> Kelas ini belum dilakukan pemetaan (Mapping) Materi</h3>
                 <hr>
 
               </div>

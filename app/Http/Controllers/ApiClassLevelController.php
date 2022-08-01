@@ -23,10 +23,25 @@ class ApiClassLevelController extends Controller
         return response()->json(['data' => $result]);
     }
 
+    public function get_class_level_by_level(Request $request)
+    {
+        $level = $request->route('levelId');
+
+        $result = ClassLevel::get_class_level_with_exist_student_by_group_and_level($level);
+
+        return response()->json(['data' => $result]);
+    }
+
     public function get_class_level_by_group()
     {
         $result = ClassLevel::get_class_level_by_group();
 
+        return response()->json(['data' => $result]);
+    }
+
+    public function get_class_level_exist_in_group()
+    {
+        $result = ClassLevel::get_class_level_with_exist_student_by_group();
         return response()->json(['data' => $result]);
     }
 

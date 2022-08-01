@@ -99,7 +99,7 @@
                         return;
                     }
 
-                    window.location.href = `/presensi/formulir?kelas=${classes}`;
+                    window.location.href = `/kurikulum/jurnal?kelas=${classes}`;
                 });
 
                 $('#btn-show-classes').on('click', function() {

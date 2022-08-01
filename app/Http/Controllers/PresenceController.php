@@ -2,9 +2,12 @@
 
 namespace App\Http\Controllers;
 
+use App\Models\ClassLevel;
+use App\Models\Presence;
 use Carbon\Carbon;
 use Illuminate\Http\Request;
 use App\Models\PresenceDateConfig;
+use Illuminate\Support\Facades\DB;
 
 class PresenceController extends Controller
 {
@@ -44,7 +47,9 @@ class PresenceController extends Controller
                 ]);
             } else {
                 return view('presences.form-presence', [
-                    "title" => "Formulir Presensi"
+                    "title" => "Formulir Presensi",
+                    'start' => substr($presence_config->start_time, 0, 5),
+                    'end' => substr($presence_config->end_time, 0, 5)
                 ]);
             }
 
@@ -58,5 +63,12 @@ class PresenceController extends Controller
 
 
 
+    }
+
+    public function get_recap_presence()
+    {
+        return view('presences.recap-presence', [
+            'title' => 'Rekap Presensi'
+        ]);
     }
 }

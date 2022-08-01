@@ -40,17 +40,17 @@
 
               <div class="form-group">
                   <label>Nama Lengkap</label>
-                  <input type="text" class="form-control" id="name" name="name" placeholder="Nama Lengkap">
+                  <input type="text" class="form-control" id="name" name="name" placeholder="Nama Lengkap" onkeypress="return checkChar();">
               </div>
 
               <div class="form-group">
                 <label>Tanggal Lahir</label>
                 <div class="input-group">
-                
+
                 <div class="input-group-prepend">
                   <span class="input-group-text"><i class="far fa-calendar-alt"></i></span>
                 </div>
-                <input type="text" id="birthdate" placeholder="Contoh 20 Januari 2020 | Format (dd/mm/yyyy) 20/01/2020" name="birthdate" class="form-control" data-inputmask-alias="datetime" data-inputmask-inputformat="dd/mm/yyyy" data-mask>
+                <input type="text" id="birthdate" placeholder="Contoh 20 Januari 2020 | Format (dd/mm/yyyy) 20/01/2020" name="birthdate" class="form-control" data-inputmask-alias="datetime" data-inputmask-inputformat="dd/mm/yyyy" data-mask onkeypress="return checkChar();">
                 </div>
               </div>
 
@@ -70,8 +70,8 @@
                   </div>
               </div>
 
-              
-            
+
+
 
             <div class="form-group clearfix">
                 <label>Status</label>
@@ -89,10 +89,40 @@
                 </div>
             </div>
 
+            <div class="form-group">
+                <label>Alamat Asal</label>
+                <textarea id="address_source" name="address_source" class="form-control" rows="3" placeholder="Tuliskan alamat asal jika generus non pribumi" onkeypress="return checkChar();"></textarea>
+            </div>
+
           </div>
 
           <div class="col-md-6">
-            
+
+            <div class="form-group">
+                <label>Nama Orang Tua</label>
+                <input type="text" class="form-control" id="parent" name="parent" placeholder="Nama Ayah / Nama Ibu" onkeypress="return checkChar();">
+            </div>
+
+            <div class="form-group">
+                <label>Kontak Orang Tua</label>
+                <input type="text" class="form-control" id="parent_phone" name="parent_phone" placeholder="No HP Ayah / No HP Ibu" onkeypress="return checkChar();">
+            </div>
+
+            <div class="form-group clearfix">
+                <label>Generus Akselerasi (GP)</label>
+                <div class="icheck-info">
+                  <input type="radio" name="is_accel" id="accel" value="1">
+                  <label for="accel">
+                      Ya
+                  </label>
+                </div>
+                <div class="icheck-warning">
+                  <input type="radio" name="is_accel" id="non-accel" value="0">
+                  <label for="non-accel">
+                    Tidak
+                  </label>
+                </div>
+            </div>
 
               <div class="form-group">
                 <label>Jenjang</label>
@@ -112,7 +142,7 @@
                   <label>Pendidikan</label>
                   <select id="education" name="education" class="form-control" style="width: 100%;">
                     <option value="">Pilih</option>
-                    
+
                   </select>
                 </div>
           </div>
@@ -122,6 +152,10 @@
       <div class="row">
         <div class="col-md-12">
           <div class="btn-group" role="group" aria-label="Button">
+            <button type="button" id="btn-back" class="btn btn-secondary">
+                <i id="back-icon" class="fa fa-arrow-left" aria-hidden="true"></i>
+                <span>Kembali</span>
+            </button>
             <button type="button" id="btn-save" class="btn btn-info">
               <i id="save-icon" class="fa fa-save" aria-hidden="true"></i>
               <i id="loading-icon-save" class="fa fa-spinner fa-spin hide"></i>
@@ -159,7 +193,7 @@ Footer
 <link rel="stylesheet" href="/adminlte/plugins/select2/css/select2.min.css">
 <link rel="stylesheet" href="/adminlte/plugins/select2-bootstrap4-theme/select2-bootstrap4.min.css">
 
-  
+
 <link rel="stylesheet" href="/adminlte/dist/css/adminlte.min.css">
 
 
@@ -193,7 +227,8 @@ Footer
 <script src="/adminlte/plugins/jquery-validation/jquery.validate.min.js"></script>
 <script src="/adminlte/plugins/jquery-validation/additional-methods.min.js"></script>
 
-<script src="https://unpkg.com/sweetalert/dist/sweetalert.min.js"></script>
+<script src="/otherjs/sweetalert.js"></script>
+    {{-- <script src="https://unpkg.com/sweetalert/dist/sweetalert.min.js"></script> --}}
 
 <script>
 
@@ -214,7 +249,7 @@ $(document).ready(function() {
     $('#level').on('change', function (e) {
       debugger;
       var data = this.value;
-      
+
       if (data != null) {
         get_class_level(data, null);
       }
@@ -235,22 +270,23 @@ $(document).ready(function() {
     $.validator.setDefaults({
       submitHandler: function () {
         swal({
-          title: "Simpan Data?",
-          text: "Pastikan data yang diisi sesuai",
-          type: "warning",
-          showCancelButton: true,
-          confirmButtonColor: '#DD6B55',
-          confirmButtonText: 'Ya',
-          cancelButtonText: "Tidak"
-        }).then(
-            function () { post_save_student('submit'); },
-            function () { return false; });
-        
+        title: "Simpan Data",
+        text: "Pastikan data yang diisi sesuai",
+        icon: "warning",
+        buttons: true,
+        dangerMode: true,
+      })
+      .then((willSave) => {
+        if (willSave) {
+          post_save_student('submit');
+        }
+      });
+
       }
     });
 
     $('#student-form').validate({
-      ignore: [], 
+      ignore: [],
       rules: {
         name: {
           required: true
@@ -272,6 +308,9 @@ $(document).ready(function() {
         },
         education: {
           required: true
+        },
+        is_accel: {
+            required: true
         }
       },
       messages: {
@@ -295,6 +334,9 @@ $(document).ready(function() {
         },
         education: {
           required: "Pendidikan harus harus dipilih"
+        },
+        is_accel: {
+            required: "Status Generus GP harus dipilih"
         }
       },
       errorElement: 'span',
@@ -312,18 +354,22 @@ $(document).ready(function() {
       }
     });
 
+    $('#btn-back').on('click', function() {
+                window.location='{{ url("generus") }}'
+            });
+
 
   });
 
-  function GetParameterValues(param) {  
-    var url = window.location.href.slice(window.location.href.indexOf('?') + 1).split('&');  
-    for (var i = 0; i < url.length; i++) {  
-        var urlparam = url[i].split('=');  
-        if (urlparam[0] == param) {  
-            return urlparam[1];  
-        }  
-    }  
-  } 
+  function GetParameterValues(param) {
+    var url = window.location.href.slice(window.location.href.indexOf('?') + 1).split('&');
+    for (var i = 0; i < url.length; i++) {
+        var urlparam = url[i].split('=');
+        if (urlparam[0] == param) {
+            return urlparam[1];
+        }
+    }
+  }
 
   function load_student_data() {
     debugger;
@@ -342,7 +388,7 @@ $(document).ready(function() {
             if (response.data.birth_date != null) {
               birthDate = response.data.birth_date.split(' ')[0].split('-').reverse().join('/');
             }
-            
+
             $('#birthdate').val(birthDate);
 
             if (response.data.gender == "Laki-laki") {
@@ -357,6 +403,18 @@ $(document).ready(function() {
                 $("#non-pribumi").prop("checked", true);
             }
 
+            $('#address_source').val(response.data.address_source);
+
+            $('#parent').val(response.data.parent);
+            $('#parent_phone').val(response.data.parent_phone);
+
+            if (response.data.is_accel == true) {
+                $("#accel").prop("checked", true);
+            } else {
+                $("#non-accel").prop("checked", true);
+            }
+
+
             if (response.data.level != null || response.data.level != '') {
                 get_level(response.data.level);
 
@@ -366,7 +424,7 @@ $(document).ready(function() {
             if (response.data.education != null || response.data.education != '') {
                 get_education(response.data.education);
             }
-               
+
         }
       },
       error: function(response) {
@@ -391,6 +449,11 @@ $(document).ready(function() {
       let level = $('#level').val();
       let class_level = $('#class_level').val();
       let education = $('#education').val();
+      let address_source = $('#address_source').val();
+      let parent = $('#parent').val();
+      let parent_phone = $('#parent_phone').val();
+      let isaccel = $("input[name='is_accel']:checked").val();
+
 
       let student = {
         id: id,
@@ -400,7 +463,11 @@ $(document).ready(function() {
         ispribumi: ispribumi,
         level: level,
         class_level: class_level,
-        education: education
+        education: education,
+        address_source: address_source,
+        parent: parent,
+        parent_phone: parent_phone,
+        isaccel: isaccel
       };
 
       $.ajax({
@@ -454,7 +521,7 @@ $(document).ready(function() {
         if (response.data != undefined || response.data != null) {
           for(let i = 0; i < response.data.length; i++) {
             $("#level").append(`<option value="${response.data[i].id}">${response.data[i].name}</option>`);
-            }  
+            }
 
             if (level != null) {
                 $("#level").val(level);
@@ -481,7 +548,7 @@ $(document).ready(function() {
           $("#class_level").append(`<option value="">Pilih</option>`);
           for(let i = 0; i < response.data.length; i++) {
             $("#class_level").append(`<option value="${response.data[i].id}">${response.data[i].name}</option>`);
-            }  
+            }
 
             if (class_level != null) {
                 $("#class_level").val(class_level);
@@ -503,7 +570,7 @@ $(document).ready(function() {
         if (response.data != undefined || response.data != null) {
           for(let i = 0; i < response.data.length; i++) {
             $("#education").append(`<option value="${response.data[i].id}">${response.data[i].name}</option>`);
-            }  
+            }
 
             if (education != null) {
                 $("#education").val(education);
@@ -517,7 +584,27 @@ $(document).ready(function() {
   }
 
 
-
+  function checkChar() {
+    if(event.keyCode == 39) {
+				event.keyCode = 0;
+				swal('Peringatan',"Tidak diizinkan menggunakan petik 1 (')","info")
+			} else if (event.keyCode == 34) {
+                event.keyCode = 0;
+				swal('Peringatan',"Tidak diizinkan menggunakan petik 2","info")
+            } else if (event.keyCode == 96) {
+                event.keyCode = 0;
+				swal('Peringatan',"Tidak diizinkan menggunakan backtick (`)","info")
+            } else if (event.keyCode == 60) {
+                event.keyCode = 0;
+				swal('Peringatan',"Tidak diizinkan menggunakan tanda (<)","info")
+            } else if (event.keyCode == 62) {
+                event.keyCode = 0;
+				swal('Peringatan',"Tidak diizinkan menggunakan tanda (>)","info")
+            } else if (event.keyCode == 47) {
+                event.keyCode = 0;
+				swal('Peringatan',"Tidak diizinkan menggunakan tanda (/)","info")
+            }
+		}
 
 </script>
 @endpush

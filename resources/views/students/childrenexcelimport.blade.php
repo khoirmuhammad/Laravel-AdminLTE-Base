@@ -32,7 +32,7 @@
 </div>
 </div>
 <div class="card-body" id="card-body-id">
-    
+
     <div id="actions" class="row">
         <div class="col-lg-12">
             <label for="formFileLg" class="form-label">Pilih Dokumen Excel</label>
@@ -58,7 +58,7 @@
         </div>
     </div>
 
-    
+
 
     <div id="pratinjau-id" class="hide">
         <hr>
@@ -79,7 +79,7 @@
                 </tr>
             </thead>
             <tbody>
-                
+
             </tbody>
         </table>
 
@@ -126,7 +126,8 @@ Footer
 
 @push('js')
 <!-- dropzonejs -->
-<script src="https://unpkg.com/sweetalert/dist/sweetalert.min.js"></script>
+<script src="/otherjs/sweetalert.js"></script>
+    {{-- <script src="https://unpkg.com/sweetalert/dist/sweetalert.min.js"></script> --}}
 
 <script>
     $(document).ready(function() {
@@ -145,11 +146,11 @@ Footer
             if(files.length > 0)
             {
                 const fd = new FormData();
-                // Append data 
+                // Append data
                 fd.append('excel-doc',files[0]);
                 fd.append('_token',CSRF_TOKEN);
 
-                // AJAX request 
+                // AJAX request
                 $.ajax({
                     url:"post-impor-excel-caberawit",
                     method: 'POST',
@@ -159,7 +160,7 @@ Footer
                     dataType: 'json',
                     success: function(response){
                         debugger
-                        swal("Berhasil", "Data excel berhasil dipindai sistem", "success")  
+                        swal("Berhasil", "Data excel berhasil dipindai sistem", "success")
 
                         $('#card-body-id').removeClass('opacity');
                         $('#pindai-icon').removeClass('hide');
@@ -198,8 +199,8 @@ Footer
                                     </tr>`;
 
                                     no++;
-                               
-                            }     
+
+                            }
                         }
 
                         if (response.female_data != null)
@@ -216,7 +217,7 @@ Footer
                                     </tr>`;
 
                                     no++;
-                               
+
                             }
                         }
 
@@ -232,7 +233,7 @@ Footer
                         $('#loading-icon-pindai').addClass('hide');
                         $('#pindai-text').text('Pindai Excel');
 
-                        
+
                         let error_message = response.responseJSON.error_message == undefined ? response.responseJSON.message : response.responseJSON.error_message;
                         let logKey = response.responseJSON.log_key;
 
@@ -245,11 +246,11 @@ Footer
 
                         swal("Gagal", alert_message, "error")
 
-                        
+
                     }
                 });
 
-                
+
 
             }
         });
@@ -298,11 +299,11 @@ Footer
                         village_id: village_id,
                     });
                 }
-                                
+
             });
 
             debugger;
-                
+
             $.ajax({
                 url:"post-simpan-impor-caberawit",
                 type: 'POST',
@@ -317,13 +318,13 @@ Footer
 
                     if (response.data_insert.length > 0) {
                         alert_message += `${response.data_insert.length} data berhasil ditambahkan \n`;
-                    } 
+                    }
 
                     if (response.data_update.length > 0) {
                         alert_message += `${response.data_update.length} data berhasil diperbarui \n`;
                     }
 
-                    swal("Berhasil", alert_message, "success") 
+                    swal("Berhasil", alert_message, "success")
 
                     let tablePreview = document.querySelector("#tbl-preview");
                     let row = `<tr>
@@ -370,7 +371,7 @@ Footer
             });
         });
 
-            
+
 
         $('#btnDelete').on('click',function() {
             $('#excel-doc').val(null);

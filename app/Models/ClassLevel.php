@@ -57,15 +57,70 @@ class ClassLevel extends Model
 
       public static function get_class_level_by_group()
       {
-        $query1 = DB::table('class_levels')
-                  ->where('group_id','=',session('group'));
+        // $query1 = DB::table('class_levels')
+        //           ->where('group_id','=',session('group'));
 
-        $query2 = DB::table('class_levels')
-                  ->where('group_id','=', '')
-                  ->union($query1)
-                  ->get();
+        // $query2 = DB::table('class_levels')
+        //           ->where('group_id','=', '')
+        //           ->union($query1)
+        //           ->get();
 
-        return $query2;
+        $query = DB::table('class_levels')
+                ->where('group_id','=',session('group'))
+                ->orWhere('group_id','=', '')
+                ->orderBy('name')
+                ->get();
+
+        return $query;
+      }
+
+      public static function get_class_level_with_exist_student_by_group()
+      {
+        $query = DB::table('class_levels')
+                    ->join('students', 'class_levels.id','=','students.class')
+                    ->where('students.group','=', session('group'))
+                    ->orderBy('class_levels.name')
+                    ->select(['class_levels.id','class_levels.name'])
+                    ->distinct()
+                    ->get();
+
+        return $query;
+      }
+
+      public static function get_class_level_with_exist_student_by_group_and_level($level)
+      {
+        // remaja & unik
+        if ($level == "3110ea5d-d75c-11ec-b5a0-5ce0c508bbb3" || $level == "3110c8d4-d75c-11ec-b5a0-5ce0c508bbb3")
+        {
+            $level = array('3110ea5d-d75c-11ec-b5a0-5ce0c508bbb3','3110c8d4-d75c-11ec-b5a0-5ce0c508bbb3');
+
+            $query1 = DB::table('class_levels')
+                    ->join('students', 'class_levels.id','=','students.class')
+                    ->where('students.group','=', session('group'))
+                    ->whereIn('class_levels.level_id', $level)
+                    ->orderBy('class_levels.name')
+                    ->select(['class_levels.id as id','class_levels.name as name'])
+                    ->distinct()
+                    ->get();
+
+            return $query1;
+
+
+
+        }
+        else
+        {
+            $query2 = DB::table('class_levels')
+                    ->join('students', 'class_levels.id','=','students.class')
+                    ->where('students.group','=', session('group'))
+                    ->where('class_levels.level_id', $level)
+                    ->orderBy('class_levels.name')
+                    ->select(['class_levels.id','class_levels.name'])
+                    ->distinct()
+                    ->get();
+
+            return $query2;
+        }
       }
 
       public static function get_class_level_by_group_join_level()
@@ -73,17 +128,23 @@ class ClassLevel extends Model
         $query1 = DB::table('class_levels')
                     ->leftJoin('levels', 'levels.id','=','class_levels.level_id')
                   ->where('class_levels.group_id','=',session('group'))
+                  ->orWhere('class_levels.group_id','=', '')
                   ->select(['class_levels.id as id','class_levels.name as classname','class_levels.group_id',
-                  'class_levels.level_id as level_id','levels.name as levelname']);
+                  'class_levels.level_id as level_id','levels.name as levelname'])->orderBy('class_levels.name')->get();
 
-        $query2 = DB::table('class_levels')
+        return $query1;
+      }
+
+      public static function get_class_leve_exists_by_group_join_level()
+      {
+        $query1 = DB::table('class_levels')
                     ->leftJoin('levels', 'levels.id','=','class_levels.level_id')
-                  ->where('class_levels.group_id','=', '')
-                  ->union($query1)
+                  ->where('class_levels.group_id','=',session('group'))
+                  ->orWhere('class_levels.group_id','=', '')
                   ->select(['class_levels.id as id','class_levels.name as classname','class_levels.group_id',
-                'class_levels.level_id as level_id','levels.name as levelname'])->get();
+                  'class_levels.level_id as level_id','levels.name as levelname'])->orderBy('class_levels.name')->get();
 
-        return $query2;
+        return $query1;
       }
 
       public static function get_class_level_join_level()
@@ -92,6 +153,18 @@ class ClassLevel extends Model
                     ->leftJoin('levels', 'levels.id','=','class_levels.level_id')
                   ->select(['class_levels.id as id','class_levels.name as classname','class_levels.group_id',
                   'class_levels.level_id as level_id','levels.name as levelname'])->get();
+
+        return $query;
+      }
+
+      public static function class_exist_in_group()
+      {
+        $query = DB::table('class_levels')
+                ->join('students', 'class_levels.id','=','students.class')
+                ->where('students.group','=', session('group'))
+                ->orderBy('class_levels.name')
+                ->distinct()
+                ->get(['class_levels.id as classid','class_levels.name as classname']);
 
         return $query;
       }

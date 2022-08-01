@@ -6,6 +6,7 @@ use Exception;
 use Carbon\Carbon;
 use App\Models\Log;
 use App\Models\Presence;
+use App\Models\ClassLevel;
 use Illuminate\Http\Request;
 use Illuminate\Support\Facades\Route;
 
@@ -25,6 +26,82 @@ class ApiPresenceController extends Controller
         ];
 
         return response()->json(['data' => $result]);
+    }
+
+    public function get_recap_presence(Request $request)
+    {
+        $months = array('Januari', 'Februari', 'Maret', 'April', 'Mei', 'Juni', 'Juli', 'Agustus','September','Oktober','November','Desember');
+
+        $class_in_group = ClassLevel::class_exist_in_group();
+
+        $current_month = $request->month == 0 ? (int)date('m') : $request->input('month');
+
+        $presence_in_month = Presence::get_recap_presences_by_class($current_month);
+
+        $result = array();
+
+        foreach($class_in_group as $class_item)
+        {
+            $class_obj = $presence_in_month->where('classname',$class_item->classname)->first();
+
+            if ($class_obj != null)
+            {
+                $result[] = [
+                    'classid' => $class_obj->classid,
+                    'class' => $class_obj->classname,
+                    'present' => $class_obj->present,
+                    'permit' => $class_obj->permit,
+                    'absent' => $class_obj->absent,
+                    'present_percent' => $class_obj->present_percent,
+                    'permit_percent' => $class_obj->permit_percent,
+                    'absent_percent' => $class_obj->absent_percent,
+                    'total' => round($class_obj->present_percent + $class_obj->permit_percent + $class_obj->absent_percent),
+                    'total_pertemuan' => count(Presence::get_total_meet_by_class($current_month, $class_obj->classname)),
+                    'bulan' => $months[$current_month - 1]
+                ];
+            }
+            else
+            {
+                $result[] = [
+                    'classid' => $class_item->classid,
+                    'class' => $class_item->classname,
+                    'present' => 0,
+                    'permit' => 0,
+                    'absent' => 0,
+                    'present_percent' => '0.00',
+                    'permit_percent' => '0.00',
+                    'absent_percent' => '0.00',
+                    'total' => '0.00',
+                    'total_pertemuan' => 0,
+                    'bulan' => $months[$current_month - 1]
+                ];
+            }
+        }
+
+        return response()->json(['data' => $result]);
+    }
+
+    public function get_recap_presence_in_class(Request $request)
+    {
+        $current_month = $request->month == 0 ? (int)date('m') : $request->input('month');
+        $class_level = $request->class_level;
+
+        $result = Presence::get_recap_presences_by_student_in_class($current_month, $class_level);
+
+        return response()->json(['data' => $result]);
+    }
+
+    public function get_analysis_presence()
+    {
+        $classes = ClassLevel::get_class_level_with_exist_student_by_group();
+        $data_class = array();
+
+        foreach($classes as $class)
+        {
+            array_push($data_class, $class->name);
+        }
+
+        return response()->json(['data_class' => $data_class]);
     }
 
     public function post_student_presence(Request $request)

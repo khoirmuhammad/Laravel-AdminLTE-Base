@@ -207,7 +207,8 @@
 @push('js')
 <script src="/adminlte/plugins/select2/js/select2.full.min.js"></script>
 
-<script src="https://unpkg.com/sweetalert/dist/sweetalert.min.js"></script>
+<script src="/otherjs/sweetalert.js"></script>
+    {{-- <script src="https://unpkg.com/sweetalert/dist/sweetalert.min.js"></script> --}}
 
 <script>
 $(document).ready(function() {
@@ -274,7 +275,7 @@ $(document).ready(function() {
 });
 
 function populate_kbm_select2() {
-debugger;
+
   let village = $('#village').val();
   let url = village == "" ? "/api/group/group-list" : "/api/group/group-list-by-village/"+ village;
   $.ajax({
@@ -331,7 +332,6 @@ function get_statistic_unik_pribumi_status(group) {
     success: function(response){
       if (response.data != undefined || response.data != null) {
         let unikStatisticTbl = document.querySelector("#unik-statistic-pribumi-status");
-        debugger;
         unikStatisticTbl.innerHTML = "";
 
         let row = `<tr>
@@ -400,7 +400,7 @@ function get_statistic_unik(group) {
                             <td class="text-center">` + response.data[i].education + `</td>
                             <td class="text-center">` + response.data[i].male + `</td>
                             <td class="text-center">` + response.data[i].female + `</td>
-                            <td class="text-center"><b>` + totalAll + `</b></td>
+                            <td class="text-center"><b>` + parseInt(response.data[i].male + response.data[i].female)  + `</b></td>
                             </tr>`;
                     totalAll = 0;
                     no++;
@@ -417,7 +417,7 @@ function get_statistic_unik(group) {
             }
         },
         error: function(response) {
-            debugger;
+
         }
     });
 }
@@ -430,7 +430,7 @@ function get_statistic_remaja(group) {
     success: function(response){
       if (response.data != undefined || response.data != null) {
         let remajaStatisticTbl = document.querySelector("#remaja-statistic");
-        debugger;
+
         remajaStatisticTbl.innerHTML = "";
 
         let row = `<tr>
@@ -576,7 +576,7 @@ function get_statistic_caberawit(group) {
             }
         },
         error: function(response) {
-            debugger;
+
         }
     });
 }
@@ -635,20 +635,20 @@ function get_statistic_general_education(group) {
             }
         },
         error: function(response) {
-            debugger;
+
         }
     });
 }
 
 function get_statistic_general_level(group) {
-  debugger;
+
     $.ajax({
         url:"/api/generus/statistika-general-kelompok-by-level/" + group,
         method: 'GET',
         dataType: 'json',
         success: function(response){
             if (response.data != undefined || response.data != null) {
-                debugger;
+
                 let generalStatisticTbl = document.querySelector("#general-statistic-level");
 
                 generalStatisticTbl.innerHTML = "";
@@ -696,7 +696,7 @@ function get_statistic_general_level(group) {
             }
         },
         error: function(response) {
-            debugger;
+
         }
     });
 }
