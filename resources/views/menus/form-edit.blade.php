@@ -225,7 +225,7 @@
                     parent: {
                         required: {
                             depends: function() {
-                                debugger;
+
                                 let isParent = $('#isParent').is(':checked'); // false
                                 let parentMenu = $('#parent').val(); // ""
                                 let parentMenuNotSelected = parentMenu == '';
@@ -270,12 +270,12 @@
                 },
                 errorElement: 'span',
                 errorPlacement: function(error, element) {
-                    debugger;
+
                     error.addClass('invalid-feedback');
                     element.closest('.form-group').append(error);
                 },
                 highlight: function(element, errorClass, validClass) {
-                    debugger;
+
                     $(element).addClass('is-invalid');
                 },
                 unhighlight: function(element, errorClass, validClass) {
@@ -290,7 +290,7 @@
         });
 
         function get_role_categories() {
-            debugger
+
             let color = ['primary', 'secondary', 'success', 'warning', 'info', 'danger']
             $.ajax({
                 url: `/api/role-categories`,
@@ -319,7 +319,7 @@
         }
 
         function get_parent_menu() {
-            debugger
+
             $.ajax({
                 url: `/api/menu/get-parent-menu`,
                 method: 'GET',
@@ -342,7 +342,7 @@
         }
 
         function post_save_menu() {
-            debugger;
+
             $(`#card-body-id`).addClass('opacity');
             $(`#submit-icon`).addClass('hide');
             $(`#loading-icon-submit`).removeClass('hide');
@@ -387,7 +387,7 @@
                     'X-CSRF-TOKEN': CSRF_TOKEN
                 },
                 success: function(response) {
-                    debugger;
+
                     swal("Berhasil", `Menu ${menuRoles.title} berhasil diperbarui`, "success");
 
                     $(`#card-body-id`).removeClass('opacity');
@@ -430,7 +430,7 @@
                 method: 'GET',
                 dataType: 'json',
                 success: function(response) {
-                    debugger;
+
                     if (response.data != undefined || response.data != null) {
                         let objMenu = response.data.menu;
                         let objRoles = response.data.roles;
@@ -452,7 +452,7 @@
                         $('#icon').val(objMenu.icon);
 
                         $.each(objRoles, function(index, value) {
-                            debugger
+
                             $(`#role_cat_${value.role_category_id.replace('.','')}`).prop('checked',
                                 true);
                         });

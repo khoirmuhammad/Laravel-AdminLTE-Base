@@ -247,7 +247,7 @@ $(document).ready(function() {
 
     // select2:select
     $('#level').on('change', function (e) {
-      debugger;
+
       var data = this.value;
 
       if (data != null) {
@@ -257,7 +257,7 @@ $(document).ready(function() {
 
 
     $('#btn-save').on('click', function() {
-      debugger
+
       let name = $('#name').val();
 
       if (name == null || name == "") {
@@ -341,12 +341,12 @@ $(document).ready(function() {
       },
       errorElement: 'span',
       errorPlacement: function (error, element) {
-        debugger;
+
         error.addClass('invalid-feedback');
         element.closest('.form-group').append(error);
       },
       highlight: function (element, errorClass, validClass) {
-        debugger;
+
         $(element).addClass('is-invalid');
       },
       unhighlight: function (element, errorClass, validClass) {
@@ -402,7 +402,7 @@ $(document).ready(function() {
         contentType: 'application/json; charset=utf-8',
         headers: {'X-CSRF-TOKEN': CSRF_TOKEN},
         success: function(response){
-          debugger
+
 
           swal("Berhasil", `Generus ${response.data.fullname} berhasil ditambahkan`, "success");
 
@@ -414,7 +414,7 @@ $(document).ready(function() {
           $("#student-form")[0].reset();
         },
         error: function(response) {
-          debugger
+
           let error_message = response.responseJSON.error_message == undefined ? response.responseJSON.message : response.responseJSON.error_message;
           let logKey = response.responseJSON.log_key;
 
@@ -454,7 +454,7 @@ $(document).ready(function() {
   }
 
   function get_class_level(level) {
-    debugger
+
     let group = $('#group').val();
     $.ajax({
       url:`/api/class-level/class-level-list/${group}/${level}`,
@@ -494,7 +494,7 @@ $(document).ready(function() {
   }
 
   function checkChar() {
-    debugger;
+
 			if(event.keyCode == 39) {
 				event.keyCode = 0;
 				swal('Peringatan',"Tidak diizinkan menggunakan petik 1 (')","info")

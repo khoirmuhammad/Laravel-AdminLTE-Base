@@ -84,11 +84,12 @@
         <div class="card">
           <div class="card-header p-2">
             <ul class="nav nav-pills">
-              <li class="nav-item"><a class="nav-link active" href="#general" data-toggle="tab">General</a></li>
-              <li class="nav-item"><a class="nav-link" href="#caberawit" data-toggle="tab">Caberawit</a></li>
-              <li class="nav-item"><a class="nav-link" href="#praremaja" data-toggle="tab">Pra Remaja</a></li>
-              <li class="nav-item"><a class="nav-link" href="#remaja" data-toggle="tab">Remaja</a></li>
-              <li class="nav-item"><a class="nav-link" href="#unik" data-toggle="tab">Usia Nikah</a></li>
+              <li class="nav-item"><a class="nav-link active" href="#general" data-toggle="tab">OVERVIEW</a></li>
+              <li class="nav-item"><a class="nav-link" href="#paudtk" data-toggle="tab">PAUD-TK</a></li>
+              <li class="nav-item"><a class="nav-link" href="#caberawit" data-toggle="tab">CABERAWIT</a></li>
+              <li class="nav-item"><a class="nav-link" href="#praremaja" data-toggle="tab">PRAREMAJA</a></li>
+              <li class="nav-item"><a class="nav-link" href="#remaja" data-toggle="tab">REMAJA</a></li>
+              <li class="nav-item"><a class="nav-link" href="#unik" data-toggle="tab">USIA NIKAH</a></li>
             </ul>
           </div><!-- /.card-header -->
           <div class="card-body">
@@ -101,8 +102,20 @@
                 <table class="table table-bordered" id="general-statistic-education">
 
                 </table>
+
+                <br>
+
+                <table class="table table-bordered" id="unik-statistic-pribumi-status">
+
+                </table>
               </div>
               <!-- /.tab-pane -->
+
+              <div class="tab-pane" id="paudtk">
+                <table class="table table-bordered" id="paudtk-statistic">
+
+                </table>
+              </div>
 
               <div class="tab-pane" id="caberawit">
                 <table class="table table-bordered" id="caberawit-statistic">
@@ -131,11 +144,7 @@
 
                 </table>
 
-                <br>
 
-                <table class="table table-bordered" id="unik-statistic-pribumi-status">
-
-                </table>
               </div>
               <!-- /.tab-pane -->
 
@@ -230,11 +239,13 @@ $(document).ready(function() {
 
       get_statistic_general_level(group);
       get_statistic_general_education(group);
+      get_statistic_unik_pribumi_status(group);
+      get_statistic_paudtk(group);
       get_statistic_caberawit(group);
       get_statistic_praremaja(group);
       get_statistic_remaja(group);
       get_statistic_unik(group);
-      get_statistic_unik_pribumi_status(group);
+
     }
 
     // Role unless ppk
@@ -252,11 +263,13 @@ $(document).ready(function() {
 
         get_statistic_general_level(group);
         get_statistic_general_education(group);
+        get_statistic_unik_pribumi_status(group);
+        get_statistic_paudtk(group);
         get_statistic_caberawit(group);
         get_statistic_praremaja(group);
         get_statistic_remaja(group);
         get_statistic_unik(group);
-        get_statistic_unik_pribumi_status(group);
+
 
 
         $('#loading-icon-select').addClass('hide');
@@ -369,14 +382,14 @@ function get_statistic_unik(group) {
         dataType: 'json',
         success: function(response){
             if (response.data != undefined || response.data != null) {
-                debugger;
+
                 let unikStatisticTbl = document.querySelector("#unik-statistic");
 
                 unikStatisticTbl.innerHTML = "";
 
                 let row = `<tr>
                               <th style="width: 10%" class="text-center">#</th>
-                              <th style="width: 30%" class="text-center">STATUS PENDIDIKAN</th>
+                              <th style="width: 30%" class="text-center">KELAS</th>
                               <th style="width: 20%" class="text-center">PUTRA</th>
                               <th style="width: 20%" class="text-center">PUTRI</th>
                               <th style="width: 20%" class="text-center">TOTAL</th>
@@ -392,15 +405,14 @@ function get_statistic_unik(group) {
 
                     totalMale = parseInt(totalMale) + parseInt(response.data[i].male);
                     totalFemale = parseInt(totalFemale) + parseInt(response.data[i].female);
-
-                    totalAll = parseInt(totalMale) + parseInt(totalFemale);
+                    totalAll = parseInt(response.data[i].male) + parseInt(response.data[i].female);
 
                     row += `<tr>
                             <td class="text-center">` + no + `</td>
-                            <td class="text-center">` + response.data[i].education + `</td>
+                            <td class="text-center">` + response.data[i].class + `</td>
                             <td class="text-center">` + response.data[i].male + `</td>
                             <td class="text-center">` + response.data[i].female + `</td>
-                            <td class="text-center"><b>` + parseInt(response.data[i].male + response.data[i].female)  + `</b></td>
+                            <td class="text-center"><b>` + totalAll + `</b></td>
                             </tr>`;
                     totalAll = 0;
                     no++;
@@ -413,7 +425,7 @@ function get_statistic_unik(group) {
                         <td class="text-center"><b>${parseInt(totalMale) + parseInt(totalFemale)}</b></td>
                         </tr>`;
 
-                unikStatisticTbl.innerHTML = row;
+                        unikStatisticTbl.innerHTML = row;
             }
         },
         error: function(response) {
@@ -423,102 +435,122 @@ function get_statistic_unik(group) {
 }
 
 function get_statistic_remaja(group) {
-  $.ajax({
-    url:"/api/generus/statistika-remaja-kelompok/"+ group,
-    method: 'GET',
-    dataType: 'json',
-    success: function(response){
-      if (response.data != undefined || response.data != null) {
-        let remajaStatisticTbl = document.querySelector("#remaja-statistic");
+    $.ajax({
+        url:"/api/generus/statistika-remaja-kelompok/"+ group,
+        method: 'GET',
+        dataType: 'json',
+        success: function(response){
+            if (response.data != undefined || response.data != null) {
 
-        remajaStatisticTbl.innerHTML = "";
+                let remajaStatisticTbl = document.querySelector("#remaja-statistic");
 
-        let row = `<tr>
-                  <th style="width: 40%" class="text-center">#</th>
-                  <th style="width: 20%" class="text-center">PUTRA</th>
-                  <th style="width: 20%" class="text-center">PUTRI</th>
-                  <th style="width: 20%" class="text-center">TOTAL</th>
-                  </tr>`;
+                remajaStatisticTbl.innerHTML = "";
 
-        let total_male = 0;
-        let total_female = 0;
-        let totalAll = 0;
+                let row = `<tr>
+                              <th style="width: 10%" class="text-center">#</th>
+                              <th style="width: 30%" class="text-center">KELAS</th>
+                              <th style="width: 20%" class="text-center">PUTRA</th>
+                              <th style="width: 20%" class="text-center">PUTRI</th>
+                              <th style="width: 20%" class="text-center">TOTAL</th>
+                            </tr>`;
 
-        for(let i = 0; i < response.data.length; i++) {
-          if (response.data[i].gender == "Laki-laki")
-            total_male = response.data[i].total;
-          else if (response.data[i].gender == "Perempuan")
-            total_female = response.data[i].total;
+                let no = 1;
+
+                let totalMale = 0;
+                let totalFemale = 0;
+                let totalAll = 0;
+
+                for(let i = 0; i < response.data.length; i++) {
+
+                    totalMale = parseInt(totalMale) + parseInt(response.data[i].male);
+                    totalFemale = parseInt(totalFemale) + parseInt(response.data[i].female);
+                    totalAll = parseInt(response.data[i].male) + parseInt(response.data[i].female);
+
+                    row += `<tr>
+                            <td class="text-center">` + no + `</td>
+                            <td class="text-center">` + response.data[i].class + `</td>
+                            <td class="text-center">` + response.data[i].male + `</td>
+                            <td class="text-center">` + response.data[i].female + `</td>
+                            <td class="text-center"><b>` + totalAll + `</b></td>
+                            </tr>`;
+                    totalAll = 0;
+                    no++;
+                }
+
+                row += `<tr>
+                        <td colspan="2" class="text-center"><b>TOTAL</b></td>
+                        <td class="text-center"><b>${totalMale}</b></td>
+                        <td class="text-center"><b>${totalFemale}</b></td>
+                        <td class="text-center"><b>${parseInt(totalMale) + parseInt(totalFemale)}</b></td>
+                        </tr>`;
+
+                        remajaStatisticTbl.innerHTML = row;
+            }
+        },
+        error: function(response) {
+
         }
-
-        totalAll = parseInt(total_male) + parseInt(total_female);
-
-        row += `<tr>
-                <td class="text-center">REMAJA</td>
-                <td class="text-center">` + total_male + `</td>
-                <td class="text-center">` + total_female + `</td>
-                <td class="text-center"><b>` + totalAll + `</b></td>
-                </tr>`;
-
-        remajaStatisticTbl.innerHTML = row;
-
-
-      }
-    },
-    error: function(response) {
-
-    }
-  });
+    });
 
 }
 
 function get_statistic_praremaja(group) {
-  $.ajax({
-    url:"/api/generus/statistika-praremaja-kelompok/"+ group,
-    method: 'GET',
-    dataType: 'json',
-    success: function(response){
-      if (response.data != undefined || response.data != null) {
-        let praremajaStatisticTbl = document.querySelector("#praremaja-statistic");
+    $.ajax({
+        url:"/api/generus/statistika-praremaja-kelompok/"+ group,
+        method: 'GET',
+        dataType: 'json',
+        success: function(response){
+            if (response.data != undefined || response.data != null) {
 
-        praremajaStatisticTbl.innerHTML = "";
+                let praremajaStatisticTbl = document.querySelector("#praremaja-statistic");
 
-        let row = `<tr>
-                  <th style="width: 40%" class="text-center">#</th>
-                  <th style="width: 20%" class="text-center">PUTRA</th>
-                  <th style="width: 20%" class="text-center">PUTRI</th>
-                  <th style="width: 20%" class="text-center">TOTAL</th>
-                  </tr>`;
+                praremajaStatisticTbl.innerHTML = "";
 
-        let total_male = 0;
-        let total_female = 0;
-        let totalAll = 0;
+                let row = `<tr>
+                              <th style="width: 10%" class="text-center">#</th>
+                              <th style="width: 30%" class="text-center">KELAS</th>
+                              <th style="width: 20%" class="text-center">PUTRA</th>
+                              <th style="width: 20%" class="text-center">PUTRI</th>
+                              <th style="width: 20%" class="text-center">TOTAL</th>
+                            </tr>`;
 
-        for(let i = 0; i < response.data.length; i++) {
-          if (response.data[i].gender == "Laki-laki")
-            total_male = response.data[i].total;
-          else if (response.data[i].gender == "Perempuan")
-            total_female = response.data[i].total;
+                let no = 1;
+
+                let totalMale = 0;
+                let totalFemale = 0;
+                let totalAll = 0;
+
+                for(let i = 0; i < response.data.length; i++) {
+
+                    totalMale = parseInt(totalMale) + parseInt(response.data[i].male);
+                    totalFemale = parseInt(totalFemale) + parseInt(response.data[i].female);
+                    totalAll = parseInt(response.data[i].male) + parseInt(response.data[i].female);
+
+                    row += `<tr>
+                            <td class="text-center">` + no + `</td>
+                            <td class="text-center">` + response.data[i].class + `</td>
+                            <td class="text-center">` + response.data[i].male + `</td>
+                            <td class="text-center">` + response.data[i].female + `</td>
+                            <td class="text-center"><b>` + totalAll + `</b></td>
+                            </tr>`;
+                    totalAll = 0;
+                    no++;
+                }
+
+                row += `<tr>
+                        <td colspan="2" class="text-center"><b>TOTAL</b></td>
+                        <td class="text-center"><b>${totalMale}</b></td>
+                        <td class="text-center"><b>${totalFemale}</b></td>
+                        <td class="text-center"><b>${parseInt(totalMale) + parseInt(totalFemale)}</b></td>
+                        </tr>`;
+
+                        praremajaStatisticTbl.innerHTML = row;
+            }
+        },
+        error: function(response) {
+
         }
-
-        totalAll = parseInt(total_male) + parseInt(total_female);
-
-        row += `<tr>
-                <td class="text-center">PRAREMAJA</td>
-                <td class="text-center">` + total_male + `</td>
-                <td class="text-center">` + total_female + `</td>
-                <td class="text-center"><b>` + totalAll + `</b></td>
-                </tr>`;
-
-        praremajaStatisticTbl.innerHTML = row;
-
-
-      }
-    },
-    error: function(response) {
-
-    }
-  });
+    });
 
 }
 
@@ -573,6 +605,65 @@ function get_statistic_caberawit(group) {
                         </tr>`;
 
                 caberawitStatisticTbl.innerHTML = row;
+            }
+        },
+        error: function(response) {
+
+        }
+    });
+}
+
+function get_statistic_paudtk(group) {
+    $.ajax({
+        url:"/api/generus/statistika-paudtk-kelompok/"+ group,
+        method: 'GET',
+        dataType: 'json',
+        success: function(response){
+            if (response.data != undefined || response.data != null) {
+
+                let paudtkStatisticTbl = document.querySelector("#paudtk-statistic");
+
+                paudtkStatisticTbl.innerHTML = "";
+
+                let row = `<tr>
+                              <th style="width: 10%" class="text-center">#</th>
+                              <th style="width: 30%" class="text-center">KELAS</th>
+                              <th style="width: 20%" class="text-center">PUTRA</th>
+                              <th style="width: 20%" class="text-center">PUTRI</th>
+                              <th style="width: 20%" class="text-center">TOTAL</th>
+                            </tr>`;
+
+                let no = 1;
+
+                let totalMale = 0;
+                let totalFemale = 0;
+                let totalAll = 0;
+
+                for(let i = 0; i < response.data.length; i++) {
+
+                    totalMale = parseInt(totalMale) + parseInt(response.data[i].male);
+                    totalFemale = parseInt(totalFemale) + parseInt(response.data[i].female);
+                    totalAll = parseInt(response.data[i].male) + parseInt(response.data[i].female);
+
+                    row += `<tr>
+                            <td class="text-center">` + no + `</td>
+                            <td class="text-center">` + response.data[i].class + `</td>
+                            <td class="text-center">` + response.data[i].male + `</td>
+                            <td class="text-center">` + response.data[i].female + `</td>
+                            <td class="text-center"><b>` + totalAll + `</b></td>
+                            </tr>`;
+                    totalAll = 0;
+                    no++;
+                }
+
+                row += `<tr>
+                        <td colspan="2" class="text-center"><b>TOTAL</b></td>
+                        <td class="text-center"><b>${totalMale}</b></td>
+                        <td class="text-center"><b>${totalFemale}</b></td>
+                        <td class="text-center"><b>${parseInt(totalMale) + parseInt(totalFemale)}</b></td>
+                        </tr>`;
+
+                        paudtkStatisticTbl.innerHTML = row;
             }
         },
         error: function(response) {

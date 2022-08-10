@@ -81,7 +81,7 @@
 
         <script>
             $(document).ready(function() {
-                debugger;
+
                 $('.select2').select2();
 
                 populate_class_select2();
@@ -109,7 +109,7 @@
             });
 
             function populate_class_select2() {
-                debugger;
+
                 let url = "/api/class-level/class-level-list-exist-in-group";
                 $.ajax({
                     url: url,

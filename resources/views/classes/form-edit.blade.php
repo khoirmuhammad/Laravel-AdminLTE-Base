@@ -181,12 +181,12 @@
                 },
                 errorElement: 'span',
                 errorPlacement: function(error, element) {
-                    debugger;
+
                     error.addClass('invalid-feedback');
                     element.closest('.form-group').append(error);
                 },
                 highlight: function(element, errorClass, validClass) {
-                    debugger;
+
                     $(element).addClass('is-invalid');
                 },
                 unhighlight: function(element, errorClass, validClass) {
@@ -201,7 +201,7 @@
         });
 
         function post_save_class() {
-            debugger;
+
             $(`#card-body-id`).addClass('opacity');
             $(`#submit-icon`).addClass('hide');
             $(`#loading-icon-submit`).removeClass('hide');
@@ -228,8 +228,6 @@
                     'X-CSRF-TOKEN': CSRF_TOKEN
                 },
                 success: function(response) {
-                    debugger
-
                     swal("Berhasil", `Data Kelas : ${classes.classname} berhasil diperbarui`, "success");
 
                     $(`#card-body-id`).removeClass('opacity');
@@ -240,7 +238,7 @@
                     set_form();
                 },
                 error: function(response) {
-                    debugger
+
                     let error_message = response.responseJSON.error_message;
                     let logKey = response.responseJSON.log_key;
 
@@ -268,7 +266,7 @@
                 method: 'GET',
                 dataType: 'json',
                 success: function(response) {
-                    debugger;
+
                     if (response.data != undefined || response.data != null) {
                         let obj = response.data;
 

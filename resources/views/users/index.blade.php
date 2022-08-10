@@ -178,7 +178,7 @@
         });
 
         function deletePengguna(id, name) {
-            debugger;
+
             swal({
                     title: "Apakah Anda Yakin?",
                     text: `Menghapus ${name} dari database!`,
@@ -196,7 +196,7 @@
         }
 
         function performDeletePengguna(id, name) {
-            debugger;
+
             $.ajax({
                 url: "/api/user/delete-user",
                 type: 'DELETE',
@@ -210,7 +210,7 @@
                     'X-CSRF-TOKEN': CSRF_TOKEN
                 },
                 success: function(response) {
-                    debugger;
+
                     swal("Berhasil", `Data Pengguna : ${name} berhasil dihapus`, "success");
                     setTimeout(function() {
                         location.reload(true);

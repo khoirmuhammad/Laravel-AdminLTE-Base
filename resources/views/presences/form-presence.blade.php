@@ -185,7 +185,7 @@
             })
 
             $('#clock-out').on('click', function() {
-                debugger;
+
                 let id = $('#teacher-presence-id').val();
 
                 if (parseInt(id) == 0) {
@@ -257,14 +257,14 @@
         }
 
         function get_student_list() {
-            debugger;
             $.ajax({
                 url: "/api/presence/get-students/" + GetParameterValues('kelas'),
                 method: 'GET',
                 dataType: 'json',
                 success: function(response) {
+                    debugger;
                     if (response.data != undefined || response.data != null) {
-                        debugger;
+
                         let presenceTbl = document.querySelector("#presence-id");
 
                         presenceTbl.innerHTML = "";
@@ -277,7 +277,7 @@
                       Aksi
                     </th>
                   </tr></thead>`;
-                        debugger;
+
                         let students_orig = response.data.students_orig;
                         let students_presence = response.data.students_presence;
 
@@ -373,7 +373,7 @@
         }
 
         function proceedClockInOut(type) {
-            debugger;
+
             let id = $('#teacher-presence-id').val();
             let user = $('#username-id').val();
             let classLevel = GetParameterValues('kelas');
@@ -395,7 +395,7 @@
                     'X-CSRF-TOKEN': CSRF_TOKEN
                 },
                 success: function(response) {
-                    debugger;
+
                     if (response.status) {
                         if (type == 'in') {
                             $('#modal-clockin').modal('hide');
@@ -444,13 +444,13 @@
         }
 
         function set_teacher_presence() {
-            debugger;
+
             $.ajax({
                 url: "/api/presence-teacher/get-teacher-presence",
                 method: 'GET',
                 dataType: 'json',
                 success: function(response) {
-                    debugger;
+
                     if (response.data != undefined || response.data != null) {
                         $('#teacher-presence-id').val(response.data.id);
 
@@ -485,7 +485,7 @@
         }
 
         function presenceStudent(studentId, studentName, code, index) {
-            debugger;
+
             let id = $('#teacher-presence-id').val();
 
             if (parseInt(id) == 0) {
@@ -527,7 +527,7 @@
         }
 
         function proceedStudentPresence(studentId, code, note, index) {
-            debugger;
+
             let presence = {
                 'id': $(`#hdId${index}`).val(),
                 'student_id': studentId,
@@ -550,7 +550,7 @@
                     'X-CSRF-TOKEN': CSRF_TOKEN
                 },
                 success: function(response) {
-                    debugger;
+
                     if (response.status) {
                         $(`#hdId${index}`).val(response.data.id);
 
@@ -576,14 +576,14 @@
                     }
                 },
                 error: function(response) {
-                    debugger;
+
                     swal("Gagal", response.status + "-" + response.statusText, "error");
                 }
             });
         }
 
         function populate_lesson_select() {
-            debugger;
+
             let url = "/api/lesson/get-all-lesson-name?class_level=" + GetParameterValues('kelas');
             $.ajax({
                 url: url,

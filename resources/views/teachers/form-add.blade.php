@@ -120,6 +120,8 @@
 
                         </div>
 
+                        <input type="checkbox" id="is-active" name="my-checkbox" checked data-bootstrap-switch>
+
                     </div>
 
                 </div>
@@ -196,6 +198,9 @@
     <script src="/adminlte/plugins/jquery-validation/jquery.validate.min.js"></script>
     <script src="/adminlte/plugins/jquery-validation/additional-methods.min.js"></script>
 
+    <!-- Bootstrap Switch -->
+    <script src="/adminlte/plugins/bootstrap-switch/js/bootstrap-switch.min.js"></script>
+
     <script src="/otherjs/sweetalert.js"></script>
     {{-- <script src="https://unpkg.com/sweetalert/dist/sweetalert.min.js"></script> --}}
 
@@ -203,10 +208,12 @@
         $(document).ready(function() {
             var CSRF_TOKEN = document.querySelector('meta[name="csrf-token"]').getAttribute("content");
 
+            $('#is-active').bootstrapSwitch('state', false);
+
             get_class_levels();
 
             $("#hasAccount").change(function() {
-                debugger;
+
                 if (this.checked) {
                     $('#username').css('display', 'block');
                     $('#username-error').css('display', 'block');
@@ -254,7 +261,7 @@
                     username: {
                         required: {
                             depends: function() {
-                                debugger;
+
                                 let hasAccountYet = $('#hasAccount').is(':checked');
                                 return hasAccountYet;
                             }
@@ -280,12 +287,12 @@
                 },
                 errorElement: 'span',
                 errorPlacement: function(error, element) {
-                    debugger;
+
                     error.addClass('invalid-feedback');
                     element.closest('.form-group').append(error);
                 },
                 highlight: function(element, errorClass, validClass) {
-                    debugger;
+
                     $(element).addClass('is-invalid');
                 },
                 unhighlight: function(element, errorClass, validClass) {
@@ -300,7 +307,7 @@
         });
 
         function post_save_teacher(action) {
-            debugger;
+
             $(`#card-body-id`).addClass('opacity');
             $(`#${action}-icon`).addClass('hide');
             $(`#loading-icon-${action}`).removeClass('hide');
@@ -314,11 +321,12 @@
             let isStudent = $('#isStudent').is(':checked');
             let hasAccount = $('#hasAccount').is(':checked');
             let username = $('#username').val();
+            let isActive = $('#is-active').is(':checked');
             let classString = null;
 
             let classes = [];
             $.each($("input[name='class_level']:checked"), function() {
-                debugger;
+
                 classes.push($(this).val());
             });
 
@@ -335,6 +343,7 @@
                 isStudent: isStudent,
                 hasAccount: hasAccount,
                 username: username,
+                isActive: isActive,
                 classString: classString
             };
 
@@ -349,7 +358,7 @@
                     'X-CSRF-TOKEN': CSRF_TOKEN
                 },
                 success: function(response) {
-                    debugger
+
 
                     swal("Berhasil", `Data Guru : ${teacher.name} berhasil ditambahkan`, "success");
 
@@ -361,7 +370,7 @@
                     $("#teacher-form")[0].reset();
                 },
                 error: function(response) {
-                    debugger
+
                     if (response.status == 500) {
                         let error_message = response.responseJSON.error_message;
                         let logKey = response.responseJSON.log_key;
@@ -388,7 +397,7 @@
         }
 
         function get_class_levels() {
-            debugger
+
             let color = ['primary', 'secondary', 'success', 'warning', 'info', 'danger']
             $.ajax({
                 url: `/api/class-level/class-level-list-exist-in-group`,

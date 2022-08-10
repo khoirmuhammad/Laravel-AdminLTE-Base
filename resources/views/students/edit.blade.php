@@ -233,7 +233,7 @@ Footer
 <script>
 
 $(document).ready(function() {
-    debugger;
+
     var CSRF_TOKEN = document.querySelector('meta[name="csrf-token"]').getAttribute("content");
 
     $('.select2').select2()
@@ -247,7 +247,7 @@ $(document).ready(function() {
 
     // select2:select
     $('#level').on('change', function (e) {
-      debugger;
+
       var data = this.value;
 
       if (data != null) {
@@ -257,7 +257,7 @@ $(document).ready(function() {
 
 
     $('#btn-save').on('click', function() {
-      debugger
+
       let name = $('#name').val();
 
       if (name == null || name == "") {
@@ -341,12 +341,12 @@ $(document).ready(function() {
       },
       errorElement: 'span',
       errorPlacement: function (error, element) {
-        debugger;
+
         error.addClass('invalid-feedback');
         element.closest('.form-group').append(error);
       },
       highlight: function (element, errorClass, validClass) {
-        debugger;
+
         $(element).addClass('is-invalid');
       },
       unhighlight: function (element, errorClass, validClass) {
@@ -372,7 +372,7 @@ $(document).ready(function() {
   }
 
   function load_student_data() {
-    debugger;
+
     var StudentId = GetParameterValues('id');
     $.ajax({
       url:`/api/generus/get-student-by-id/${StudentId}`,
@@ -380,7 +380,7 @@ $(document).ready(function() {
       dataType: 'json',
       success: function(response){
         if (response.data != undefined || response.data != null) {
-            debugger;
+
             $('#student-id').val(response.data.id);
             $('#name').val(response.data.fullname);
 
@@ -479,7 +479,7 @@ $(document).ready(function() {
         contentType: 'application/json; charset=utf-8',
         headers: {'X-CSRF-TOKEN': CSRF_TOKEN},
         success: function(response){
-          debugger
+
 
           swal("Berhasil", `Generus ${response.data.fullname} berhasil diperbarui`, "success");
 
@@ -491,7 +491,7 @@ $(document).ready(function() {
           location.reload(true);
         },
         error: function(response) {
-          debugger
+
           let error_message = response.responseJSON.error_message == undefined ? response.responseJSON.message : response.responseJSON.error_message;
           let logKey = response.responseJSON.log_key;
 
@@ -535,7 +535,7 @@ $(document).ready(function() {
   }
 
   function get_class_level(level,class_level) {
-    debugger
+
     let group = $('#group').val();
     $.ajax({
       url:`/api/class-level/class-level-list/${group}/${level}`,
@@ -543,7 +543,7 @@ $(document).ready(function() {
       dataType: 'json',
       success: function(response){
         if (response.data != undefined || response.data != null) {
-            debugger;
+
           $('#class_level').empty().trigger("change");
           $("#class_level").append(`<option value="">Pilih</option>`);
           for(let i = 0; i < response.data.length; i++) {

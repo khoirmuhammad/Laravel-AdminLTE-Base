@@ -71,4 +71,11 @@ class PresenceController extends Controller
             'title' => 'Rekap Presensi'
         ]);
     }
+
+    public function get_recap_presence_teacher()
+    {
+        return view('presences.recap-precense-teacher', [
+            'title' => 'Rekap Presensi Guru'
+        ]);
+    }
 }

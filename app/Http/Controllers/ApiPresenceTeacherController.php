@@ -24,6 +24,25 @@ class ApiPresenceTeacherController extends Controller
         return response()->json(['data' => $result]);
     }
 
+    public function get_recap_precense_teacher(Request $request)
+    {
+        $current_month = $request->month == 0 ? (int)date('m') : $request->input('month');
+
+        $result = Presenceteacher::get_recap_precense_teacher($current_month);
+
+        return response()->json(['data' => $result]);
+    }
+
+    public function get_history_presence_teacher(Request $request)
+    {
+        $current_month = $request->month == 0 ? (int)date('m') : $request->input('month');
+        $tacher_id =  $request->input('teacher_id');
+
+        $result = Presenceteacher::get_history_presence_teacher($current_month, $tacher_id);
+
+        return response()->json(['data' => $result]);
+    }
+
     public function post_teacher_presence(Request $request)
     {
         try

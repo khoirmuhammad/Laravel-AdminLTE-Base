@@ -22,4 +22,15 @@ class Teacher extends Model
 
       return $query;
     }
+
+    public static function get_total_teacher_group_by_status($group)
+    {
+        $query = DB::table('teachers')
+                ->where('group', $group)
+                ->where('is_teacher', true)
+                ->groupBy(['status'])
+                ->get(['status',DB::raw('count(*) as total')]);
+
+        return $query;
+    }
 }

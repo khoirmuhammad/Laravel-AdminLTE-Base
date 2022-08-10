@@ -174,12 +174,12 @@
                 },
                 errorElement: 'span',
                 errorPlacement: function(error, element) {
-                    debugger;
+
                     error.addClass('invalid-feedback');
                     element.closest('.form-group').append(error);
                 },
                 highlight: function(element, errorClass, validClass) {
-                    debugger;
+
                     $(element).addClass('is-invalid');
                 },
                 unhighlight: function(element, errorClass, validClass) {
@@ -194,7 +194,7 @@
         });
 
         function post_save_role_category() {
-            debugger;
+
             $(`#card-body-id`).addClass('opacity');
             $(`#submit-icon`).addClass('hide');
             $(`#loading-icon-submit`).removeClass('hide');
@@ -219,7 +219,7 @@
                     'X-CSRF-TOKEN': CSRF_TOKEN
                 },
                 success: function(response) {
-                    debugger
+
 
                     swal("Berhasil", `Data Role Kategori : ${role.name} berhasil ditambahkan`, "success");
 
@@ -231,7 +231,7 @@
                     $("#role-category-form")[0].reset();
                 },
                 error: function(response) {
-                    debugger
+
                     if (response.status == 500) {
                         let error_message = response.responseJSON.error_message;
                         let logKey = response.responseJSON.log_key;

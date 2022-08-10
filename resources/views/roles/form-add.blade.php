@@ -274,12 +274,12 @@
                 },
                 errorElement: 'span',
                 errorPlacement: function(error, element) {
-                    debugger;
+
                     error.addClass('invalid-feedback');
                     element.closest('.form-group').append(error);
                 },
                 highlight: function(element, errorClass, validClass) {
-                    debugger;
+
                     $(element).addClass('is-invalid');
                 },
                 unhighlight: function(element, errorClass, validClass) {
@@ -294,7 +294,7 @@
         });
 
         function post_save_role(action) {
-            debugger;
+
             $(`#card-body-id`).addClass('opacity');
             $(`#submit-icon`).addClass('hide');
             $(`#loading-icon-submit`).removeClass('hide');
@@ -304,7 +304,7 @@
             let category = $('#category').val();
             let village = $('#desa').is(':checked') || $('#kelompok').is(':checked') ? $('#village').val() : null;
             let group = $('#kelompok').is(':checked') ? $('#village_group').val() : null;
-            debugger;
+
             let role = {
                 id: id,
                 category: category,
@@ -324,7 +324,7 @@
                     'X-CSRF-TOKEN': CSRF_TOKEN
                 },
                 success: function(response) {
-                    debugger
+
 
                     swal("Berhasil", `Data Role : ${role.id} berhasil ditambahkan`, "success");
 
@@ -336,7 +336,7 @@
                     $("#role-form")[0].reset();
                 },
                 error: function(response) {
-                    debugger
+
 
                     if (response.status == 500) {
                         let error_message = response.responseJSON.error_message;
@@ -365,7 +365,7 @@
         }
 
         function get_role_category() {
-            debugger
+
             $.ajax({
                 url: `/api/role-categories`,
                 method: 'GET',
@@ -388,7 +388,7 @@
         }
 
         function get_village() {
-            debugger
+
             $.ajax({
                 url: `/api/villages`,
                 method: 'GET',
@@ -411,7 +411,7 @@
         }
 
         function get_group() {
-            debugger
+
             let village = $('#village').val();
 
             if (village == null || village == '') {

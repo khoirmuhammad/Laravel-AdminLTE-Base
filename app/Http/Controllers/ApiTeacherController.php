@@ -108,6 +108,8 @@ class ApiTeacherController extends Controller
     {
         try
         {
+            DB::beginTransaction();
+
             $teacher = Teacher::find($request->input('id'));
 
             $teacher->name = $request->input('name');
@@ -117,15 +119,26 @@ class ApiTeacherController extends Controller
             $teacher->is_admin_class = $request->input('isAdminClass');
             $teacher->is_student = $request->input('isStudent');
             $teacher->class_level = $request->input('classString');
+            $teacher->is_active = $request->input('isActive');
             $teacher->group = session('group');
             $teacher->updated_at = Carbon::now('Asia/Jakarta');
 
             $teacher->save();
 
+            $username = $request->input('username');
+            $user = User::where('username',$username)->first();
+            $user->is_active = $request->input('isActive');
+
+            $user->save();
+
+            DB::commit();
+
             return response()->json(204);
         }
         catch(Exception $ex)
         {
+            DB::rollBack();
+
             $error = $ex->getMessage();
             $action = explode('@',Route::getCurrentRoute()->getActionName())[1];
             $log_key = strtoupper(auth()->user()->username . $this->get_random_string());
@@ -161,6 +174,7 @@ class ApiTeacherController extends Controller
             $teacher->is_admin_class = $request->input('isAdminClass');
             $teacher->is_student = $request->input('isStudent');
             $teacher->class_level = $request->input('classString');
+            $teacher->is_active = $request->input('isActive');
             $teacher->group = session('group');
             $teacher->created_at = Carbon::now('Asia/Jakarta');
             $teacher->updated_at = Carbon::now('Asia/Jakarta');
@@ -178,6 +192,7 @@ class ApiTeacherController extends Controller
                 $user->password = bcrypt(env('PASSWORD_INIT'));
                 $user->created_at = Carbon::now('Asia/Jakarta');
                 $user->updated_at = Carbon::now('Asia/Jakarta');
+                $user->is_active = $request->input('isActive');
 
                 $user->save();
             }
