@@ -38,34 +38,39 @@
                     <h3 style="text-align: center;"><strong>{{ $start }} - {{ $end }}</strong></h3>
                     <input type="hidden" id="username-id" value="{{ auth()->user()->username }}">
                     <input type="hidden" id="teacher-presence-id" value="0">
+
                     <table class="table table-bordered">
                         <thead>
                             <tr>
-                                <th width="70%" style="text-align:center" colspan="2">{{ auth()->user()->name }}
+                                <th width="70%" style="text-align:center">
+                                    {{ auth()->user()->name }}
                                 </th>
                             </tr>
+
                             <tr>
                                 <th style="text-align: center;font-size:14px">
-                                    <span id="text-in" class="hide">Presensi Masuk 10:35</span>
+                                    <button class="btn btn-info btn-xs hide" id="btnChangeTime" style="margin: auto">Ubah
+                                        Waktu</button>
+                                    <span id="text-in" class="hide"></span>
+
                                     <button class="btn btn-block btn-primary btn-sm" id="clock-in"> <i id="icon-in"
                                             class="fa fa-check" aria-hidden="true"></i> <i id="loading-icon-in"
                                             class="fa fa-spinner fa-spin" style="display: none"></i> <span id="span-in">
                                             Masuk</span></button>
                                 </th>
-                                <th style="text-align: center;font-size:14px">
-                                    <span id="text-out" class="hide">Presensi Keluar 10:35</span>
-                                    <button class="btn btn-block btn-secondary btn-sm" id="clock-out"> <i
-                                            class="fa fa-check" aria-hidden="true"></i> Keluar</button>
-                                </th>
+
                             </tr>
                         </thead>
                     </table>
+
+
+
                 </div>
             </div>
 
             <div class="row justify-content-center">
                 <div class="col-md-6">
-                    <table class="table table-bordered table-striped table-sm" id="presence-id">
+                    <table class="table table-borderless table-striped table-sm" id="presence-id">
 
                     </table>
                 </div>
@@ -106,6 +111,47 @@
             <!-- /.modal-dialog -->
         </div>
     </div>
+
+    <div class="modal fade" id="modal-time">
+        <div class="modal-dialog modal-sm">
+            <div class="modal-content">
+                <div class="modal-header">
+                    <h4 class="modal-title">Ubah Waktu Masuk</h4>
+                    <button type="button" class="close" data-dismiss="modal" aria-label="Close">
+                        <span aria-hidden="true">&times;</span>
+                    </button>
+                </div>
+                <div class="modal-body">
+
+                    <div class="bootstrap-timepicker">
+                        <div class="form-group">
+                            <label>Time picker:</label>
+
+                            <div class="input-group date" id="timepicker" data-target-input="nearest">
+                                <input type="text" id="time-in" class="form-control datetimepicker-input"
+                                    data-target="#timepicker" />
+                                <div class="input-group-append" data-target="#timepicker" data-toggle="datetimepicker">
+                                    <div class="input-group-text"><i class="far fa-clock"></i></div>
+                                </div>
+                            </div>
+                            <!-- /.input group -->
+                        </div>
+                        <!-- /.form group -->
+                    </div>
+
+                    <div class="modal-footer justify-content-between">
+                        <button type="button" class="btn btn-default" data-dismiss="modal">Tutup</button>
+                        <button type="button" id="btnChangeTimeNow" class="btn btn-secondary">
+
+                            <span>Perbarui</span>
+                        </button>
+                    </div>
+                </div>
+                <!-- /.modal-content -->
+            </div>
+            <!-- /.modal-dialog -->
+        </div>
+    </div>
 @endsection
 
 
@@ -120,6 +166,9 @@
     <!-- Select2 -->
     <link rel="stylesheet" href="/adminlte/plugins/select2/css/select2.min.css">
     <link rel="stylesheet" href="/adminlte/plugins/select2-bootstrap4-theme/select2-bootstrap4.min.css">
+
+    <!-- Tempusdominus Bbootstrap 4 -->
+    <link rel="stylesheet" href="/adminlte/plugins/tempusdominus-bootstrap-4/css/tempusdominus-bootstrap-4.min.css">
 
     <link rel="stylesheet" href="/adminlte/dist/css/adminlte.min.css">
     <link rel="stylesheet" href="https://cdnjs.cloudflare.com/ajax/libs/font-awesome/4.7.0/css/font-awesome.min.css">
@@ -150,6 +199,9 @@
     <script src="/adminlte/plugins/jquery-validation/jquery.validate.min.js"></script>
     <script src="/adminlte/plugins/jquery-validation/additional-methods.min.js"></script>
 
+    <!-- Tempusdominus Bootstrap 4 -->
+    <script src="/adminlte/plugins/tempusdominus-bootstrap-4/js/tempusdominus-bootstrap-4.min.js"></script>
+
     <link rel="stylesheet" href="https://cdnjs.cloudflare.com/ajax/libs/font-awesome/4.7.0/css/font-awesome.min.css">
     <script src="/adminlte/plugins/select2/js/select2.full.min.js"></script>
     <script src="/otherjs/sweetalert.js"></script>
@@ -161,11 +213,74 @@
 
             $('.select2').select2();
 
+            //Timepicker
+            $('#timepicker').datetimepicker({
+                format: 'LT'
+            })
+
             set_time();
             set_teacher_presence();
             get_student_list();
             populate_lesson_select();
 
+            $('#btnChangeTime').on('click', function() {
+                $('#modal-time').modal('show');
+            })
+
+            $('#btnChangeTimeNow').on('click', function() {
+                let timeIn = $('#time-in').val();
+                debugger;
+                if (timeIn != null && timeIn != '') {
+                    let numberTime = timeIn.split(' ')[0];
+                    let hourMinutes = numberTime.split(':');
+
+                    let hhmmss = '';
+                    let hour = ''
+
+                    if (timeIn.split(' ')[1] == "PM") {
+                        hour = parseInt(hourMinutes[0]) + parseInt(12);
+                        hhmmss = `${hour}:${hourMinutes[1]}:00`
+                    } else {
+                        hour = parseInt(hourMinutes[0]);
+                        hhmmss = `0${hour}:${hourMinutes[1]}:00`
+                    }
+
+
+                    let teacherId = $('#teacher-presence-id').val();
+
+                    let timeInData = {
+                        'timein': hhmmss,
+                        'teacherId': teacherId
+                    };
+
+                    $.ajax({
+                        url: "/api/presence-teacher/put-timein",
+                        type: 'POST',
+                        dataType: 'json',
+                        contentType: 'json',
+                        data: JSON.stringify(timeInData),
+                        contentType: 'application/json; charset=utf-8',
+                        headers: {
+                            'X-CSRF-TOKEN': CSRF_TOKEN
+                        },
+                        success: function(response) {
+                            $('#modal-time').modal('hide');
+                            swal("Berhasil", `Waktu Masuk Berhasil Diperbarui`, "success");
+
+                            if (timeIn.split(' ')[1] == "PM"){
+                                $('#text-in').text(`Presensi Masuk ${hour}:${hourMinutes[1]}`)
+                            } else {
+                                $('#text-in').text(`Presensi Masuk 0${hour}:${hourMinutes[1]}`)
+                            }
+                        },
+                        error: function(response) {
+                            swal("Gagal", response.status + "-" + response.statusText, "error");
+                        }
+                    });
+
+                }
+
+            })
 
             $('#clock-in').on('click', function() {
                 let id = $('#teacher-presence-id').val();
@@ -184,47 +299,6 @@
                 proceedClockInOut('in');
             })
 
-            $('#clock-out').on('click', function() {
-
-                let id = $('#teacher-presence-id').val();
-
-                if (parseInt(id) == 0) {
-                    swal("Info", `Anda belum melakukan presensi masuk`, "info");
-                    return;
-                }
-
-                let totalPrecense = parseInt($('#presence-id > > tr').length - 1);
-                let actualPresence = 0;
-
-                $('#presence-id > > tr').each(function(index, tr) {
-
-                    if (index != 0 && index <= totalPrecense) {
-                        let hdId = $(`#hdId${index}`).length;
-
-                        if (hdId != 0) {
-                            if ($(`#hdId${index}`).val() != 0) {
-                                actualPresence = actualPresence + 1;
-                            }
-                        }
-                    }
-                });
-
-                if (totalPrecense == actualPresence) {
-                    //$('#modal-clockout').modal('show');
-                    proceedClockInOut('out');
-                } else {
-                    swal("Info", `Mohon lengkapi presensi generus di kelas ini`, "info");
-                    return
-                }
-
-                return;
-                //$('#modal-clockout').modal('show');
-            })
-
-
-            $('#btnClockOut').on('click', function() {
-                proceedClockInOut('out');
-            })
 
 
         });
@@ -330,11 +404,11 @@
                                 <input type="hidden" id='` + hdId + `' value="` + presenceId + `"></input>
                                 <span class="` + isTextShow + `" id='` + spStudentPresence + `'>${remark}</span>
                                 <button id='` + btnIdPresent + `' class="btn btn-success btn-sm ` + isBtnHide +
-                                `" onclick="presenceStudent('` + stdId + `', '` + name + `', 'H', '` + no + `')"> <i class="fa fa-check" aria-hidden="true"></i></button>
+                                `" onclick="presenceStudent('` + stdId + `', '` + name + `', 'H', '` + no + `')" style="border-radius: 15px"> <i class="fa fa-check" aria-hidden="true"></i></button>
                                 <button id='` + btnIdPermit + `' class="btn btn-info btn-sm ` + isBtnHide +
-                                `" onclick="presenceStudent('` + stdId + `', '` + name + `', 'I', '` + no + `')"> <i class="fa fa-hand-pointer-o" aria-hidden="true"></i></button>
+                                `" onclick="presenceStudent('` + stdId + `', '` + name + `', 'I', '` + no + `')" style="border-radius: 15px"> <i class="fa fa-hand-pointer-o" aria-hidden="true"></i></button>
                                 <button id='` + btnIdAbsent + `' class="btn btn-danger btn-sm ` + isBtnHide +
-                                `" onclick="presenceStudent('` + stdId + `', '` + name + `', 'A', '` + no + `')"> <i class="fa fa-close" aria-hidden="true"></i></button>
+                                `" onclick="presenceStudent('` + stdId + `', '` + name + `', 'A', '` + no + `')" style="border-radius: 15px"> <i class="fa fa-close" aria-hidden="true"></i></button>
                             </td>
                             </tr>`;
                         }
@@ -357,11 +431,11 @@
                     if (field == 'filled_by') {
                         data = val.filled_by;
                     } else if (field == 'is_present') {
-                        data = val.is_present;
+                        data = parseInt(val.is_present);
                     } else if (field == 'is_permit') {
-                        data = val.is_permit;
+                        data = parseInt(val.is_permit);
                     } else if (field == 'is_absent') {
-                        data = val.is_absent;
+                        data = parseInt(val.is_absent);
                     } else if (field == "id") {
                         data = val.id;
                     }
@@ -412,28 +486,10 @@
                                     $('#text-in').text(
                                         `Presensi Masuk ${clockInTimeSplit[0]}:${clockInTimeSplit[1]}`);
                                     $('#text-in').css('display', 'block');
-                                }
-                            }
-                        } else if (type == 'out') {
-                            $('#modal-clockout').modal('hide');
-                            swal("Berhasil", `Presensi Keluar Berhasil`, "success");
-
-                            $('#teacher-presence-id').val(response.data.id);
-                            $('#clock-out').css('display', 'none');
-
-                            if (response.data.clock_out_time != undefined || response.data.clock_out_time !=
-                                null) {
-                                let clockOutTimeSplit = response.data.clock_out_time.split(':');
-
-                                if (clockOutTimeSplit.length > 0) {
-                                    $('#text-out').text(
-                                        `Presensi Keluar ${clockOutTimeSplit[0]}:${clockOutTimeSplit[1]}`);
-                                    $('#text-out').css('display', 'block');
+                                    $('#btnChangeTime').css('display', 'block');
                                 }
                             }
                         }
-
-
 
                     }
                 },
@@ -463,6 +519,7 @@
                                 $('#text-in').text(
                                     `Presensi Masuk ${clockInTimeSplit[0]}:${clockInTimeSplit[1]}`);
                                 $('#text-in').css('display', 'block');
+                                $('#btnChangeTime').css('display', 'block');
                             }
                         }
 

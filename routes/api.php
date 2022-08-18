@@ -89,6 +89,7 @@ Route::post('/teacher/post-save-teacher', [ApiTeacherController::class, 'post_sa
 Route::delete('/teacher/delete-teacher', [ApiTeacherController::class, 'delete_teacher']);
 
 Route::post('/presence-teacher/post-clockinout',[ApiPresenceTeacherController::class, 'post_teacher_presence']);
+Route::post('/presence-teacher/put-timein',[ApiPresenceTeacherController::class, 'put_teacher_presence_in']);
 Route::get('/presence-teacher/get-teacher-presence', [ApiPresenceTeacherController::class, 'get_current_presence_on_class']);
 
 Route::get('/role-categories', [ApiRoleCategoriesController::class, 'get_role_categories']);

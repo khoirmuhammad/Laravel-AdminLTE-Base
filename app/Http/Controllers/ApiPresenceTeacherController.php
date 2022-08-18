@@ -96,6 +96,37 @@ class ApiPresenceTeacherController extends Controller
         }
     }
 
+    public function put_teacher_presence_in(Request $request)
+    {
+        try
+        {
+            if ($request->input('teacherId') != 0)
+            {
+                $presenceIn = PresenceTeacher::find($request->input('teacherId'));
+
+                $presenceIn->clock_in_time = $request->input('timein');
+
+                $presenceIn->save();
+
+                return response()->json(['status' => true, 'data' => $presenceIn], 201);
+            }
+            else
+            {
+                return response()->json(['status' => false, 'error_message' => 'Data ID kosong'], 404);
+            }
+        }
+        catch(Exception $ex)
+        {
+            $error = $ex->getMessage();
+            $action = explode('@',Route::getCurrentRoute()->getActionName())[1];
+            $log_key = strtoupper(auth()->user()->username . $this->get_random_string());
+
+            $this->save_log($action, $error, $log_key);
+
+            return response()->json(['status' => false, 'error_message' => "Terjadi Kesalahan Saat Presensi", 'log_key' => $log_key], 500);
+        }
+    }
+
     private function save_log($action, $error, $log_key)
     {
         try

@@ -189,6 +189,7 @@
                                 <button type="button" class="btn btn-info btn-xs" onclick="DetailHistory('${obj.name}','${obj.teacher_id}')"><i class="fa fa-arrow-right "></i></button>
                             </td>
                             </tr>`
+                            seq++;
                         }
                         $('#recap-presence > tbody').html(null);
                         $('#recap-presence > tbody').append(row);

@@ -18,6 +18,7 @@ class Presence extends Model
         $query = DB::table('students')
             ->where('group', $group)
             ->where('class', $class_level)
+            ->where('is_accel','<>',true)
             ->get(['id as student_id', 'fullname']);
 
         return $query;
@@ -74,7 +75,7 @@ class Presence extends Model
         FROM students st
         left JOIN presences pr on st.id = pr.student_id
         JOIN class_levels cl on pr.class_level_id = cl.id WHERE cl.id = '". $class_level ."' and month(pr.filled_date) = ". $month ."
-        and year(pr.filled_date) = ". $current_year ."
+        and year(pr.filled_date) = ". $current_year ." and st.is_accel <> 1
         GROUP by st.fullname, st.id, cl.name
         ORDER by SUM(is_present) DESC, SUM(is_permit) DESC, SUM(is_absent) ASC, st.fullname");
 
