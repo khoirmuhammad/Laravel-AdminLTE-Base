@@ -62,6 +62,7 @@ Route::get('/menu/ubah-menu', [MenuController::class, 'get_form_edit'])->middlew
 
 Route::get('/presensi/popup', [PresenceController::class, 'get_form_presence_popup'])->middleware('auth');
 Route::get('/presensi/formulir', [PresenceController::class, 'get_form_presence'])->middleware('auth');
+Route::get('/presensi/pengajuan-presensi', [PresenceController::class, 'get_form_request_presence'])->middleware('auth');
 Route::get('/presensi/rekapitulasi', [PresenceController::class, 'get_recap_presence'])->middleware('auth');
 Route::get('/presensi-guru/rekapitulasi', [PresenceController::class, 'get_recap_presence_teacher'])->middleware('auth');
 Route::get('/presensi/rekapitulasi2', [PresenceController::class, 'get_recap_presence2'])->middleware('auth');

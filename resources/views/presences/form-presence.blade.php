@@ -125,7 +125,7 @@
 
                     <div class="bootstrap-timepicker">
                         <div class="form-group">
-                            <label>Time picker:</label>
+                            <label>Waktu Presensi</label>
 
                             <div class="input-group date" id="timepicker" data-target-input="nearest">
                                 <input type="text" id="time-in" class="form-control datetimepicker-input"

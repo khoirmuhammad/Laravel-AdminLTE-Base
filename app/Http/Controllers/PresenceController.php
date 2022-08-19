@@ -65,6 +65,13 @@ class PresenceController extends Controller
 
     }
 
+    public function get_form_request_presence(Request $request)
+    {
+        return view('presences.form-request-presence',[
+            'title' => 'Pengajuan Presensi'
+        ]);
+    }
+
     public function get_recap_presence()
     {
         return view('presences.recap-presence', [
