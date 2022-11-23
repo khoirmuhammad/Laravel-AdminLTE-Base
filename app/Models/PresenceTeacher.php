@@ -27,6 +27,16 @@ class PresenceTeacher extends Model
         return collect($query);
     }
 
+    public static function get_presence_teacher_in_month($month, $teacher_id)
+    {
+        $current_year = (int)date('Y');
+
+        $query = DB::select("SELECT teacher_id, class_level_id, clock_in_date, clock_in_time from presence_teachers
+        where teacher_id  = '". $teacher_id ."' and MONTH(clock_in_date) = ".$month." and YEAR(clock_in_date) = ". $current_year ."");
+
+        return $query;
+    }
+
     public static function get_history_presence_teacher($month, $teacher_id)
     {
         $current_year = (int)date('Y');

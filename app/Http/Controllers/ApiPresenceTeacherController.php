@@ -6,6 +6,7 @@ use Exception;
 use Carbon\Carbon;
 use App\Models\Log;
 use App\Models\Presence;
+use App\Models\PresenceDateConfig;
 use App\Models\Teacher;
 use Illuminate\Support\Str;
 use Illuminate\Http\Request;
@@ -38,9 +39,70 @@ class ApiPresenceTeacherController extends Controller
 
     public function get_recap_precense_teacher(Request $request)
     {
+        $result = array();
+
         $current_month = $request->month == 0 ? (int)date('m') : $request->input('month');
 
-        $result = Presenceteacher::get_recap_precense_teacher($current_month);
+        $days = ['Sunday','Monday','Tuesday','Wednesday','Thursday','Friday','Saturday'];
+        $hariHari = ['Minggu','Senin','Selasa','Rabu','Kamis','Jumat','Sabtu'];
+
+        $teachers = Presenceteacher::get_recap_precense_teacher($current_month);
+
+        foreach($teachers as $teacher)
+        {
+            $teacher_presents = PresenceTeacher::get_presence_teacher_in_month($current_month, $teacher->teacher_id);
+
+            $total_pas = 0;
+            $total_t1 = 0;
+            $total_t2 = 0;
+            $total_t3 = 0;
+
+            foreach($teacher_presents as $tp)
+            {
+                $day = date('l', strtotime($tp->clock_in_date));
+                $day_index = array_search($day, $days);
+                $hari = $hariHari[$day_index];
+
+                $presence_config = PresenceDateConfig::where('class_level', $tp->class_level_id)
+                                ->where('day',$hari)->first();
+
+                $start_time_in_day = $presence_config->start_time;
+                $clock_in_time_in_day = $tp->clock_in_time;
+
+                $dateTimeObject1 = strtotime($start_time_in_day);
+                $dateTimeObject2 = strtotime($clock_in_time_in_day);
+
+                $diff_minutes = abs(($dateTimeObject1 - $dateTimeObject2) / 60);
+
+                if ($dateTimeObject2 <= $dateTimeObject1) {
+                    $total_pas++;
+                } else {
+                    if ($diff_minutes <= env('t1')) {
+                        $total_pas++;
+                    } else if ($diff_minutes > env('t1') && $diff_minutes <= env('t2')) {
+                        $total_t1++;
+                    } else if ($diff_minutes > env('t2') && $diff_minutes <= env('t3')) {
+                        $total_t2++;
+                    } else {
+                        $total_t3++;
+                    }
+                }
+
+            }
+
+            $result[] = [
+                'teacher_id' => $teacher->teacher_id,
+                'name' => $teacher->name,
+                'total_hadir' => $teacher->total_hadir,
+                'total_pas' => $total_pas,
+                'total_t1' => $total_t1,
+                'total_t2' => $total_t2,
+                'total_t3' => $total_t3,
+            ];
+
+        }
+
+
 
         return response()->json(['data' => $result]);
     }

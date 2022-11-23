@@ -25,7 +25,7 @@
         </div>
         <div class="card-body" id="card-body-id">
             <div class="row mb-2">
-                <div class="col-md-3"></div>
+                <div class="col-md-6"></div>
                 <div class="col-md-1">Bulan Periode</div>
                 <div class="col-md-2">
 
@@ -47,7 +47,7 @@
                 </div>
             </div>
             <div class="row">
-                <div class="col-md-6">
+                <div class="col-md-9">
                     <div class="table-responsive">
                         <table class="table table-sm" id="recap-presence">
                             <thead>
@@ -55,6 +55,10 @@
                                     <th class="text-center">No</th>
                                     <th class="text-center">Nama Guru</th>
                                     <th class="text-center">Kehadiran</th>
+                                    <th class="text-center">Tepat</th>
+                                    <th class="text-center">T1</th>
+                                    <th class="text-center">T2</th>
+                                    <th class="text-center">T3</th>
                                     <th class="text-center">#</th>
                                 </tr>
 
@@ -172,7 +176,7 @@
                 method: 'GET',
                 dataType: 'json',
                 success: function(response) {
-
+                    debugger
                     if (response.data != undefined || response.data != null) {
 
 
@@ -185,6 +189,10 @@
                             <td class="text-center">${seq}</td>
                             <td class="text-center">${obj.name}</td>
                             <td class="text-center">${obj.total_hadir}</td>
+                            <td class="text-center">${obj.total_pas}</td>
+                            <td class="text-center">${obj.total_t1}</td>
+                            <td class="text-center">${obj.total_t2}</td>
+                            <td class="text-center">${obj.total_t3}</td>
                             <td>
                                 <button type="button" class="btn btn-info btn-xs" onclick="DetailHistory('${obj.name}','${obj.teacher_id}')"><i class="fa fa-arrow-right "></i></button>
                             </td>
