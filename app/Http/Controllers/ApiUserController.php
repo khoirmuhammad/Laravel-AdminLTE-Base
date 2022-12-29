@@ -6,6 +6,7 @@ use Exception;
 use Carbon\Carbon;
 use App\Models\Log;
 use App\Models\Role;
+use App\Models\Teacher;
 use App\Models\User;
 use App\Models\UserRole;
 use Illuminate\Support\Str;
@@ -105,6 +106,7 @@ class ApiUserController extends Controller
                 $user->email = $request->input('email');
                 $user->username = $this->set_username($request->input('name'));
                 $user->password = bcrypt(env('PASSWORD_INIT'));
+                $user->is_active = $request->input('isActive');
                 $user->created_at = Carbon::now('Asia/Jakarta');
                 $user->updated_at = Carbon::now('Asia/Jakarta');
 
@@ -161,6 +163,7 @@ class ApiUserController extends Controller
 
                 $user->name = $request->input('name');
                 $user->email = $request->input('email');
+                $user->is_active = $request->input('isActive');
                 $user->updated_at = Carbon::now('Asia/Jakarta');
 
                 $user->save();
@@ -268,6 +271,16 @@ class ApiUserController extends Controller
             DB::beginTransaction();
 
             if ($roleType == "ppg" && str_contains($role, "superadmin")) {
+
+                $user_roles = UserRole::where('user_id', $id)->get();
+
+                foreach ($user_roles as $user_role) {
+                    if (str_contains($user_role->role_id, "guru.kbm")) {
+                        $username = User::find($id)->username;
+                        Teacher::where('username', $username)->delete();
+                    }
+                }
+
                 UserRole::where('user_id', $id)->delete();
 
                 $check_user = UserRole::where('user_id', $id)->get()->count();
@@ -278,6 +291,11 @@ class ApiUserController extends Controller
                 $user_roles = UserRole::where('user_id', $id)->get();
 
                 foreach ($user_roles as $user_role) {
+                    if (str_contains($user_role->role_id, "guru.kbm")) {
+                        $username = User::find($id)->username;
+                        Teacher::where('username', $username)->delete();
+                    }
+
                     $roles_source = Role::where('id', $user_role->role_id)->where('village_code', $village)->where('group_code', '=', null)->first();
 
                     if ($roles_source != null) {
@@ -293,6 +311,12 @@ class ApiUserController extends Controller
                 $user_roles = UserRole::where('user_id', $id)->get();
 
                 foreach ($user_roles as $user_role) {
+
+                    if (str_contains($user_role->role_id, "guru.kbm")) {
+                        $username = User::find($id)->username;
+                        Teacher::where('username', $username)->delete();
+                    }
+
                     $roles_source = Role::where('id', $user_role->role_id)->where('village_code', '<>', null)->where('group_code', '=', $group)->first();
 
                     if ($roles_source != null) {

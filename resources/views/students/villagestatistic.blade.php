@@ -84,13 +84,13 @@
             <div class="row">
                 <div class="table-responsive">
                     <table class="table table-bordered" id="statistic-group-level-gender">
-                
+
                     </table>
 
                     <br>
 
                     <table class="table table-bordered" id="statistic-group-education-gender">
-                
+
                     </table>
                 </div>
             </div>
@@ -124,13 +124,13 @@ $(document).ready(function() {
 });
 
 function get_statistic_by_group_education_gender() {
-    debugger
+
     $.ajax({
         url:"/api/generus/statistika-desa-by-group-education-gender",
         method: 'GET',
         dataType: 'json',
         success: function(response){
-            debugger;
+
             if (response.data != undefined || response.data != null) {
                 let table = document.querySelector("#statistic-group-education-gender");
 
@@ -280,7 +280,7 @@ function get_statistic_by_group_education_gender() {
                           </tr>`;
 
                 table.innerHTML = row;
-                
+
             }
         },
         error: function(response) {
@@ -291,13 +291,13 @@ function get_statistic_by_group_education_gender() {
 }
 
 function get_statistic_by_group_level_gender() {
-    debugger
+
     $.ajax({
         url:"/api/generus/statistika-desa-by-group-level-gender",
         method: 'GET',
         dataType: 'json',
         success: function(response){
-            debugger;
+
             if (response.data != undefined || response.data != null) {
                 let table = document.querySelector("#statistic-group-level-gender");
 
@@ -423,7 +423,7 @@ function get_statistic_by_group_level_gender() {
                           </tr>`;
 
                 table.innerHTML = row;
-                
+
             }
         },
         error: function(response) {

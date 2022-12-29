@@ -98,7 +98,15 @@
                         <div class="form-group clearfix" id="cbRoleKelompok">
 
                         </div>
+
+
+
                     </div>
+                </div>
+
+                <div class="row mb-4">
+                    <input type="checkbox" id="is-active" name="my-checkbox" checked data-bootstrap-switch>
+
                 </div>
 
                 <div class="row">
@@ -172,12 +180,17 @@
     <script src="/adminlte/plugins/jquery-validation/jquery.validate.min.js"></script>
     <script src="/adminlte/plugins/jquery-validation/additional-methods.min.js"></script>
 
+    <!-- Bootstrap Switch -->
+    <script src="/adminlte/plugins/bootstrap-switch/js/bootstrap-switch.min.js"></script>
+
     <script src="/otherjs/sweetalert.js"></script>
     {{-- <script src="https://unpkg.com/sweetalert/dist/sweetalert.min.js"></script> --}}
 
     <script>
         $(document).ready(function() {
             var CSRF_TOKEN = document.querySelector('meta[name="csrf-token"]').getAttribute("content");
+
+            $('#is-active').bootstrapSwitch('state', false);
 
             check_role();
 
@@ -215,12 +228,12 @@
                 },
                 errorElement: 'span',
                 errorPlacement: function(error, element) {
-                    debugger;
+
                     error.addClass('invalid-feedback');
                     element.closest('.form-group').append(error);
                 },
                 highlight: function(element, errorClass, validClass) {
-                    debugger;
+
                     $(element).addClass('is-invalid');
                 },
                 unhighlight: function(element, errorClass, validClass) {
@@ -235,7 +248,7 @@
         });
 
         function check_role() {
-            debugger;
+
             let role = $('#role').val();
             let roleType = $('#role-type').val();
             let village = $('#village').val();
@@ -281,6 +294,7 @@
 
             let name = $('#name').val();
             let email = $('#email').val();
+            let isActive = $('#is-active').is(':checked');
             let roles = [];
 
             let daerah = $('#cbDaerah').is(':checked');
@@ -305,10 +319,11 @@
                 });
             }
 
-            debugger;
+
             let user = {
                 name: name,
                 email: email,
+                isActive: isActive,
                 roles: roles
             };
 
@@ -324,7 +339,7 @@
                     'X-CSRF-TOKEN': CSRF_TOKEN
                 },
                 success: function(response) {
-                    debugger
+
 
                     swal("Berhasil", `Data Pengguna : ${user.name} berhasil ditambahkan`, "success");
 
@@ -333,10 +348,11 @@
                     $(`#loading-icon-submit`).addClass('hide');
                     $(`#submit-text`).text('Submit');
 
-                    $("#role-form")[0].reset();
+                    $("#user-form")[0].reset();
+                    $('#is-active').bootstrapSwitch('state', false);
                 },
                 error: function(response) {
-                    debugger
+
                     if (response.status == 500) {
                         let error_message = response.responseJSON.error_message;
                         let logKey = response.responseJSON.log_key;
@@ -363,7 +379,7 @@
         }
 
         function get_role_daerah() {
-            debugger
+
             $.ajax({
                 url: `/api/role/role-daerah`,
                 method: 'GET',
@@ -373,13 +389,15 @@
                         $('#cbRoleDaerah').empty().trigger("change");
                         $('#cbRoleDaerah').append('<label>Pilih Role</label><br>');
                         for (let i = 0; i < response.data.length; i++) {
-                            debugger
-                            $("#cbRoleDaerah").append(`<div class="icheck-primary d-inline">
+                            if (!response.data[i].id.includes("guru.kbm")) {
+                                $("#cbRoleDaerah").append(`<div class="icheck-primary d-inline">
                                 <input type="checkbox" id="${response.data[i].id.replaceAll('.','')}" name="role_daerah" value="${response.data[i].id}">
                                 <label for="${response.data[i].id.replaceAll('.','')}">
                                     ${response.data[i].id}
                                 </label>
                             </div>`);
+                            }
+
                         }
                     }
                 },
@@ -390,7 +408,7 @@
         }
 
         function get_all_role_desa() {
-            debugger
+
             $.ajax({
                 url: `/api/role/role-desa`,
                 method: 'GET',
@@ -400,13 +418,15 @@
                         $('#cbRoleDesa').empty().trigger("change");
                         $('#cbRoleDesa').append('<label>Pilih Role</label><br>');
                         for (let i = 0; i < response.data.length; i++) {
-                            debugger
-                            $("#cbRoleDesa").append(`<div class="icheck-success d-inline">
+                            if (!response.data[i].id.includes("guru.kbm")) {
+                                $("#cbRoleDesa").append(`<div class="icheck-success d-inline">
                                 <input type="checkbox" id="${response.data[i].id.replaceAll('.','')}" name="role_desa" value="${response.data[i].id}">
                                 <label for="${response.data[i].id.replaceAll('.','')}">
                                     ${response.data[i].id}
                                 </label>
                             </div>`);
+                            }
+
                         }
                     }
                 },
@@ -417,7 +437,7 @@
         }
 
         function get_role_desa() {
-            debugger
+
             $.ajax({
                 url: `/api/role/role-desa/${$('#village').val()}`,
                 method: 'GET',
@@ -427,13 +447,15 @@
                         $('#cbRoleDesa').empty().trigger("change");
                         $('#cbRoleDesa').append('<label>Pilih Role</label><br>');
                         for (let i = 0; i < response.data.length; i++) {
-                            debugger
-                            $("#cbRoleDesa").append(`<div class="icheck-success d-inline">
+                            if (!response.data[i].id.includes("guru.kbm")) {
+                                $("#cbRoleDesa").append(`<div class="icheck-success d-inline">
                                 <input type="checkbox" id="${response.data[i].id.replaceAll('.','')}" name="role_desa" value="${response.data[i].id}">
                                 <label for="${response.data[i].id.replaceAll('.','')}">
                                     ${response.data[i].id}
                                 </label>
                             </div>`);
+                            }
+
                         }
                     }
                 },
@@ -444,7 +466,7 @@
         }
 
         function get_all_role_kelompok() {
-            debugger
+
             $.ajax({
                 url: `/api/role/role-kelompok`,
                 method: 'GET',
@@ -454,13 +476,17 @@
                         $('#cbRoleKelompok').empty().trigger("change");
                         $('#cbRoleKelompok').append('<label>Pilih Role</label><br>');
                         for (let i = 0; i < response.data.length; i++) {
-                            debugger
-                            $("#cbRoleKelompok").append(`<div class="icheck-danger d-inline">
+
+                            if (!response.data[i].id.includes("guru.kbm")) {
+                                $("#cbRoleKelompok").append(`<div class="icheck-danger d-inline">
                                 <input type="checkbox" id="${response.data[i].id.replaceAll('.','')}" name="role_kelompok" value="${response.data[i].id}">
                                 <label for="${response.data[i].id.replaceAll('.','')}">
                                     ${response.data[i].id}
                                 </label>
                             </div>`);
+                            }
+
+
                         }
                     }
                 },
@@ -471,7 +497,7 @@
         }
 
         function get_role_kelompok() {
-            debugger
+
             $.ajax({
                 url: `/api/role/role-kelompok/${$('#group').val()}`,
                 method: 'GET',
@@ -481,13 +507,16 @@
                         $('#cbRoleKelompok').empty().trigger("change");
                         $('#cbRoleKelompok').append('<label>Pilih Role</label><br>');
                         for (let i = 0; i < response.data.length; i++) {
-                            debugger
-                            $("#cbRoleKelompok").append(`<div class="icheck-danger d-inline">
+
+                            if (!response.data[i].id.includes("guru.kbm")) {
+                                $("#cbRoleKelompok").append(`<div class="icheck-danger d-inline">
                                 <input type="checkbox" id="${response.data[i].id.replaceAll('.','')}" name="role_kelompok" value="${response.data[i].id}">
                                 <label for="${response.data[i].id.replaceAll('.','')}">
                                     ${response.data[i].id}
                                 </label>
                             </div>`);
+                            }
+
                         }
                     }
                 },

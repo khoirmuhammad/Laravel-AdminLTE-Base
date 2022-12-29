@@ -166,7 +166,7 @@
         });
 
         function deleteRoleKategori(id, name) {
-            debugger;
+
             swal({
                     title: "Apakah Anda Yakin?",
                     text: `Menghapus ${name} dari database!`,
@@ -184,7 +184,7 @@
         }
 
         function performDeleteRoleKategori(id, name) {
-            debugger;
+
             $.ajax({
                 url: "/api/role-categories/delete-role-category",
                 type: 'DELETE',
@@ -198,7 +198,7 @@
                     'X-CSRF-TOKEN': CSRF_TOKEN
                 },
                 success: function(response) {
-                    debugger;
+
                     swal("Berhasil", `Data Kategori Role : ${name} berhasil dihapus`, "success");
                     setTimeout(function() {
                         location.reload(true);

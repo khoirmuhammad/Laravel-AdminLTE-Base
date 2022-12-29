@@ -24,14 +24,7 @@
         <div class="card-header">
             <h3 class="card-title">{{ $title }}</h3>
 
-            <div class="card-tools">
-                <button type="button" class="btn btn-tool" data-card-widget="collapse" title="Collapse">
-                    <i class="fas fa-minus"></i>
-                </button>
-                <button type="button" class="btn btn-tool" data-card-widget="remove" title="Remove">
-                    <i class="fas fa-times"></i>
-                </button>
-            </div>
+
         </div>
         <div class="card-body" id="card-body-id">
             <div class="row mb-2">
@@ -193,8 +186,10 @@
         href="https://fonts.googleapis.com/css?family=Source+Sans+Pro:300,400,400i,700&display=fallback">
     <!-- Font Awesome -->
     <link rel="stylesheet" href="/adminlte/plugins/fontawesome-free/css/all.min.css">
+    <!-- Theme style -->
+    <link rel="stylesheet" href="/adminlte/dist/css/adminlte.min.css">
     <!-- icheck bootstrap -->
-    <link rel="stylesheet" href="/adminlte/plugins/icheck-bootstrap/icheck-bootstrap.min.css">
+    {{-- <link rel="stylesheet" href="/adminlte/plugins/icheck-bootstrap/icheck-bootstrap.min.css"> --}}
 
     <link rel="stylesheet" href="https://cdnjs.cloudflare.com/ajax/libs/font-awesome/4.7.0/css/font-awesome.min.css">
 
@@ -216,9 +211,8 @@
 
     <!-- ChartJS -->
     <script src="/adminlte/plugins/chart.js/Chart.min.js"></script>
-    <!-- AdminLTE App -->
-    <script src="/adminlte/dist/js/adminlte.min.js"></script>
 
+    <script src="/otherjs/sweetalert.js"></script>
     <script>
         var class_general = [];
         var present_general = [];
@@ -236,8 +230,9 @@
 
         var thisMonthName;
         var prevMonthName;
-        var listOfMonth = ['Januari','Februari','Maret','April','Mei','Juni','Juli','Agustus',
-    'September','Oktober','November','Desember'];
+        var listOfMonth = ['Januari', 'Februari', 'Maret', 'April', 'Mei', 'Juni', 'Juli', 'Agustus',
+            'September', 'Oktober', 'November', 'Desember'
+        ];
 
         $(document).ready(function() {
             set_current_month();
@@ -262,19 +257,19 @@
         }
 
         function get_recap_presence(month) {
-            debugger;
+
 
             $.ajax({
                 url: '/api/presence/get-recap-presence?month=' + month,
                 method: 'GET',
                 dataType: 'json',
                 success: function(response) {
-                    debugger;
+
                     if (response.data != undefined || response.data != null) {
 
                         set_analysis_chart_this_month(month, response.data);
                         set_analysis_chart_prev_month(parseInt(month));
-                        debugger;
+
                         let row = '';
                         for (let i = 0; i < response.data.length; i++) {
                             let obj = response.data[i];
@@ -320,7 +315,7 @@
                 method: 'GET',
                 dataType: 'json',
                 success: function(response) {
-                    debugger;
+
                     if (response.data != undefined || response.data != null) {
 
                         let row = '';
@@ -357,13 +352,13 @@
         }
 
         function set_analysis_chart_this_month(month, data) {
-            debugger;
+
             if (month == 0) {
                 var date = new Date()
                 let month = date.getMonth();
                 thisMonthName = listOfMonth[month];
             } else {
-                thisMonthName = listOfMonth[month-1];
+                thisMonthName = listOfMonth[month - 1];
             }
 
 
@@ -384,7 +379,7 @@
         }
 
         function set_analysis_chart_prev_month(prevMonth) {
-            debugger;
+
             if (prevMonth == 0) {
                 var date = new Date()
                 let month = date.getMonth();
@@ -393,13 +388,12 @@
                 prevMonth = prevMonth - 1;
             }
 
-            prevMonthName = listOfMonth[prevMonth-1];
+            prevMonthName = listOfMonth[prevMonth - 1];
 
             present_general_prev = [];
             permit_general_prev = [];
             absent_general_prev = [];
 
-            debugger;
             $.ajax({
                 url: '/api/presence/get-recap-presence?month=' + prevMonth,
                 method: 'GET',
@@ -411,7 +405,8 @@
                         for (let i = 0; i < response.data.length; i++) {
                             let obj = response.data[i];
 
-                            present_general_prev.push(obj.present === 0 ? null : parseFloat(obj.present_percent));
+                            present_general_prev.push(obj.present === 0 ? null : parseFloat(obj
+                                .present_percent));
                             permit_general_prev.push(obj.permit === 0 ? null : parseFloat(obj.permit_percent));
                             absent_general_prev.push(obj.absent === 0 ? null : parseFloat(obj.absent_percent));
 
@@ -425,9 +420,6 @@
         }
 
         function chart() {
-            debugger;
-
-
 
             if (barChart) {
                 barChart.destroy();
@@ -478,7 +470,7 @@
                     },
                 ]
             }
-            debugger;
+
             var barChartCanvasCurrentMonth = $('#barChartCurrentMonth').get(0).getContext('2d');
             var barChartDataCurrentMonth = jQuery.extend(true, {}, areaChartDataCurrentMonth);
             var tempPresentCurrentMonth = areaChartDataCurrentMonth.datasets[0];

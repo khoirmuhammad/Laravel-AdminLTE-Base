@@ -1,22 +1,23 @@
 <?php
 
-use App\Http\Controllers\ApiClassLevelController;
-use App\Http\Controllers\ApiEducationController;
 use Illuminate\Http\Request;
 use Illuminate\Support\Facades\Route;
-use App\Http\Controllers\ApiGroupController;
-use App\Http\Controllers\ApiLessonController;
-use App\Http\Controllers\ApiLevelController;
 use App\Http\Controllers\ApiMenuController;
-use App\Http\Controllers\ApiStudentController;
-use App\Http\Controllers\ApiTeacherController;
-use App\Http\Controllers\ApiPresenceController;
-use App\Http\Controllers\ApiPresenceDateConfigController;
-use App\Http\Controllers\ApiPresenceTeacherController;
-use App\Http\Controllers\ApiRoleCategoriesController;
 use App\Http\Controllers\ApiRoleController;
 use App\Http\Controllers\ApiUserController;
+use App\Http\Controllers\ApiGroupController;
+use App\Http\Controllers\ApiLevelController;
+use App\Http\Controllers\ApiLessonController;
+use App\Http\Controllers\ApiStudentController;
+use App\Http\Controllers\ApiTeacherController;
 use App\Http\Controllers\ApiVillageController;
+use App\Http\Controllers\ApiPresenceController;
+use App\Http\Controllers\ApiDashboardController;
+use App\Http\Controllers\ApiEducationController;
+use App\Http\Controllers\ApiClassLevelController;
+use App\Http\Controllers\ApiRoleCategoriesController;
+use App\Http\Controllers\ApiPresenceTeacherController;
+use App\Http\Controllers\ApiPresenceDateConfigController;
 
 /*
 |--------------------------------------------------------------------------
@@ -36,6 +37,7 @@ Route::middleware('auth:sanctum')->get('/user', function (Request $request) {
 
 Route::get('/generus/statistika-general-kelompok-by-level/{groupId}', [ApiStudentController::class, 'get_group_statistic_general_by_level']);
 Route::get('/generus/statistika-general-kelompok-by-education/{groupId}', [ApiStudentController::class, 'get_group_statistic_general_by_education']);
+Route::get('/generus/statistika-paudtk-kelompok/{groupId}', [ApiStudentController::class, 'get_group_statistic_paudtk']);
 Route::get('/generus/statistika-caberawit-kelompok/{groupId}', [ApiStudentController::class, 'get_group_statistic_caberawit']);
 Route::get('/generus/statistika-praremaja-kelompok/{groupId}', [ApiStudentController::class, 'get_group_statistic_praremaja']);
 Route::get('/generus/statistika-remaja-kelompok/{groupId}', [ApiStudentController::class, 'get_group_statistic_remaja']);
@@ -49,6 +51,9 @@ Route::get('/generus/get-student-by-id/{id}', [ApiStudentController::class, 'get
 Route::post('/generus/post-save-student', [ApiStudentController::class, 'post_save_student']);
 Route::delete('generus/delete-student-by-id', [ApiStudentController::class, 'delete_student_by_id']);
 
+Route::get('/dashboard/get-teacher-total-by-status', [ApiDashboardController::class, 'get_total_teacher_group_by_status']);
+Route::get('/dashboard/get-student-total-by-level', [ApiDashboardController::class, 'get_total_student_by_level']);
+Route::get('/dashboard/get-student-total-by-class-gender', [ApiDashboardController::class, 'get_total_student_by_class_gender']);
 
 
 Route::get('/group/group-info/{groupId}', [ApiGroupController::class, 'get_group_info']);
@@ -76,12 +81,18 @@ Route::get('/presence/get-analysis-presence', [ApiPresenceController::class, 'ge
 Route::get('/presence/get-recap-presence-in-class', [ApiPresenceController::class, 'get_recap_presence_in_class']);
 Route::post('/presence/post-student-presence',[ApiPresenceController::class, 'post_student_presence']);
 
+Route::get('/presence-teacher/get-recap-presence', [ApiPresenceTeacherController::class, 'get_recap_precense_teacher']);
+Route::get('/presence-teacher/get-history-presence', [ApiPresenceTeacherController::class, 'get_history_presence_teacher']);
+
 Route::get('/teacher/get-teacher/{id}', [ApiTeacherController::class, 'get_teacher_by_id']);
 Route::post('/teacher/post-save-teacher', [ApiTeacherController::class, 'post_save_teacher']);
 Route::delete('/teacher/delete-teacher', [ApiTeacherController::class, 'delete_teacher']);
 
 Route::post('/presence-teacher/post-clockinout',[ApiPresenceTeacherController::class, 'post_teacher_presence']);
+Route::post('/presence-teacher/put-timein',[ApiPresenceTeacherController::class, 'put_teacher_presence_in']);
+Route::post('/presence-teacher/post-request-presence',[ApiPresenceTeacherController::class, 'post_request_presence']);
 Route::get('/presence-teacher/get-teacher-presence', [ApiPresenceTeacherController::class, 'get_current_presence_on_class']);
+Route::get('/presence-teacher/presence-check', [ApiPresenceTeacherController::class, 'get_check_teacher_presence']);
 
 Route::get('/role-categories', [ApiRoleCategoriesController::class, 'get_role_categories']);
 Route::post('/role-categories/post-save', [ApiRoleCategoriesController::class, 'post_save_role']);

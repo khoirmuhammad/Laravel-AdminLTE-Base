@@ -211,6 +211,50 @@ class ApiStudentController extends Controller
         return response()->json(['data' => $result]);
     }
 
+    public function get_group_statistic_paudtk(Request $request)
+    {
+        $group_id = $request->route('groupId') != "" ? $request->route('groupId') : session('group');
+        $result = array();
+        $class_name = null;
+        $male_total = 0;
+        $female_total = 0;
+
+        $paudtk_class_gender = Student::select_student_by_class_and_gender($group_id, env('PAUDTK_CODE'));
+
+        $distinct_classnames = $paudtk_class_gender->unique('name')->pluck('name');
+
+        foreach($distinct_classnames as $classname)
+        {
+            $caberawit_class = $paudtk_class_gender->where('name','=',$classname);
+
+            foreach($caberawit_class as $item)
+            {
+                $class_name = $item->name;
+
+                if ($item->gender == "Laki-laki")
+                {
+                    $male_total = $item->total;
+                }
+
+                if ($item->gender == "Perempuan")
+                {
+                    $female_total = $item->total;
+                }
+            }
+
+            $result[] = [
+                'class' => $class_name,
+                'male' => $male_total,
+                'female' => $female_total
+            ];
+
+            $male_total = 0;
+            $female_total = 0;
+        }
+
+        return response()->json(['data' => $result]);
+    }
+
     public function get_group_statistic_caberawit(Request $request)
     {
         $group_id = $request->route('groupId') != "" ? $request->route('groupId') : session('group');
@@ -219,7 +263,7 @@ class ApiStudentController extends Controller
         $male_total = 0;
         $female_total = 0;
 
-        $caberawit_class_gender = Student::select_student_caberawit_by_class_and_gender($group_id);
+        $caberawit_class_gender = Student::select_student_by_class_and_gender($group_id, env('CABERAWIT_CODE'));
 
         $distinct_classnames = $caberawit_class_gender->unique('name')->pluck('name');
 
@@ -258,41 +302,22 @@ class ApiStudentController extends Controller
     public function get_group_statistic_praremaja(Request $request)
     {
         $group_id = $request->route('groupId') != "" ? $request->route('groupId') : session('group');
-
-        $praremaja_gender = Student::select_student_praremaja_by_gender($group_id);
-
-        return response()->json(['data' => $praremaja_gender]);
-    }
-
-    public function get_group_statistic_remaja(Request $request)
-    {
-        $group_id = $request->route('groupId') != "" ? $request->route('groupId') : session('group');
-
-        $remaja_gender = Student::select_student_remaja_by_gender($group_id);
-
-        return response()->json(['data' => $remaja_gender]);
-    }
-
-    public function get_group_statistic_unik(Request $request)
-    {
-        $group_id = $request->route('groupId') != "" ? $request->route('groupId') : session('group');
-
         $result = array();
-        $education = null;
+        $class_name = null;
         $male_total = 0;
         $female_total = 0;
 
-        $unik_education_gender = Student::select_student_unik_by_education_and_gender($group_id);
+        $praremaja_class_gender = Student::select_student_by_class_and_gender($group_id, env('PRAREMAJA_CODE'));
 
-        $distinct_eduname = $unik_education_gender->unique('name')->pluck('name');
+        $distinct_classnames = $praremaja_class_gender->unique('name')->pluck('name');
 
-        foreach($distinct_eduname as $eduname)
+        foreach($distinct_classnames as $classname)
         {
-            $unik_education = $unik_education_gender->where('name','=',$eduname);
+            $caberawit_class = $praremaja_class_gender->where('name','=',$classname);
 
-            foreach($unik_education as $item)
+            foreach($caberawit_class as $item)
             {
-                $education = $item->name;
+                $class_name = $item->name;
 
                 if ($item->gender == "Laki-laki")
                 {
@@ -306,7 +331,95 @@ class ApiStudentController extends Controller
             }
 
             $result[] = [
-                'education' => $education,
+                'class' => $class_name,
+                'male' => $male_total,
+                'female' => $female_total
+            ];
+
+            $male_total = 0;
+            $female_total = 0;
+        }
+
+        return response()->json(['data' => $result]);
+    }
+
+    public function get_group_statistic_remaja(Request $request)
+    {
+        $group_id = $request->route('groupId') != "" ? $request->route('groupId') : session('group');
+        $result = array();
+        $class_name = null;
+        $male_total = 0;
+        $female_total = 0;
+
+        $remaja_class_gender = Student::select_student_by_class_and_gender($group_id, env('REMAJA_CODE'));
+
+        $distinct_classnames = $remaja_class_gender->unique('name')->pluck('name');
+
+        foreach($distinct_classnames as $classname)
+        {
+            $caberawit_class = $remaja_class_gender->where('name','=',$classname);
+
+            foreach($caberawit_class as $item)
+            {
+                $class_name = $item->name;
+
+                if ($item->gender == "Laki-laki")
+                {
+                    $male_total = $item->total;
+                }
+
+                if ($item->gender == "Perempuan")
+                {
+                    $female_total = $item->total;
+                }
+            }
+
+            $result[] = [
+                'class' => $class_name,
+                'male' => $male_total,
+                'female' => $female_total
+            ];
+
+            $male_total = 0;
+            $female_total = 0;
+        }
+
+        return response()->json(['data' => $result]);
+    }
+
+    public function get_group_statistic_unik(Request $request)
+    {
+        $group_id = $request->route('groupId') != "" ? $request->route('groupId') : session('group');
+        $result = array();
+        $class_name = null;
+        $male_total = 0;
+        $female_total = 0;
+
+        $unik_class_gender = Student::select_student_by_class_and_gender($group_id, env('UNIK_CODE'));
+
+        $distinct_classnames = $unik_class_gender->unique('name')->pluck('name');
+
+        foreach($distinct_classnames as $classname)
+        {
+            $caberawit_class = $unik_class_gender->where('name','=',$classname);
+
+            foreach($caberawit_class as $item)
+            {
+                $class_name = $item->name;
+
+                if ($item->gender == "Laki-laki")
+                {
+                    $male_total = $item->total;
+                }
+
+                if ($item->gender == "Perempuan")
+                {
+                    $female_total = $item->total;
+                }
+            }
+
+            $result[] = [
+                'class' => $class_name,
                 'male' => $male_total,
                 'female' => $female_total
             ];

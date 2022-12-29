@@ -169,7 +169,7 @@
         });
 
         function deleteRole(id) {
-            debugger;
+
             swal({
                     title: "Apakah Anda Yakin?",
                     text: `Menghapus ${id} dari database!`,
@@ -187,7 +187,7 @@
         }
 
         function performDeleteRole(id) {
-            debugger;
+
             $.ajax({
                 url: "/api/role/delete-role",
                 type: 'DELETE',
@@ -201,7 +201,7 @@
                     'X-CSRF-TOKEN': CSRF_TOKEN
                 },
                 success: function(response) {
-                    debugger;
+
                     swal("Berhasil", `Data Role : ${id} berhasil dihapus`, "success");
                     setTimeout(function() {
                         location.reload(true);

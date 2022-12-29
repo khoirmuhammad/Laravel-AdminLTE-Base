@@ -180,7 +180,7 @@
         });
 
         function deletePjKelas(id, name) {
-            debugger;
+
             swal({
                     title: "Apakah Anda Yakin?",
                     text: `Menghapus ${name} dari database!`,
@@ -198,7 +198,7 @@
         }
 
         function performDeletePJKelas(id, name) {
-            debugger;
+
             $.ajax({
                 url: "/api/teacher/delete-teacher",
                 type: 'DELETE',
@@ -212,7 +212,7 @@
                     'X-CSRF-TOKEN': CSRF_TOKEN
                 },
                 success: function(response) {
-                    debugger;
+
                     swal("Berhasil", `Data Guru : ${name} berhasil dihapus`, "success");
                     setTimeout(function() {
                         location.reload(true);

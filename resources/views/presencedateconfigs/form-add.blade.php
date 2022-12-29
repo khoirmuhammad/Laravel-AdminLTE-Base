@@ -383,9 +383,6 @@
     <link rel="stylesheet" href="/adminlte/plugins/select2-bootstrap4-theme/select2-bootstrap4.min.css">
 
 
-    <link rel="stylesheet" href="/adminlte/dist/css/adminlte.min.css">
-
-
     <link rel="stylesheet" href="https://cdnjs.cloudflare.com/ajax/libs/font-awesome/4.7.0/css/font-awesome.min.css">
 
 
@@ -444,12 +441,12 @@
             })
 
             $('#level').on('change', function() {
-                debugger;
+
                 get_class_level(this.value);
             })
 
             $('#btnCreate').on('click', function() {
-                debugger;
+
                 let level_val = $('#level').val();
                 let class_level_selected = $('input[name^="class_level"]:checked').length;
                 let day_selected = $('input[name^="day"]:checked').length;
@@ -506,7 +503,7 @@
             })
 
             $('#btnSearch').on('click', function() {
-                debugger;
+
                 get_schedules();
             })
 
@@ -521,6 +518,8 @@
                 dataType: 'json',
                 success: function(response) {
                     if (response.data != undefined || response.data != null) {
+                        $("#level").empty();
+                        $("#level").append('<option value="">Pilih</option>')
                         for (let i = 0; i < response.data.length; i++) {
                             $("#level").append(
                                 `<option value="${response.data[i].id}">${response.data[i].name}</option>`);
@@ -534,7 +533,7 @@
         }
 
         function get_class_level(level) {
-            debugger
+
             let group = $('#group').val();
             $.ajax({
                 url: `/api/class-level/class-level-list-by-level/${level}`,
@@ -583,7 +582,7 @@
         }
 
         function get_class_level_filter(level) {
-            debugger
+
             if (level == null || level == '') {
                 $('#class-filter').empty().trigger("change");
                 $("#class-filter").append(`<option value="">PILIH KELAS</option>`);
@@ -640,7 +639,7 @@
                 }
             });
 
-            debugger;
+
             $.ajax({
                 url: "/api/schedule/post-insert",
                 type: 'POST',
@@ -652,7 +651,7 @@
                     'X-CSRF-TOKEN': CSRF_TOKEN
                 },
                 success: function(response) {
-                    debugger
+
 
                     if (response == 204) {
                         swal("Peringatan", `Data jadwal telah tersedia`, "info");
@@ -668,7 +667,7 @@
                     get_schedules();
                 },
                 error: function(response) {
-                    debugger
+
                     if (response.status == 500) {
                         let error_message = response.responseJSON.error_message;
                         let logKey = response.responseJSON.log_key;
@@ -712,7 +711,7 @@
                     'X-CSRF-TOKEN': CSRF_TOKEN
                 },
                 success: function(response) {
-                    debugger
+
 
                     swal("Berhasil", `Data Jadwal berhasil diperbarui`, "success");
 
@@ -721,7 +720,7 @@
                     get_schedules();
                 },
                 error: function(response) {
-                    debugger
+
                     if (response.status == 500) {
                         let error_message = response.responseJSON.error_message;
                         let logKey = response.responseJSON.log_key;
@@ -754,7 +753,7 @@
         }
 
         function get_schedules() {
-            debugger;
+
             let level = $("#level-filter").val();
             let classLevel = $('#class-filter').val();
 
@@ -776,7 +775,7 @@
                 method: 'GET',
                 dataType: 'json',
                 success: function(response) {
-                    debugger;
+
                     if (response.data != undefined || response.data != null) {
 
                         let row = '';
@@ -832,7 +831,7 @@
         }
 
         function performDeleteSchedule(id) {
-            debugger;
+
             $.ajax({
                 url: "/api/schedule/delete-schedule",
                 type: 'DELETE',
@@ -846,7 +845,7 @@
                     'X-CSRF-TOKEN': CSRF_TOKEN
                 },
                 success: function(response) {
-                    debugger;
+
                     swal("Berhasil", `Jadwal berhasil dihapus`, "success");
                     get_schedules();
 
@@ -875,7 +874,7 @@
         }
 
         function editSchedule(id, classLevel, level, day, startTime, endTime) {
-            debugger;
+
             $('#hdId').val(id);
 
             $('#edLevel').val(level);

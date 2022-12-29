@@ -87,6 +87,30 @@ class Student extends Model
         return $result;
     }
 
+    public static function select_student_general_by_level($group_id)
+    {
+        $result = DB::table('students')
+                ->leftJoin('levels', 'students.level', '=', 'levels.id')
+                ->where('students.group', '=', $group_id) //7079bef5-d75c-11ec-b5a0-5ce0c508bbb3
+                ->orderBy('levels.order')
+                ->groupBy(['students.level','levels.name'])
+                ->get(['levels.name',DB::raw('count(*) as total')]);
+
+        return $result;
+    }
+
+    public static function select_student_general_by_class_gender($group_id)
+    {
+        $result = DB::table('students')
+                ->leftJoin('class_levels', 'students.class', '=', 'class_levels.id')
+                ->where('students.group', '=', $group_id) // 7079bef5-d75c-11ec-b5a0-5ce0c508bbb3
+                ->orderBy('class_levels.name')
+                ->groupBy(['students.class','class_levels.name','students.gender'])
+                ->get(['class_levels.name','students.gender',DB::raw('count(*) as total')]);
+
+        return $result;
+    }
+
     public static function select_student_general_by_level_education($group_id)
     {
         $result = DB::table('students')
@@ -99,13 +123,13 @@ class Student extends Model
         return $result;
     }
 
-    public static function select_student_caberawit_by_class_and_gender($group_id)
+    public static function select_student_by_class_and_gender($group_id, $level)
     {
-        //SELECT class_levels.name, students.gender, COUNT(students.class) as total FROM students JOIN class_levels on students.class = class_levels.id WHERE students.group = '7079bef5-d75c-11ec-b5a0-5ce0c508bbb3' and students.level = '28fff9be-d75c-11ec-b5a0-5ce0c508bbb3' group by students.class, students.gender;
         $result = DB::table('class_levels')
                 ->leftJoin('students', 'students.class', '=', 'class_levels.id')
                 ->where('students.group', '=', $group_id) //7079bef5-d75c-11ec-b5a0-5ce0c508bbb3
-                ->where('students.level', '=', '28fff9be-d75c-11ec-b5a0-5ce0c508bbb3')
+                ->where('students.level', '=', $level)
+                ->orderBy('class_levels.name')
                 ->groupBy(['students.class', 'class_levels.name', 'students.gender'])
                 ->get(['students.class', 'class_levels.name','students.gender',DB::raw('count(students.class) as total')]);
 
@@ -122,6 +146,7 @@ class Student extends Model
 
         return $result;
     }
+
 
     public static function select_student_remaja_by_gender($group_id)
     {
@@ -161,7 +186,7 @@ class Student extends Model
     {
         $result = DB::table('students')
                 ->where('group', '=', $group_id) //7079bef5-d75c-11ec-b5a0-5ce0c508bbb3
-                ->where('level', '=', '3110c8d4-d75c-11ec-b5a0-5ce0c508bbb3')
+                // ->where('level', '=', '3110c8d4-d75c-11ec-b5a0-5ce0c508bbb3')
                 ->where('isPribumi', '=', 1)
                 ->get([DB::raw('count(*) as total')]);
 
@@ -172,7 +197,7 @@ class Student extends Model
     {
         $result = DB::table('students')
                 ->where('group', '=', $group_id) // 7079bef5-d75c-11ec-b5a0-5ce0c508bbb3
-                ->where('level', '=', '3110c8d4-d75c-11ec-b5a0-5ce0c508bbb3')
+                // ->where('level', '=', '3110c8d4-d75c-11ec-b5a0-5ce0c508bbb3')
                 ->where('isPribumi', '<>', 1)
                 ->get([DB::raw('count(*) as total')]);
 

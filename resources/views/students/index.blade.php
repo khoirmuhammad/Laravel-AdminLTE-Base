@@ -219,7 +219,7 @@ function deleteStudent(id, name) {
   }
 
   function performDeleteStudent(id, name) {
-    debugger;
+
     $.ajax({
         url:"/api/generus/delete-student-by-id",
         type: 'DELETE',
@@ -229,14 +229,14 @@ function deleteStudent(id, name) {
         contentType: 'application/json; charset=utf-8',
         headers: {'X-CSRF-TOKEN': CSRF_TOKEN},
         success: function(response){
-          debugger;
+
           if (response.status) {
             swal("Berhasil", `Generus ${name} berhasil dihapus`, "success");
             location.reload(true);
           }
         },
         error: function(response) {
-          debugger;
+
         }
       });
   }

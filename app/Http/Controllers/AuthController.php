@@ -26,6 +26,17 @@ class AuthController extends Controller
 
         if ($user != null)
         {
+            if ($user->is_active == false)
+            {
+                $response = [
+                    'status' => false,
+                    'message' => "Akun anda sedang tidak aktif / belum diaktivasi",
+                    'data' => null
+                ];
+
+                return response()->json(['response' => $response]);
+            }
+
             $user_roles = UserRole::where('user_id','=',$user->id)->get();
 
             $roles = array();

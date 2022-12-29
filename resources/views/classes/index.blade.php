@@ -177,7 +177,7 @@
         });
 
         function deleteClass(id, name) {
-            debugger;
+
             swal({
                     title: "Apakah Anda Yakin?",
                     text: `Menghapus ${name} dari database!`,
@@ -195,7 +195,7 @@
         }
 
         function performDeleteClass(id, name) {
-            debugger;
+
             $.ajax({
                 url: "/api/class-level/delete-class-level",
                 type: 'DELETE',
@@ -209,7 +209,7 @@
                     'X-CSRF-TOKEN': CSRF_TOKEN
                 },
                 success: function(response) {
-                    debugger;
+
                     swal("Berhasil", `Data Kelas : ${name} berhasil dihapus`, "success");
                     setTimeout(function() {
                         location.reload(true);

@@ -217,7 +217,7 @@
         }
 
         function performDeleteMenu(id, title) {
-            debugger;
+
             $.ajax({
                 url: "/api/menu/delete-menu",
                 type: 'DELETE',
@@ -231,7 +231,7 @@
                     'X-CSRF-TOKEN': CSRF_TOKEN
                 },
                 success: function(response) {
-                    debugger;
+
                     swal("Berhasil", `Data Menu : ${title} berhasil dihapus`, "success");
                     setTimeout(function() {
                         location.reload(true);

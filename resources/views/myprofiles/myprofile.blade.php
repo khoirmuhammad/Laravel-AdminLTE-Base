@@ -261,7 +261,7 @@
                     oldPassword: {
                         required: {
                             depends: function() {
-                                debugger;
+
                                 let isChangePassword = $('#isChangePassword').is(':checked');
                                 return isChangePassword;
                             }
@@ -270,7 +270,7 @@
                     newPassword: {
                         required: {
                             depends: function() {
-                                debugger;
+
                                 let isChangePassword = $('#isChangePassword').is(':checked');
                                 return isChangePassword;
                             }
@@ -279,7 +279,7 @@
                     confirmNewPassword: {
                         required: {
                             depends: function() {
-                                debugger;
+
                                 let isChangePassword = $('#isChangePassword').is(':checked');
                                 return isChangePassword;
                             }
@@ -305,12 +305,12 @@
                 },
                 errorElement: 'span',
                 errorPlacement: function(error, element) {
-                    debugger;
+
                     error.addClass('invalid-feedback');
                     element.closest('.form-group').append(error);
                 },
                 highlight: function(element, errorClass, validClass) {
-                    debugger;
+
                     $(element).addClass('is-invalid');
                 },
                 unhighlight: function(element, errorClass, validClass) {
@@ -321,7 +321,7 @@
         });
 
         async function post_save_user() {
-            debugger;
+
             $(`#card-body-id`).addClass('opacity');
             $(`#submit-icon`).addClass('hide');
             $(`#loading-icon-submit`).removeClass('hide');
@@ -406,7 +406,7 @@
                     'X-CSRF-TOKEN': CSRF_TOKEN
                 },
                 success: function(response) {
-                    debugger
+
 
                     swal("Berhasil", `Data Pengguna : ${user.fullname} berhasil diperbarui`, "success");
 
@@ -415,7 +415,7 @@
                     set_form();
                 },
                 error: function(response) {
-                    debugger
+
                     if (response.status == 500) {
                         let error_message = response.responseJSON.error_message;
                         let logKey = response.responseJSON.log_key;
@@ -445,7 +445,7 @@
                 method: 'GET',
                 dataType: 'json',
                 success: function(response) {
-                    debugger;
+
                     if (response.data != undefined || response.data != null) {
                         let obj = response.data;
 

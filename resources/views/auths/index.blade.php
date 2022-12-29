@@ -34,7 +34,7 @@
 </style>
 
 </head>
-<body class="hold-transition login-page" id="login-page-id" style="background-image: url('assets/background-img.jpg');">
+<body class="hold-transition login-page" id="login-page-id" style="background-image: url('assets/background-mdt4.jpg');">
 <div class="login-box" >
   <!-- /.login-logo -->
   <div class="card card-outline card-secondary">
@@ -84,7 +84,7 @@
 
         <br>
         <p class="mb-3" align="center">
-          <a href="#">Lupa Kata Sandi ?</a>
+          {{-- <a href="#">Lupa Kata Sandi ?</a> --}}
         </p>
 
         <p class="cp-text" align="center">
@@ -161,7 +161,7 @@
 
 
         $('#btnProceed').on('click', function() {
-          debugger;
+
           let radioVal = $("input[name='role']:checked").val();
 
           if (radioVal == undefined || radioVal == null) {
@@ -207,7 +207,7 @@
                   }
                 },
                 error: function(response) {
-                    debugger;
+
                     $('#loading-icon-proceed').addClass('hide');
                     $('#proceed-text').text('Lanjutkan');
                     console.log(response);
@@ -235,7 +235,7 @@
             $('#loading-icon-login').removeClass('hide');
             $('#store-text').text('');
 
-            debugger;
+
             $.ajax({
                 url:"login/post-authentication",
                 type: 'POST',
@@ -245,7 +245,7 @@
                 contentType: 'application/json; charset=utf-8',
                 headers: {'X-CSRF-TOKEN': CSRF_TOKEN},
                 success: function(response){
-                    debugger;
+
 
                     $('#login-page-id').removeClass('opacity');
                     $('#login-icon').removeClass('hide');
@@ -258,12 +258,21 @@
                       $('#roles-radio').empty().append('');
 
                       roles.forEach(element => {
-                        $('#roles-radio').append(`<div class="icheck-primary">
+                        if (roles.length == 1) {
+                            $('#roles-radio').append(`<div class="icheck-primary">
+                            <input type="radio" id="${element.role}" name="role" value="${element.role}" checked>
+                            <label for="${element.role}">
+                              ${element.role}
+                            </label>
+                          </div>`);
+                        } else {
+                            $('#roles-radio').append(`<div class="icheck-primary">
                             <input type="radio" id="${element.role}" name="role" value="${element.role}">
                             <label for="${element.role}">
                               ${element.role}
                             </label>
                           </div>`);
+                        }
                       });
 
                       $('#modal-roles').modal('show');
@@ -274,7 +283,7 @@
 
                 },
                 error: function(response) {
-                    debugger;
+
                     $('#login-page-id').removeClass('opacity');
                     $('#login-icon').removeClass('hide');
                     $('#loading-icon-login').addClass('hide');

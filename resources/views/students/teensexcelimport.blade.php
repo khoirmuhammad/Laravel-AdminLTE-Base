@@ -134,7 +134,7 @@ Footer
         var CSRF_TOKEN = document.querySelector('meta[name="csrf-token"]').getAttribute("content");
 
         $('#btnScan').on('click',function() {
-            debugger;
+
 
             $('#card-body-id').addClass('opacity');
             $('#pindai-icon').addClass('hide');
@@ -159,7 +159,7 @@ Footer
                     processData: false,
                     dataType: 'json',
                     success: function(response){
-                        debugger
+
                         swal("Berhasil", "Data excel berhasil dipindai sistem", "success")
 
                         $('#card-body-id').removeClass('opacity');
@@ -167,7 +167,6 @@ Footer
                         $('#loading-icon-pindai').addClass('hide');
                         $('#pindai-text').text('Pindai Excel');
 
-                        debugger;
                         //append data to table
                         let tablePreview = document.querySelector("#tbl-preview");
 
@@ -232,7 +231,6 @@ Footer
                         $('#pratinjau-id').removeClass('hide');
                     },
                     error: function(response){
-                        debugger;
 
                         $('#card-body-id').removeClass('opacity');
                         $('#pindai-icon').removeClass('hide');
@@ -315,7 +313,6 @@ Footer
 
             });
 
-            debugger;
 
             $.ajax({
                 url:"post-simpan-impor-remaja",
@@ -326,7 +323,6 @@ Footer
                 contentType: 'application/json; charset=utf-8',
                 headers: {'X-CSRF-TOKEN': CSRF_TOKEN},
                 success: function(response){
-                    debugger;
                     let alert_message = '';
 
                     if (response.data_insert.length > 0) {
@@ -369,7 +365,6 @@ Footer
                     $('#btnScan').addClass('hide');
                 },
                 error: function(response){
-                    debugger;
                     $('#card-body-id').removeClass('opacity');
                     $('#store-icon').removeClass('hide');
                     $('#loading-icon-store').addClass('hide');
