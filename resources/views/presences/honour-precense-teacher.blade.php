@@ -25,7 +25,7 @@
         </div>
         <div class="card-body" id="card-body-id">
             <div class="row mb-2">
-                <div class="col-md-6"></div>
+                <div class="col-md-9"></div>
                 <div class="col-md-1">Bulan Periode</div>
                 <div class="col-md-2">
 
@@ -46,18 +46,21 @@
                     </select>
                 </div>
             </div>
-            <div class="row">
-                <div class="col-md-9">
+            <div class="row mb-2">
+                <div class="col-md-12">
                     <div class="table-responsive">
                         <table class="table table-sm" id="recap-presence">
                             <thead>
                                 <tr>
                                     <th class="text-center">No</th>
                                     <th class="text-center">Nama Guru</th>
-                                    <th class="text-center">Kehadiran</th>
-                                    <th class="text-center">Tepat</th>
+                                    <th class="text-center">T0</th>
                                     <th class="text-center">T1</th>
                                     <th class="text-center">T2</th>
+                                    <th class="text-center">Ukhro T0</th>
+                                    <th class="text-center">Ukhro T1</th>
+                                    <th class="text-center">Ukhro T2</th>
+                                    <th class="text-center">Total Ukhro</th>
                                     <th class="text-center">#</th>
                                 </tr>
 
@@ -70,6 +73,10 @@
                         </table>
                     </div>
                 </div>
+            </div>
+            <div class="row">
+                <div class="col-md-9"></div>
+                <div class="col-md-3"><strong><span id="total_ukhro_in_month"></span></strong></div>
             </div>
         </div>
         <!-- /.card-body -->
@@ -171,7 +178,7 @@
 
 
             $.ajax({
-                url: '/api/presence-teacher/get-recap-presence?month=' + month,
+                url: '/api/presence-teacher/get-honour-presence?month=' + month,
                 method: 'GET',
                 dataType: 'json',
                 success: function(response) {
@@ -181,16 +188,23 @@
 
                         let row = '';
                         let seq = 1;
+                        let totalUkhro = 0;
                         for (let i = 0; i < response.data.length; i++) {
                             let obj = response.data[i];
+                            let totalUkhroEachTeacher = parseInt(obj.honour_pas + obj.honour_t1 + obj.honour_t2);
+
+                            totalUkhro = parseInt(totalUkhro + totalUkhroEachTeacher);
 
                             row += `<tr>
                             <td class="text-center">${seq}</td>
                             <td class="text-center">${obj.name}</td>
-                            <td class="text-center">${obj.total_hadir}</td>
                             <td class="text-center">${obj.total_pas}</td>
                             <td class="text-center">${obj.total_t1}</td>
                             <td class="text-center">${obj.total_t2}</td>
+                            <td class="text-center">${rupiah(obj.honour_pas)}</td>
+                            <td class="text-center">${rupiah(obj.honour_t1)}</td>
+                            <td class="text-center">${rupiah(obj.honour_t2)}</td>
+                            <td class="text-center" style="font-weight:bold">${rupiah(totalUkhroEachTeacher)}</td>
                             <td>
                                 <button type="button" class="btn btn-info btn-xs" onclick="DetailHistory('${obj.name}','${obj.teacher_id}')"><i class="fa fa-arrow-right "></i></button>
                             </td>
@@ -199,6 +213,7 @@
                         }
                         $('#recap-presence > tbody').html(null);
                         $('#recap-presence > tbody').append(row);
+                        $('#total_ukhro_in_month').text(`TOTAL UKHRO : ${rupiah(totalUkhro)}`);
 
                     }
                 },
@@ -247,6 +262,13 @@
 
                 }
             });
+        }
+
+        const rupiah = (number)=>{
+            return new Intl.NumberFormat("id-ID", {
+            style: "currency",
+            currency: "IDR"
+            }).format(number);
         }
     </script>
 @endpush

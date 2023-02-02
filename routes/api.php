@@ -83,6 +83,7 @@ Route::post('/presence/post-student-presence',[ApiPresenceController::class, 'po
 
 Route::get('/presence-teacher/get-recap-presence', [ApiPresenceTeacherController::class, 'get_recap_precense_teacher']);
 Route::get('/presence-teacher/get-history-presence', [ApiPresenceTeacherController::class, 'get_history_presence_teacher']);
+Route::get('/presence-teacher/get-honour-presence', [ApiPresenceTeacherController::class, 'get_recap_honour_teacher']);
 
 Route::get('/teacher/get-teacher/{id}', [ApiTeacherController::class, 'get_teacher_by_id']);
 Route::post('/teacher/post-save-teacher', [ApiTeacherController::class, 'post_save_teacher']);

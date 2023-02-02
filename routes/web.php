@@ -66,6 +66,7 @@ Route::get('/presensi/pengajuan-presensi', [PresenceController::class, 'get_form
 Route::get('/presensi/rekapitulasi', [PresenceController::class, 'get_recap_presence'])->middleware('auth');
 Route::get('/presensi-guru/rekapitulasi', [PresenceController::class, 'get_recap_presence_teacher'])->middleware('auth');
 Route::get('/presensi/rekapitulasi2', [PresenceController::class, 'get_recap_presence2'])->middleware('auth');
+Route::get('/presensi-guru/ukhro', [PresenceController::class, 'get_honour_presence_teacher'])->middleware('auth');
 
 Route::get('/pj-kelas', [TeacherController::class, 'get_list_teachers'])->middleware('auth');
 Route::get('/pj-kelas/tambah-pjkelas', [TeacherController::class, 'get_form_add_teacher'])->middleware('auth');

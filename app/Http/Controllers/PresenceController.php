@@ -85,4 +85,11 @@ class PresenceController extends Controller
             'title' => 'Rekap Presensi Guru'
         ]);
     }
+
+    public function get_honour_presence_teacher()
+    {
+        return view('presences.honour-precense-teacher', [
+            'title' => 'Rekap Ukhro Guru'
+        ]);
+    }
 }
