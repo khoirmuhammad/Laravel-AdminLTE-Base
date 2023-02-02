@@ -50,4 +50,10 @@ class PresenceTeacher extends Model
 
         return $query;
     }
+
+    public static function get_honour_teacher()
+    {
+        $query = DB::select("SELECT teacher_id, ontime_rate, late1_rate, late2_rate FROM teacher_honour");
+        return collect($query);
+    }
 }
